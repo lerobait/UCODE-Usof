@@ -1,4 +1,4 @@
-import { connectDatabase } from './database/db';
+import { connectDatabase } from '../database/db';
 import app from './app';
 
 const port = process.env.PORT || 3000;

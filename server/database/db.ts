@@ -1,16 +1,16 @@
 import { Sequelize } from 'sequelize-typescript';
-import { User } from '../models/User';
-import { Post } from '../models/Post';
-import { Comment } from '../models/Comment';
-import { Like } from '../models/Like';
-import { PostCategory } from '../models/PostCategory';
-import { Category } from '../models/Category';
-import { PasswordReset } from '../models/PasswordReset';
-import { UserSession } from '../models/UserSession';
+import { User } from './models/User';
+import { Post } from './models/Post';
+import { Comment } from './models/Comment';
+import { Like } from './models/Like';
+import { PostCategory } from './models/PostCategory';
+import { Category } from './models/Category';
+import { PasswordReset } from './models/PasswordReset';
+import { UserSession } from './models/UserSession';
 import dotenv from 'dotenv';
 import path from 'path';
 
-const envPath = path.join(__dirname, '../../../src/database/db.env');
+const envPath = path.join(__dirname, '../../database/db.env');
 dotenv.config({ path: envPath });
 
 const DB_HOST = process.env.DB_HOST;
@@ -41,7 +41,6 @@ export const connectDatabase = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connected');
-    await sequelize.sync({ alter: true });
   } catch (error) {
     console.error('Unable to connect to the database:', error);
     process.exit(1);
