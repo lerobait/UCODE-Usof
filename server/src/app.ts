@@ -6,6 +6,8 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import xss from 'xss-clean';
 import AppError from './utils/appError';
+import userRouter from './routes/user.routes';
+import globalErrorHandler from './controllers/errorController';
 
 const app = express();
 
@@ -28,11 +30,15 @@ app.use(cookieParser());
 app.use(xss());
 app.use(compression());
 
+app.use('/api/v1/users', userRouter);
+
 app.all(
   '*',
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
   },
 );
+
+app.use(globalErrorHandler);
 
 export default app;

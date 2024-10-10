@@ -9,18 +9,31 @@ import {
   DataType,
   HasMany,
 } from 'sequelize-typescript';
+import {
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize/types';
 import { Post } from './Post';
 import { Comment } from './Comment';
 import { Like } from './Like';
 import { UserSession } from './UserSession';
 import { PasswordReset } from './PasswordReset';
 
-@Table({ tableName: 'users' })
-export class User extends Model<User> {
+@Table({
+  tableName: 'users',
+  timestamps: false,
+})
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
   @PrimaryKey
   @AutoIncrement
-  @Column
-  id!: number;
+  @Column({
+    type: DataType.INTEGER,
+  })
+  id!: CreationOptional<number>;
 
   @Unique
   @Column(DataType.STRING(50))
@@ -41,15 +54,18 @@ export class User extends Model<User> {
 
   @Default(0)
   @Column(DataType.INTEGER)
-  rating!: number;
+  rating!: CreationOptional<number>;
 
   @Default('user')
   @Column(DataType.ENUM('user', 'admin'))
-  role!: 'user' | 'admin';
+  role!: CreationOptional<'user' | 'admin'>;
 
   @Default(DataType.NOW)
-  @Column(DataType.DATE)
-  created_at!: Date;
+  @Column({
+    type: DataType.DATE,
+    field: 'created_at',
+  })
+  created_at!: CreationOptional<Date>;
 
   @HasMany(() => Post)
   posts!: Post[];

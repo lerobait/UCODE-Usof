@@ -32,14 +32,17 @@ export default {
       },
       rating: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         defaultValue: 0,
       },
       role: {
         type: DataTypes.ENUM('user', 'admin'),
+        allowNull: false,
         defaultValue: 'user',
       },
       created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW,
       },
     });

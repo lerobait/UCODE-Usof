@@ -10,7 +10,7 @@ import { UserSession } from './models/UserSession';
 import dotenv from 'dotenv';
 import path from 'path';
 
-const envPath = path.join(__dirname, '../../database/db.env');
+const envPath = path.join(__dirname, '../../config.env');
 dotenv.config({ path: envPath });
 
 const DB_HOST = process.env.DB_HOST;
@@ -34,7 +34,7 @@ const sequelize = new Sequelize({
     PasswordReset,
     UserSession,
   ],
-  logging: false,
+  logging: console.log,
 });
 
 export const connectDatabase = async () => {
