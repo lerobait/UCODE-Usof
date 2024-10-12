@@ -40,6 +40,15 @@ export default {
         allowNull: false,
         defaultValue: 'user',
       },
+      email_verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      email_verification_token: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,

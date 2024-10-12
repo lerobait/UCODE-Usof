@@ -10,7 +10,7 @@ import {
 } from 'sequelize-typescript';
 import { User } from './User';
 
-@Table({ tableName: 'password_resets' })
+@Table({ tableName: 'password_resets', timestamps: false })
 export class PasswordReset extends Model<PasswordReset> {
   @PrimaryKey
   @Column(DataType.STRING(100))
@@ -20,7 +20,7 @@ export class PasswordReset extends Model<PasswordReset> {
   token!: string;
 
   @Default(DataType.NOW)
-  @Column(DataType.DATE)
+  @Column({ type: DataType.DATE, field: 'created_at' })
   created_at!: Date;
 
   @ForeignKey(() => User)

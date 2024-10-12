@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import xss from 'xss-clean';
 import AppError from './utils/appError';
-import userRouter from './routes/user.routes';
+import authRouter from './routes/auth.routes';
 import globalErrorHandler from './controllers/errorController';
 
 const app = express();
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(xss());
 app.use(compression());
 
-app.use('/api/v1/users', userRouter);
+app.use('/api/auth', authRouter);
 
 app.all(
   '*',

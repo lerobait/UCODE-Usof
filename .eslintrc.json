@@ -35,18 +35,16 @@
   "overrides": [
     {
       "files": ["**/*.ts", "**/*.tsx"],
-      "rules": {
-        // Специфичные для TypeScript правила
-      }
+      "rules": {}
     },
     {
-      "files": ["client/**/*.tsx"], // Правила для клиентской части
+      "files": ["client/**/*.tsx"],
       "env": {
         "browser": true
       }
     },
     {
-      "files": ["server/**/*.ts"], // Правила для серверной части
+      "files": ["server/**/*.ts"],
       "env": {
         "node": true
       }

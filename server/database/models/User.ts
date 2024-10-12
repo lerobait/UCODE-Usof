@@ -60,6 +60,13 @@ export class User extends Model<
   @Column(DataType.ENUM('user', 'admin'))
   role!: CreationOptional<'user' | 'admin'>;
 
+  @Default(false)
+  @Column(DataType.BOOLEAN)
+  email_verified!: CreationOptional<boolean>;
+
+  @Column(DataType.STRING)
+  email_verification_token!: string | null;
+
   @Default(DataType.NOW)
   @Column({
     type: DataType.DATE,
