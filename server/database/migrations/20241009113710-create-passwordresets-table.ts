@@ -10,6 +10,10 @@ export default {
       token: {
         type: DataTypes.STRING(255),
       },
+      expires_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

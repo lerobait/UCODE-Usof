@@ -7,7 +7,7 @@ import helmet from 'helmet';
 import xss from 'xss-clean';
 import AppError from './utils/appError';
 import authRouter from './routes/auth.routes';
-import globalErrorHandler from './controllers/errorController';
+import globalErrorHandler from './controllers/error.controller';
 
 const app = express();
 

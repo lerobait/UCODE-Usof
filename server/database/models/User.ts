@@ -67,6 +67,9 @@ export class User extends Model<
   @Column(DataType.STRING)
   email_verification_token!: string | null;
 
+  @Column(DataType.DATE)
+  email_verification_expires_at!: CreationOptional<Date>;
+
   @Default(DataType.NOW)
   @Column({
     type: DataType.DATE,

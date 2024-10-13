@@ -49,6 +49,10 @@ export default {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      email_verification_expires_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,

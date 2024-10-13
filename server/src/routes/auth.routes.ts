@@ -3,11 +3,11 @@ import {
   register,
   login,
   logout,
-  protect,
   sendPasswordReset,
   confirmPasswordReset,
   confirmEmail,
 } from '../controllers/auth.controller';
+import protect from '../middlewares/protect.middelware';
 
 const router = Router();
 
