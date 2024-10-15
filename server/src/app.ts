@@ -9,6 +9,7 @@ import AppError from './utils/appError';
 import globalErrorHandler from './controllers/error.controller';
 import authRouter from './routes/auth.routes';
 import userRouter from './routes/user.routes';
+import categoryRouter from './routes/category.routes';
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(compression());
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+app.use('/api/categories', categoryRouter);
 
 app.all(
   '*',

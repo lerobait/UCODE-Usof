@@ -1,0 +1,25 @@
+import { Router } from 'express';
+import restrictTo from '../middlewares/restrict.middelware';
+import protect from '../middlewares/protect.middelware';
+import {
+  createCategory,
+  getAllCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategory,
+} from '../controllers/category.controller';
+
+const router = Router();
+
+router.use(protect);
+
+router.get('/', getAllCategories);
+router.get('/:category_id', getCategoryById);
+
+router.use(restrictTo('admin'));
+
+router.post('/', createCategory);
+router.patch('/:category_id', updateCategory);
+router.delete('/:category_id', deleteCategory);
+
+export default router;
