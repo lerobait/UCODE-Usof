@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
-import { Category } from '../../database/models/Category';
-import AppError from '../utils/appError';
+import * as CategoryService from '../services/category.service';
 import catchAsync from '../utils/catchAsync';
 
 export const getAllCategories = catchAsync(
   async (req: Request, res: Response) => {
-    const categories = await Category.findAll();
+    const categories = await CategoryService.getAllCategories();
 
     res.status(200).json({
       status: 'success',
@@ -22,14 +21,7 @@ export const getCategoryById = catchAsync(
     const { category_id } = req.params;
 
     const id = parseInt(category_id);
-    if (isNaN(id)) {
-      throw new AppError('Invalid category ID', 400);
-    }
-
-    const category = await Category.findByPk(id);
-    if (!category) {
-      throw new AppError('Category not found', 404);
-    }
+    const category = await CategoryService.getCategoryById(id);
 
     res.status(200).json({
       status: 'success',
@@ -43,17 +35,7 @@ export const getCategoryById = catchAsync(
 export const createCategory = catchAsync(
   async (req: Request, res: Response) => {
     const { title, description } = req.body;
-
-    if (!title) {
-      throw new AppError('Title is required', 400);
-    }
-
-    const existingCategory = await Category.findOne({ where: { title } });
-    if (existingCategory) {
-      throw new AppError('Category with this title already exists', 400);
-    }
-
-    const category = await Category.create({ title, description });
+    const category = await CategoryService.createCategory(title, description);
 
     res.status(201).json({
       status: 'success',
@@ -67,32 +49,14 @@ export const createCategory = catchAsync(
 export const updateCategory = catchAsync(
   async (req: Request, res: Response) => {
     const { category_id } = req.params;
-
     const id = parseInt(category_id);
-    if (isNaN(id)) {
-      throw new AppError('Invalid category ID', 400);
-    }
-
-    const category = await Category.findByPk(id);
-    if (!category) {
-      throw new AppError('Category not found', 404);
-    }
-
     const { title, description } = req.body;
 
-    if (title) {
-      const existingCategory = await Category.findOne({ where: { title } });
-      if (existingCategory && existingCategory.id !== id) {
-        throw new AppError('Category with this title already exists', 400);
-      }
-      category.title = title;
-    }
-
-    if (description) {
-      category.description = description;
-    }
-
-    await category.save();
+    const category = await CategoryService.updateCategory(
+      id,
+      title,
+      description,
+    );
 
     res.status(200).json({
       status: 'success',
@@ -106,18 +70,9 @@ export const updateCategory = catchAsync(
 export const deleteCategory = catchAsync(
   async (req: Request, res: Response) => {
     const { category_id } = req.params;
-
     const id = parseInt(category_id);
-    if (isNaN(id)) {
-      throw new AppError('Invalid category ID', 400);
-    }
 
-    const category = await Category.findByPk(id);
-    if (!category) {
-      throw new AppError('Category not found', 404);
-    }
-
-    await category.destroy();
+    await CategoryService.deleteCategory(id);
 
     res.status(204).json({
       status: 'success',
