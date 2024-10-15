@@ -3,9 +3,11 @@ import { User } from '../../database/models/User';
 import UserService from '../services/user.service';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
+import upload from '../utils/upload';
 
 interface CustomRequest extends Request {
   user?: User;
+  file?: Express.Multer.File | Express.MulterS3.File;
 }
 
 export const getMe = catchAsync(
@@ -52,6 +54,30 @@ export const updateMyPassword = catchAsync(
     });
   },
 );
+
+export const uploadUserAvatar = [
+  upload.single('avatar'),
+  catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return next(new AppError('User not authenticated', 401));
+    }
+
+    if (!req.file) {
+      return next(new AppError('No file uploaded', 400));
+    }
+
+    const avatarUrl = (req.file as Express.MulterS3.File).location;
+
+    const updatedUser = await UserService.updateAvatar(req.user.id, avatarUrl);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user: updatedUser,
+      },
+    });
+  }),
+];
 
 export const updateMe = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {

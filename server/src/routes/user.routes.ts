@@ -11,6 +11,7 @@ import {
   updateMyPassword,
   updateMe,
   deleteMe,
+  uploadUserAvatar,
 } from '../controllers/user.controller';
 
 const router = Router();
@@ -19,6 +20,7 @@ router.use(protect);
 
 router.get('/me', getMe);
 router.patch('/updateMyPassword', updateMyPassword);
+router.patch('/avatar', uploadUserAvatar);
 router.patch('/updateMe', updateMe);
 router.delete('/deleteMe', deleteMe);
 

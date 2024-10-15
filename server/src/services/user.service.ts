@@ -41,6 +41,27 @@ export class UserService {
     return user;
   }
 
+  async updateAvatar(userId: number, avatarUrl: string) {
+    const user = await User.findByPk(userId, {
+      attributes: {
+        exclude: [
+          'password',
+          'email_verification_token',
+          'email_verification_expires_at',
+        ],
+      },
+    });
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    user.profile_picture = avatarUrl;
+    await user.save();
+
+    return user;
+  }
+
   async updateMe(userId: number, login?: string, fullName?: string) {
     const user = await User.findByPk(userId, {
       attributes: {
