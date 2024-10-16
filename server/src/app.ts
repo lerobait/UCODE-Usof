@@ -10,6 +10,7 @@ import globalErrorHandler from './controllers/error.controller';
 import authRouter from './routes/auth.routes';
 import userRouter from './routes/user.routes';
 import categoryRouter from './routes/category.routes';
+import postRouter from './routes/post.routes';
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(compression());
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/categories', categoryRouter);
+app.use('/api/posts', postRouter);
 
 app.all(
   '*',

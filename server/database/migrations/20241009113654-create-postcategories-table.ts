@@ -19,6 +19,11 @@ export default {
         },
         primaryKey: true,
       },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     });
   },
 

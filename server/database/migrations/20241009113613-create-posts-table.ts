@@ -11,7 +11,7 @@ export default {
       author_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'users', // имя таблицы, на которую ссылаемся
+          model: 'users',
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -26,17 +26,11 @@ export default {
       },
       publish_date: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW,
       },
       status: {
         type: DataTypes.ENUM('active', 'inactive'),
-      },
-      category_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'categories', // имя таблицы, на которую ссылаемся
-          key: 'id',
-        },
       },
     });
   },

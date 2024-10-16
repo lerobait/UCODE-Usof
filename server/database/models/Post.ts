@@ -6,16 +6,27 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
+  HasMany,
   Default,
+  AutoIncrement,
 } from 'sequelize-typescript';
+import {
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize/types';
 import { User } from './User';
-import { Category } from './Category';
+import { PostCategory } from './PostCategory';
 
-@Table({ tableName: 'posts' })
-export class Post extends Model<Post> {
+@Table({ tableName: 'posts', timestamps: false })
+export class Post extends Model<
+  InferAttributes<Post>,
+  InferCreationAttributes<Post>
+> {
   @PrimaryKey
+  @AutoIncrement
   @Column(DataType.INTEGER)
-  id!: number;
+  id!: CreationOptional<number>;
 
   @ForeignKey(() => User)
   @Column(DataType.INTEGER)
@@ -28,19 +39,18 @@ export class Post extends Model<Post> {
   content!: string;
 
   @Default(DataType.NOW)
-  @Column(DataType.DATE)
-  publish_date!: Date;
+  @Column({
+    type: DataType.DATE,
+    field: 'publish_date',
+  })
+  publish_date!: CreationOptional<Date>;
 
   @Column(DataType.ENUM('active', 'inactive'))
   status!: 'active' | 'inactive';
 
-  @ForeignKey(() => Category)
-  @Column(DataType.INTEGER)
-  category_id!: number;
-
   @BelongsTo(() => User)
-  author!: User;
+  author?: User;
 
-  @BelongsTo(() => Category)
-  category!: Category;
+  @HasMany(() => PostCategory)
+  postCategories?: PostCategory[];
 }
