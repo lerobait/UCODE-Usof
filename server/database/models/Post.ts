@@ -38,6 +38,9 @@ export class Post extends Model<
   @Column(DataType.TEXT)
   content!: string;
 
+  @Column(DataType.STRING(255))
+  image_url?: string;
+
   @Default(DataType.NOW)
   @Column({
     type: DataType.DATE,

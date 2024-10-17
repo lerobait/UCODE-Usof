@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import uploadImage from '../utils/upload';
 import restrictTo from '../middlewares/restrict.middelware';
 import protect from '../middlewares/protect.middelware';
 import {

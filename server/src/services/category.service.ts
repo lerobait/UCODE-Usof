@@ -30,6 +30,7 @@ export const formatPost = (post: Post) => ({
         rating: post.author.rating,
       }
     : null,
+  image_url: post.image_url,
   categories: post.postCategories?.map(({ category }) => ({
     id: category?.id || 0,
     title: category?.title || '',

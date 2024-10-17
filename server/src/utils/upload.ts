@@ -11,7 +11,7 @@ const s3 = new S3Client({
   region: process.env.AWS_S3_REGION,
 });
 
-const upload = multer({
+const uploadImage = multer({
   storage: multerS3({
     s3: s3,
     bucket: process.env.AWS_PUBLIC_BUCKET_NAME || '',
@@ -19,7 +19,15 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req: Request, file, cb) {
-      const fileName = `avatars/${Date.now().toString()}-${file.originalname}`;
+      let folder = '';
+
+      if (file.fieldname === 'avatar') {
+        folder = 'avatars/';
+      } else {
+        folder = 'posts/';
+      }
+
+      const fileName = `${folder}${Date.now().toString()}-${file.originalname}`;
       cb(null, fileName);
     },
   }),
@@ -33,4 +41,4 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-export default upload;
+export default uploadImage;

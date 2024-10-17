@@ -3,6 +3,7 @@ import { Post } from '../../database/models/Post';
 import { Category } from '../../database/models/Category';
 import { User } from '../../database/models/User';
 import { PostCategory } from '../../database/models/PostCategory';
+import uploadImage from '../utils/upload';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 
@@ -34,6 +35,7 @@ export const getAllPosts = catchAsync(
         publish_date,
         status,
         author,
+        image_url,
         postCategories = [],
       }) => ({
         id,
@@ -42,6 +44,7 @@ export const getAllPosts = catchAsync(
         publish_date,
         status,
         author,
+        image_url,
         categories: postCategories.map(({ category }) => ({
           id: category?.id || 0,
           title: category?.title || '',
@@ -93,6 +96,7 @@ export const getPostById = catchAsync(
       publish_date: post.publish_date,
       status: post.status,
       author: post.author,
+      image_url: post.image_url,
       categories: post.postCategories?.map(({ category }) => ({
         id: category?.id || 0,
         title: category?.title || '',
@@ -115,8 +119,9 @@ interface CustomRequest extends Request {
   };
 }
 
-export const createPost = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const createPost = [
+  uploadImage.single('image'),
+  catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { title, content, categories } = req.body;
 
     if (!title || !content || !categories || !Array.isArray(categories)) {
@@ -133,12 +138,15 @@ export const createPost = catchAsync(
       return next(new AppError('One or more categories are invalid.', 400));
     }
 
+    const imageUrl = req.file?.location;
+
     const newPost = await Post.create({
       title,
       content,
       author_id: req.user?.id ?? 0,
       status: 'active',
       publish_date: new Date(),
+      image_url: imageUrl,
     });
 
     const postCategories = categories.map((categoryId: number) => ({
@@ -163,11 +171,12 @@ export const createPost = catchAsync(
         categories: filteredCategories,
       },
     });
-  },
-);
+  }),
+];
 
-export const updatePost = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const updatePost = [
+  uploadImage.single('image'),
+  catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { post_id } = req.params;
     const { title, content, categories } = req.body;
 
@@ -185,6 +194,10 @@ export const updatePost = catchAsync(
 
     if (title) post.title = title;
     if (content) post.content = content;
+
+    if (req.file) {
+      post.image_url = req.file.location;
+    }
 
     if (categories && Array.isArray(categories)) {
       const existingCategories = await Category.findAll({
@@ -230,6 +243,7 @@ export const updatePost = catchAsync(
       author_id: updatedPost?.author_id,
       status: updatedPost?.status,
       publish_date: updatedPost?.publish_date,
+      image_url: updatedPost?.image_url,
       categories:
         updatedPost?.postCategories?.map(({ category }) => ({
           id: category?.id || 0,
@@ -244,8 +258,8 @@ export const updatePost = catchAsync(
         post: formattedPost,
       },
     });
-  },
-);
+  }),
+];
 
 export const deletePost = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {

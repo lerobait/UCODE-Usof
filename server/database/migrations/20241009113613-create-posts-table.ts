@@ -24,6 +24,10 @@ export default {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      image_url: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
       publish_date: {
         type: DataTypes.DATE,
         allowNull: false,

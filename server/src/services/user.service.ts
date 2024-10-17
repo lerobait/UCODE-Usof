@@ -42,6 +42,7 @@ export class UserService {
   }
 
   async updateAvatar(userId: number, avatarUrl: string) {
+    console.log(`Updating avatar for user ${userId}: ${avatarUrl}`);
     const user = await User.findByPk(userId, {
       attributes: {
         exclude: [

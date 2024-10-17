@@ -3,7 +3,7 @@ import { User } from '../../database/models/User';
 import UserService from '../services/user.service';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
-import upload from '../utils/upload';
+import uploadImage from '../utils/upload';
 
 interface CustomRequest extends Request {
   user?: User;
@@ -56,7 +56,7 @@ export const updateMyPassword = catchAsync(
 );
 
 export const uploadUserAvatar = [
-  upload.single('avatar'),
+  uploadImage.single('avatar'),
   catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
       return next(new AppError('User not authenticated', 401));
