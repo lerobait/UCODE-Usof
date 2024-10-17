@@ -32,6 +32,25 @@ export const getCategoryById = catchAsync(
   },
 );
 
+export const getPostsByCategoryId = catchAsync(
+  async (req: Request, res: Response) => {
+    const { category_id } = req.params;
+    const id = parseInt(category_id);
+
+    const posts = await CategoryService.getPostsByCategoryId(id);
+
+    const formattedPosts = posts ? posts.map(CategoryService.formatPost) : [];
+
+    res.status(200).json({
+      status: 'success',
+      results: (posts ?? []).length,
+      data: {
+        posts: formattedPosts,
+      },
+    });
+  },
+);
+
 export const createCategory = catchAsync(
   async (req: Request, res: Response) => {
     const { title, description } = req.body;

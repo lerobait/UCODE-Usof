@@ -6,7 +6,7 @@ import {
   AutoIncrement,
   DataType,
   Default,
-  HasMany,
+  BelongsToMany,
 } from 'sequelize-typescript';
 import {
   InferAttributes,
@@ -14,6 +14,7 @@ import {
   CreationOptional,
 } from 'sequelize/types';
 import { PostCategory } from './PostCategory';
+import { Post } from './Post';
 
 @Table({ tableName: 'categories', timestamps: false })
 export class Category extends Model<
@@ -38,6 +39,6 @@ export class Category extends Model<
   })
   created_at!: CreationOptional<Date>;
 
-  @HasMany(() => PostCategory)
-  postCategories?: PostCategory[];
+  @BelongsToMany(() => Post, () => PostCategory)
+  posts?: Post[];
 }
