@@ -9,18 +9,26 @@ import {
   BelongsTo,
   Default,
 } from 'sequelize-typescript';
+import {
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize/types';
 import { User } from './User';
 import { Post } from './Post';
 
-@Table({ tableName: 'comments' })
-export class Comment extends Model<Comment> {
+@Table({ tableName: 'comments', timestamps: false })
+export class Comment extends Model<
+  InferAttributes<Comment>,
+  InferCreationAttributes<Comment, { omit: 'author' | 'post' }>
+> {
   @PrimaryKey
   @AutoIncrement
-  @Column
-  id!: number;
+  @Column(DataType.INTEGER)
+  id!: CreationOptional<number>;
 
   @ForeignKey(() => User)
-  @Column
+  @Column(DataType.INTEGER)
   author_id!: number;
 
   @ForeignKey(() => Post)
@@ -31,16 +39,19 @@ export class Comment extends Model<Comment> {
   content!: string;
 
   @Default(DataType.NOW)
-  @Column(DataType.DATE)
-  publish_date!: Date;
+  @Column({
+    type: DataType.DATE,
+    field: 'publish_date',
+  })
+  publish_date!: CreationOptional<Date>;
 
   @Default('active')
   @Column(DataType.ENUM('active', 'inactive'))
   status!: 'active' | 'inactive';
 
   @BelongsTo(() => User)
-  author!: User;
+  author?: User;
 
   @BelongsTo(() => Post)
-  post!: Post;
+  post?: Post;
 }

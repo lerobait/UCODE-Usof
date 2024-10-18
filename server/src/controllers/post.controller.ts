@@ -6,6 +6,9 @@ import {
   getMyPostsService,
   updatePostService,
   deletePostService,
+  createCommentService,
+  getCommentsForPostService,
+  getCategoriesForPostService,
 } from '../services/post.service';
 import uploadImage from '../utils/upload';
 import catchAsync from '../utils/catchAsync';
@@ -60,6 +63,43 @@ export const getMyPosts = catchAsync(
       status: 'success',
       data: {
         posts,
+      },
+    });
+  },
+);
+
+export const getCategoriesForPost = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { post_id } = req.params;
+    const categories = await getCategoriesForPostService(post_id);
+
+    if (!categories) {
+      return next(new AppError('No categories found for this post', 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        categories,
+      },
+    });
+  },
+);
+
+export const getCommentsForPost = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { post_id } = req.params;
+
+    const comments = await getCommentsForPostService(post_id);
+
+    if (!comments) {
+      return next(new AppError('No comments found for this post', 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        comments,
       },
     });
   },
@@ -136,6 +176,31 @@ export const deletePost = catchAsync(
     res.status(204).json({
       status: 'success',
       message: 'Post deleted successfully',
+    });
+  },
+);
+
+export const createComment = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { post_id } = req.params;
+    const { content } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return next(new AppError('User not authenticated', 401));
+    }
+
+    if (!content) {
+      return next(new AppError('Content is required', 400));
+    }
+
+    const comment = await createCommentService(post_id, content, userId);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        comment,
+      },
     });
   },
 );

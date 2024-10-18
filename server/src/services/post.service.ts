@@ -2,6 +2,7 @@ import { Post } from '../../database/models/Post';
 import { Category } from '../../database/models/Category';
 import { PostCategory } from '../../database/models/PostCategory';
 import { User } from '../../database/models/User';
+import { Comment } from '../../database/models/Comment';
 import AppError from '../utils/appError';
 
 export const getAllPostsService = async () => {
@@ -135,6 +136,51 @@ export const getMyPostsService = async (userId: number) => {
   );
 };
 
+export const getCommentsForPostService = async (postId: string) => {
+  const comments = await Comment.findAll({
+    where: { post_id: postId },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'full_name', 'profile_picture'],
+      },
+    ],
+  });
+
+  return comments.map(({ id, content, publish_date, status, author }) => ({
+    id,
+    content,
+    publish_date,
+    status,
+    author,
+  }));
+};
+
+export const getCategoriesForPostService = async (postId: string) => {
+  const post = await Post.findOne({
+    where: { id: postId },
+    include: [
+      {
+        model: PostCategory,
+        include: [
+          {
+            model: Category,
+            attributes: ['id', 'title', 'description'],
+          },
+        ],
+      },
+    ],
+  });
+
+  if (!post) return null;
+
+  return (post.postCategories ?? []).map(({ category }) => ({
+    id: category?.id || 0,
+    title: category?.title || '',
+    description: category?.description || '',
+  }));
+};
+
 export const createPostService = async (
   title: string,
   content: string,
@@ -239,4 +285,35 @@ export const deletePostService = async (
   await PostCategory.destroy({ where: { post_id: post.id } });
   await post.destroy();
   return true;
+};
+
+export const createCommentService = async (
+  postId: string,
+  content: string,
+  userId: number,
+) => {
+  const post = await Post.findByPk(postId);
+  if (!post) {
+    throw new AppError('Post not found', 404);
+  }
+
+  const comment = await Comment.create({
+    post_id: Number(postId),
+    content,
+    author_id: userId,
+    status: 'active',
+  });
+
+  const author = await User.findOne({
+    where: { id: userId },
+    attributes: ['id', 'full_name', 'profile_picture', 'rating'],
+  });
+
+  return {
+    id: comment.id,
+    content: comment.content,
+    post_id: comment.post_id,
+    author,
+    status: comment.status,
+  };
 };
