@@ -9,19 +9,27 @@ import {
   BelongsTo,
   Default,
 } from 'sequelize-typescript';
+import {
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize/types';
 import { User } from './User';
 import { Post } from './Post';
 import { Comment } from './Comment';
 
-@Table({ tableName: 'likes' })
-export class Like extends Model<Like> {
+@Table({ tableName: 'likes', timestamps: false })
+export class Like extends Model<
+  InferAttributes<Like>,
+  InferCreationAttributes<Like>
+> {
   @PrimaryKey
   @AutoIncrement
-  @Column
-  id!: number;
+  @Column(DataType.INTEGER)
+  id!: CreationOptional<number>;
 
   @ForeignKey(() => User)
-  @Column
+  @Column(DataType.INTEGER)
   author_id!: number;
 
   @ForeignKey(() => Post)
@@ -36,15 +44,18 @@ export class Like extends Model<Like> {
   type!: 'like' | 'dislike';
 
   @Default(DataType.NOW)
-  @Column(DataType.DATE)
-  publish_date!: Date;
+  @Column({
+    type: DataType.DATE,
+    field: 'publish_date',
+  })
+  publish_date!: CreationOptional<Date>;
 
   @BelongsTo(() => User)
-  author!: User;
+  author?: User;
 
   @BelongsTo(() => Post)
-  post!: Post;
+  post?: Post;
 
   @BelongsTo(() => Comment)
-  comment!: Comment;
+  comment?: Comment;
 }
