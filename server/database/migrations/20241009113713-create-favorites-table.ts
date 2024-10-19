@@ -2,7 +2,7 @@ import { QueryInterface, DataTypes } from 'sequelize';
 
 export default {
   up: async (queryInterface: QueryInterface) => {
-    await queryInterface.createTable('user_sessions', {
+    await queryInterface.createTable('favorites', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -16,17 +16,18 @@ export default {
         },
         onDelete: 'CASCADE',
       },
-      token: {
-        type: DataTypes.STRING(255),
-      },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+      post_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'posts',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
       },
     });
   },
 
   down: async (queryInterface: QueryInterface) => {
-    await queryInterface.dropTable('user_sessions');
+    await queryInterface.dropTable('favorites');
   },
 };

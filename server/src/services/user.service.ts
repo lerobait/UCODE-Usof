@@ -155,7 +155,6 @@ export class UserService {
       posts: [],
       comments: [],
       likes: [],
-      sessions: [],
       passwordResets: [],
       email_verified: true,
     });

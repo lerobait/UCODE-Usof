@@ -17,7 +17,6 @@ import {
 import { Post } from './Post';
 import { Comment } from './Comment';
 import { Like } from './Like';
-import { UserSession } from './UserSession';
 import { PasswordReset } from './PasswordReset';
 
 @Table({
@@ -85,9 +84,6 @@ export class User extends Model<
 
   @HasMany(() => Like)
   likes!: Like[];
-
-  @HasMany(() => UserSession)
-  sessions!: UserSession[];
 
   @HasMany(() => PasswordReset)
   passwordResets!: PasswordReset[];

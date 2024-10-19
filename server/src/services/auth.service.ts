@@ -61,7 +61,6 @@ export const registerUser = async (
     posts: [],
     comments: [],
     likes: [],
-    sessions: [],
     passwordResets: [],
   });
 

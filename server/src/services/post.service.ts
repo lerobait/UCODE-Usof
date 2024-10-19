@@ -4,6 +4,7 @@ import { PostCategory } from '../../database/models/PostCategory';
 import { User } from '../../database/models/User';
 import { Comment } from '../../database/models/Comment';
 import { Like } from '../../database/models/Like';
+import { Favorite } from '../../database/models/Favorite';
 import AppError from '../utils/appError';
 import { Op } from 'sequelize';
 import Sequelize from 'sequelize';
@@ -288,6 +289,80 @@ export const deletePostService = async (
   await PostCategory.destroy({ where: { post_id: post.id } });
   await post.destroy();
   return true;
+};
+
+export const getMyFavoritePostsService = async (userId: number) => {
+  const favoritePosts = await Favorite.findAll({
+    where: { user_id: userId },
+    include: [
+      {
+        model: Post,
+        include: [
+          {
+            model: User,
+            attributes: ['id', 'full_name', 'profile_picture', 'rating'],
+          },
+          {
+            model: PostCategory,
+            include: [
+              {
+                model: Category,
+                attributes: ['id', 'title', 'description'],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+
+  return favoritePosts
+    .map(({ post }) => {
+      if (!post) return null;
+      return {
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        publish_date: post.publish_date,
+        status: post.status,
+        author: post.author,
+        image_url: post.image_url,
+        categories: post.postCategories?.map(({ category }) => ({
+          id: category?.id || 0,
+          title: category?.title || '',
+          description: category?.description || '',
+        })),
+      };
+    })
+    .filter(Boolean);
+};
+
+export const addPostToFavoritesService = async (
+  postId: number,
+  userId: number,
+) => {
+  const post = await Post.findByPk(postId);
+  if (!post) {
+    throw new AppError('Post not found', 404);
+  }
+
+  const existingFavorite = await Favorite.findOne({
+    where: {
+      post_id: postId,
+      user_id: userId,
+    },
+  });
+
+  if (existingFavorite) {
+    throw new AppError('Post is already in favorites', 400);
+  }
+
+  const favorite = await Favorite.create({
+    post_id: postId,
+    user_id: userId,
+  });
+
+  return favorite;
 };
 
 export const getLikesForPostService = async (postId: number) => {

@@ -12,6 +12,8 @@ import {
   addLikeToPostService,
   deleteLikeFromPostService,
   getLikesForPostService,
+  addPostToFavoritesService,
+  getMyFavoritePostsService,
 } from '../services/post.service';
 import uploadImage from '../utils/upload';
 import catchAsync from '../utils/catchAsync';
@@ -179,6 +181,44 @@ export const deletePost = catchAsync(
     res.status(204).json({
       status: 'success',
       message: 'Post deleted successfully',
+    });
+  },
+);
+
+export const getMyFavoritePosts = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return next(new AppError('User not authenticated', 401));
+    }
+
+    const favoritePosts = await getMyFavoritePostsService(userId);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        posts: favoritePosts,
+      },
+    });
+  },
+);
+
+export const addPostToFavorites = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { post_id } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return next(new AppError('User not authenticated', 401));
+    }
+
+    const favorite = await addPostToFavoritesService(Number(post_id), userId);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        favorite,
+      },
     });
   },
 );

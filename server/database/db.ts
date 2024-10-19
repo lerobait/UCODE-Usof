@@ -6,7 +6,7 @@ import { Like } from './models/Like';
 import { PostCategory } from './models/PostCategory';
 import { Category } from './models/Category';
 import { PasswordReset } from './models/PasswordReset';
-import { UserSession } from './models/UserSession';
+import { Favorite } from './models/Favorite';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -32,7 +32,7 @@ const sequelize = new Sequelize({
     PostCategory,
     Category,
     PasswordReset,
-    UserSession,
+    Favorite,
   ],
   logging: console.log,
 });
