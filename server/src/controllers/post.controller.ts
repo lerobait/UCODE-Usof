@@ -9,6 +9,9 @@ import {
   createCommentService,
   getCommentsForPostService,
   getCategoriesForPostService,
+  addLikeToPostService,
+  deleteLikeFromPostService,
+  getLikesForPostService,
 } from '../services/post.service';
 import uploadImage from '../utils/upload';
 import catchAsync from '../utils/catchAsync';
@@ -176,6 +179,56 @@ export const deletePost = catchAsync(
     res.status(204).json({
       status: 'success',
       message: 'Post deleted successfully',
+    });
+  },
+);
+
+export const getLikesForPost = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { post_id } = req.params;
+
+    const likes = await getLikesForPostService(Number(post_id));
+
+    res.status(200).json({
+      status: 'success',
+      results: likes.length,
+      data: {
+        likes,
+      },
+    });
+  },
+);
+
+export const addlikeToPost = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { post_id } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return next(new AppError('User not authenticated', 401));
+    }
+
+    const like = await addLikeToPostService(Number(post_id), userId);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        like,
+      },
+    });
+  },
+);
+
+export const deleteLikeFromPost = catchAsync(
+  async (req: CustomRequest, res: Response) => {
+    const postId = parseInt(req.params.post_id, 10);
+    const userId = req.user?.id ?? 0;
+
+    await deleteLikeFromPostService(postId, userId);
+
+    return res.status(204).json({
+      status: 'success',
+      message: 'Like deleted successfully',
     });
   },
 );

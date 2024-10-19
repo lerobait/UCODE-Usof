@@ -38,7 +38,7 @@ export class Like extends Model<
 
   @ForeignKey(() => Comment)
   @Column
-  comment_id!: number;
+  comment_id?: number;
 
   @Column(DataType.ENUM('like', 'dislike'))
   type!: 'like' | 'dislike';

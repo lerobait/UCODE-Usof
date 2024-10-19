@@ -11,6 +11,9 @@ import {
   createComment,
   getCommentsForPost,
   getCategoriesForPost,
+  addlikeToPost,
+  deleteLikeFromPost,
+  getLikesForPost,
 } from '../controllers/post.controller';
 
 const router = Router();
@@ -24,10 +27,13 @@ router.use(protect);
 router.post('/', createPost);
 router.patch('/:post_id', updatePost);
 router.delete('/:post_id', deletePost);
+router.post('/:post_id/like', addlikeToPost);
+router.delete('/:post_id/like', deleteLikeFromPost);
 router.post('/:post_id/comments', createComment);
 
 router.use(restrictTo('admin'));
 
 router.get('/:post_id/categories', getCategoriesForPost);
+router.get('/:post_id/like', getLikesForPost);
 
 export default router;

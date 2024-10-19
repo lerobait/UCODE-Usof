@@ -3,7 +3,10 @@ import { Category } from '../../database/models/Category';
 import { PostCategory } from '../../database/models/PostCategory';
 import { User } from '../../database/models/User';
 import { Comment } from '../../database/models/Comment';
+import { Like } from '../../database/models/Like';
 import AppError from '../utils/appError';
+import { Op } from 'sequelize';
+import Sequelize from 'sequelize';
 
 export const getAllPostsService = async () => {
   const posts = await Post.findAll({
@@ -285,6 +288,83 @@ export const deletePostService = async (
   await PostCategory.destroy({ where: { post_id: post.id } });
   await post.destroy();
   return true;
+};
+
+export const getLikesForPostService = async (postId: number) => {
+  const post = await Post.findByPk(postId);
+
+  if (!post) {
+    throw new AppError('Post not found', 404);
+  }
+
+  const likes = await Like.findAll({
+    where: {
+      post_id: postId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'login', 'full_name', 'profile_picture'],
+      },
+    ],
+  });
+
+  return likes;
+};
+
+export const addLikeToPostService = async (postId: number, userId: number) => {
+  const post = await Post.findByPk(postId);
+
+  if (!post) {
+    throw new AppError('Post not found', 404);
+  }
+
+  if (post.status === 'inactive') {
+    throw new AppError('You cannot like an inactive post', 403);
+  }
+
+  if (post.author_id === userId) {
+    throw new AppError('You cannot like your own post', 403);
+  }
+
+  const existingLike = await Like.findOne({
+    where: {
+      post_id: postId,
+      author_id: userId,
+    },
+  });
+
+  if (existingLike) {
+    throw new AppError('You already liked this post', 400);
+  }
+
+  const like = await Like.create({
+    post_id: postId,
+    author_id: userId,
+    type: 'like',
+  });
+  return like;
+};
+
+export const deleteLikeFromPostService = async (
+  postId: number,
+  userId: number,
+) => {
+  const like = await Like.findOne({
+    where: {
+      post_id: postId,
+      author_id: userId,
+      comment_id: {
+        [Op.is]: Sequelize.literal('NULL'),
+      },
+    },
+  });
+
+  if (!like) {
+    throw new AppError('Like not found', 404);
+  }
+
+  await like.destroy();
 };
 
 export const createCommentService = async (
