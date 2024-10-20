@@ -6,9 +6,23 @@ import { Comment } from '../../database/models/Comment';
 import { Like } from '../../database/models/Like';
 import { Favorite } from '../../database/models/Favorite';
 import AppError from '../utils/appError';
-import { Op } from 'sequelize';
-import Sequelize from 'sequelize';
+import { Op, QueryTypes } from 'sequelize';
+import { Transaction } from 'sequelize';
 import sequelize from '../../database/db';
+
+interface PostWithCounts {
+  id: number;
+  title: string;
+  content: string;
+  publish_date: Date;
+  status: 'active' | 'inactive';
+  image_url?: string;
+  author_id: number;
+  author_login: string;
+  author_profile_picture?: string;
+  likes_count: number;
+  comments_count: number;
+}
 
 export const getAllPostsService = async () => {
   const posts = await Post.findAll({
@@ -28,8 +42,8 @@ export const getAllPostsService = async () => {
     ],
     attributes: {
       include: [
-        [Sequelize.fn('COUNT', Sequelize.col('comments.id')), 'comments_count'],
-        [Sequelize.fn('COUNT', Sequelize.col('likes.id')), 'likes_count'],
+        [sequelize.fn('COUNT', sequelize.col('comments.id')), 'comments_count'],
+        [sequelize.fn('COUNT', sequelize.col('likes.id')), 'likes_count'],
       ],
     },
     group: ['Post.id', 'author.id'],
@@ -112,8 +126,8 @@ export const getMyPostsService = async (userId: number) => {
     ],
     attributes: {
       include: [
-        [Sequelize.fn('COUNT', Sequelize.col('comments.id')), 'comments_count'],
-        [Sequelize.fn('COUNT', Sequelize.col('likes.id')), 'likes_count'],
+        [sequelize.fn('COUNT', sequelize.col('comments.id')), 'comments_count'],
+        [sequelize.fn('COUNT', sequelize.col('likes.id')), 'likes_count'],
       ],
     },
     group: ['Post.id', 'author.id'],
@@ -285,7 +299,7 @@ export const deletePostService = async (
   postId: string,
   userId: number | undefined,
 ) => {
-  return sequelize.transaction(async (transaction: Sequelize.Transaction) => {
+  return sequelize.transaction(async (transaction: Transaction) => {
     const post = await Post.findOne({
       where: { id: postId, author_id: userId },
       transaction,
@@ -334,49 +348,45 @@ export const deletePostService = async (
 };
 
 export const getMyFavoritePostsService = async (userId: number) => {
-  const favoritePosts = await Favorite.findAll({
-    where: { user_id: userId },
-    include: [
-      {
-        model: Post,
-        include: [
-          {
-            model: User,
-            attributes: ['id', 'full_name', 'profile_picture', 'rating'],
-          },
-          {
-            model: PostCategory,
-            include: [
-              {
-                model: Category,
-                attributes: ['id', 'title', 'description'],
-              },
-            ],
-          },
-        ],
-      },
-    ],
+  const query = `
+    SELECT 
+      p.id, 
+      p.title, 
+      p.content, 
+      p.publish_date, 
+      p.status, 
+      p.image_url, 
+      u.id AS author_id, 
+      u.login AS author_login, 
+      u.profile_picture AS author_profile_picture,
+      (SELECT COUNT(*) FROM comments WHERE comments.post_id = p.id) AS comments_count,
+      (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id) AS likes_count
+    FROM favorites f
+    JOIN posts p ON f.post_id = p.id
+    JOIN users u ON p.author_id = u.id
+    WHERE f.user_id = :userId
+  `;
+
+  const favoritePosts = await sequelize.query<PostWithCounts>(query, {
+    replacements: { userId },
+    type: QueryTypes.SELECT,
   });
 
-  return favoritePosts
-    .map(({ post }) => {
-      if (!post) return null;
-      return {
-        id: post.id,
-        title: post.title,
-        content: post.content,
-        publish_date: post.publish_date,
-        status: post.status,
-        author: post.author,
-        image_url: post.image_url,
-        categories: post.postCategories?.map(({ category }) => ({
-          id: category?.id || 0,
-          title: category?.title || '',
-          description: category?.description || '',
-        })),
-      };
-    })
-    .filter(Boolean);
+  return favoritePosts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    publish_date: post.publish_date,
+    status: post.status,
+    image_url: post.image_url,
+    author: {
+      id: post.author_id,
+      login: post.author_login,
+      profile_picture: post.author_profile_picture,
+    },
+    likes_count: post.likes_count,
+    comments_count: post.comments_count,
+  }));
 };
 
 export const addPostToFavoritesService = async (
@@ -472,7 +482,7 @@ export const deleteLikeFromPostService = async (
       post_id: postId,
       author_id: userId,
       comment_id: {
-        [Op.is]: Sequelize.literal('NULL'),
+        [Op.is]: sequelize.literal('NULL'),
       },
     },
   });
