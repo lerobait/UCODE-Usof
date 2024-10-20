@@ -8,6 +8,7 @@ import { Favorite } from '../../database/models/Favorite';
 import AppError from '../utils/appError';
 import { Op } from 'sequelize';
 import Sequelize from 'sequelize';
+import sequelize from '../../database/db';
 
 export const getAllPostsService = async () => {
   const posts = await Post.findAll({
@@ -234,6 +235,7 @@ export const updatePostService = async (
   title: string | undefined,
   content: string | undefined,
   categories: number[] | undefined,
+  status: string | undefined,
   userId: number | undefined,
   imageUrl?: string,
 ) => {
@@ -247,6 +249,7 @@ export const updatePostService = async (
   if (title) post.title = title;
   if (content) post.content = content;
   if (imageUrl) post.image_url = imageUrl;
+  if (status === 'active' || status === 'inactive') post.status = status;
 
   if (categories && Array.isArray(categories)) {
     const existingCategories = await Category.findAll({
@@ -283,12 +286,52 @@ export const deletePostService = async (
   postId: string,
   userId: number | undefined,
 ) => {
-  const post = await Post.findOne({ where: { id: postId } });
-  if (!post || post.author_id !== userId) return null;
+  return sequelize.transaction(async (transaction: Sequelize.Transaction) => {
+    const post = await Post.findOne({
+      where: { id: postId, author_id: userId },
+      transaction,
+    });
 
-  await PostCategory.destroy({ where: { post_id: post.id } });
-  await post.destroy();
-  return true;
+    if (!post) {
+      throw new AppError(
+        'Post not found or not authorized to delete this post',
+        403,
+      );
+    }
+
+    try {
+      await PostCategory.destroy({ where: { post_id: postId }, transaction });
+
+      const commentIds = await Comment.findAll({
+        attributes: ['id'],
+        where: { post_id: postId },
+        transaction,
+      });
+      const commentIdList = commentIds.map((comment) => comment.id);
+
+      if (commentIdList.length > 0) {
+        await Like.destroy({
+          where: { comment_id: { [Op.in]: commentIdList } },
+          transaction,
+        });
+      }
+
+      await Comment.destroy({ where: { post_id: postId }, transaction });
+
+      await Like.destroy({ where: { post_id: postId }, transaction });
+
+      await Favorite.destroy({ where: { post_id: postId }, transaction });
+
+      await Post.destroy({ where: { id: postId }, transaction });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.stack);
+      } else {
+        console.error(error);
+      }
+      throw new AppError('Error during post deletion', 500);
+    }
+  });
 };
 
 export const getMyFavoritePostsService = async (userId: number) => {
@@ -450,6 +493,10 @@ export const createCommentService = async (
   const post = await Post.findByPk(postId);
   if (!post) {
     throw new AppError('Post not found', 404);
+  }
+
+  if (post.status === 'inactive') {
+    throw new AppError('Cannot comment on an inactive post', 403);
   }
 
   const comment = await Comment.create({

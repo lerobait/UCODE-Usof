@@ -138,7 +138,7 @@ export const updatePost = [
   uploadImage.single('image'),
   catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { post_id } = req.params;
-    const { title, content, categories } = req.body;
+    const { title, content, categories, status } = req.body;
     const userId = req.user?.id;
     const imageUrl = req.file?.location;
 
@@ -147,6 +147,7 @@ export const updatePost = [
       title,
       content,
       categories,
+      status,
       userId,
       imageUrl,
     );

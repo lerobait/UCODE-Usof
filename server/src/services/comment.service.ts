@@ -43,11 +43,6 @@ export const updateComment = async (
   }
 
   if (status) {
-    if (status === 'inactive' && comment.status === 'active') {
-      await Like.destroy({
-        where: { comment_id: commentId },
-      });
-    }
     if (status === 'active' || status === 'inactive') {
       comment.status = status;
     } else {
