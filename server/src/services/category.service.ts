@@ -1,7 +1,8 @@
 import { Category } from '../../database/models/Category';
 import { Post } from '../../database/models/Post';
-import { PostCategory } from '../../database/models/PostCategory';
 import { User } from '../../database/models/User';
+import { Comment } from '../../database/models/Comment';
+import { Like } from '../../database/models/Like';
 import AppError from '../utils/appError';
 
 export const getAllCategories = async () => {
@@ -46,16 +47,15 @@ export const getPostsByCategoryId = async (categoryId: number) => {
         include: [
           {
             model: User,
-            attributes: ['id', 'full_name', 'profile_picture', 'rating'],
+            attributes: ['id', 'login', 'profile_picture'],
           },
           {
-            model: PostCategory,
-            include: [
-              {
-                model: Category,
-                attributes: ['id', 'title', 'description'],
-              },
-            ],
+            model: Comment,
+            attributes: [],
+          },
+          {
+            model: Like,
+            attributes: [],
           },
         ],
       },
@@ -66,7 +66,30 @@ export const getPostsByCategoryId = async (categoryId: number) => {
     throw new AppError('Category not found', 404);
   }
 
-  return category.posts;
+  const formattedPosts = await Promise.all(
+    (category.posts ?? []).map(async (post) => {
+      const likesCount = await post.$get('likes');
+      const commentsCount = await post.$get('comments');
+
+      return {
+        id: post.id,
+        author: {
+          id: post.author?.id,
+          login: post.author?.login,
+          profile_picture: post.author?.profile_picture,
+        },
+        status: post.status,
+        publish_date: post.publish_date,
+        title: post.title,
+        content: post.content,
+        image_url: post.image_url,
+        likes_count: likesCount.length,
+        comments_count: commentsCount.length,
+      };
+    }),
+  );
+
+  return formattedPosts;
 };
 
 export const createCategory = async (title: string, description?: string) => {

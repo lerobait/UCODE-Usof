@@ -39,13 +39,11 @@ export const getPostsByCategoryId = catchAsync(
 
     const posts = await CategoryService.getPostsByCategoryId(id);
 
-    const formattedPosts = posts ? posts.map(CategoryService.formatPost) : [];
-
     res.status(200).json({
       status: 'success',
-      results: (posts ?? []).length,
+      results: posts.length,
       data: {
-        posts: formattedPosts,
+        posts,
       },
     });
   },
