@@ -32,7 +32,7 @@ export class Comment extends Model<
   author_id!: number;
 
   @ForeignKey(() => Post)
-  @Column
+  @Column(DataType.INTEGER)
   post_id!: number;
 
   @Column(DataType.TEXT)

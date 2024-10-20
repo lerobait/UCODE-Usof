@@ -15,45 +15,44 @@ export const getAllPostsService = async () => {
     include: [
       {
         model: User,
-        attributes: ['id', 'full_name', 'profile_picture', 'rating'],
+        attributes: ['id', 'login', 'profile_picture'],
       },
       {
-        model: PostCategory,
-        include: [
-          {
-            model: Category,
-            attributes: ['id', 'title', 'description'],
-          },
-        ],
+        model: Comment,
+        attributes: [],
+      },
+      {
+        model: Like,
+        attributes: [],
       },
     ],
+    attributes: {
+      include: [
+        [Sequelize.fn('COUNT', Sequelize.col('comments.id')), 'comments_count'],
+        [Sequelize.fn('COUNT', Sequelize.col('likes.id')), 'likes_count'],
+      ],
+    },
+    group: ['Post.id', 'author.id'],
   });
 
-  return posts.map(
-    ({
-      id,
-      title,
-      content,
-      publish_date,
-      status,
-      author,
-      image_url,
-      postCategories = [],
-    }) => ({
-      id,
-      title,
-      content,
-      publish_date,
-      status,
-      author,
-      image_url,
-      categories: postCategories.map(({ category }) => ({
-        id: category?.id || 0,
-        title: category?.title || '',
-        description: category?.description || '',
-      })),
-    }),
-  );
+  return posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    publish_date: post.publish_date,
+    status: post.status,
+    image_url: post.image_url,
+    author_id: post.author_id,
+    author: post.author
+      ? {
+          id: post.author.id,
+          login: post.author.login,
+          profile_picture: post.author.profile_picture,
+        }
+      : null,
+    likes_count: post.getDataValue('likes_count'),
+    comments_count: post.getDataValue('comments_count'),
+  }));
 };
 
 export const getPostByIdService = async (postId: string) => {

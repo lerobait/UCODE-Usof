@@ -17,6 +17,8 @@ import {
 } from 'sequelize/types';
 import { User } from './User';
 import { PostCategory } from './PostCategory';
+import { Comment } from './Comment';
+import { Like } from './Like';
 
 @Table({ tableName: 'posts', timestamps: false })
 export class Post extends Model<
@@ -56,4 +58,13 @@ export class Post extends Model<
 
   @HasMany(() => PostCategory)
   postCategories?: PostCategory[];
+
+  @HasMany(() => Comment)
+  comments?: Comment[];
+
+  @HasMany(() => Like)
+  likes?: Like[];
+
+  likes_count?: number;
+  comments_count?: number;
 }

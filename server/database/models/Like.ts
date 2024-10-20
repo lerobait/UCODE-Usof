@@ -33,11 +33,11 @@ export class Like extends Model<
   author_id!: number;
 
   @ForeignKey(() => Post)
-  @Column
+  @Column(DataType.INTEGER)
   post_id!: number;
 
   @ForeignKey(() => Comment)
-  @Column
+  @Column(DataType.INTEGER)
   comment_id?: number;
 
   @Column(DataType.ENUM('like', 'dislike'))
