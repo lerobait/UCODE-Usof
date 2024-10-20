@@ -18,6 +18,7 @@ import {
 import uploadImage from '../utils/upload';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
+import { getStringQueryParam } from '../utils/filters';
 
 interface CustomRequest extends Request {
   user?: {
@@ -27,7 +28,16 @@ interface CustomRequest extends Request {
 
 export const getAllPosts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const posts = await getAllPostsService();
+    const status = getStringQueryParam(req.query.status);
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const order = getStringQueryParam(req.query.order) || 'DESC';
+
+    const posts = await getAllPostsService(
+      status as 'active' | 'inactive',
+      sortBy as 'likes' | 'date',
+      order as 'ASC' | 'DESC',
+    );
+
     res.status(200).json({
       status: 'success',
       data: {

@@ -8,6 +8,7 @@ import { Favorite } from '../../database/models/Favorite';
 import AppError from '../utils/appError';
 import { Op, QueryTypes } from 'sequelize';
 import { Transaction } from 'sequelize';
+import { applyFilters } from '../utils/filters';
 import sequelize from '../../database/db';
 
 interface PostWithCounts {
@@ -24,8 +25,15 @@ interface PostWithCounts {
   comments_count: number;
 }
 
-export const getAllPostsService = async () => {
+export const getAllPostsService = async (
+  status?: 'active' | 'inactive',
+  sortBy?: 'likes' | 'date',
+  order?: 'ASC' | 'DESC',
+) => {
+  const { whereClause, orderClause } = applyFilters({ status, sortBy, order });
+
   const posts = await Post.findAll({
+    where: whereClause,
     include: [
       {
         model: User,
@@ -47,6 +55,7 @@ export const getAllPostsService = async () => {
       ],
     },
     group: ['Post.id', 'author.id'],
+    order: orderClause,
   });
 
   return posts.map((post) => ({
