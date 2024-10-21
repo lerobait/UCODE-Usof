@@ -29,6 +29,8 @@ export const getAllPostsService = async (
   status?: 'active' | 'inactive',
   sortBy?: 'likes' | 'date',
   order?: 'ASC' | 'DESC',
+  limit?: number,
+  offset?: number,
 ) => {
   const { whereClause, orderClause } = applyFilters({
     status,
@@ -39,8 +41,23 @@ export const getAllPostsService = async (
     orderClause: [string, string][];
   };
 
-  const posts = await Post.findAll({
+  const postIds = await Post.findAll({
     where: whereClause,
+    attributes: ['id'],
+    order: sequelize.literal(
+      `(SELECT COUNT(*) FROM likes WHERE likes.post_id = Post.id) DESC`,
+    ),
+    limit,
+    offset,
+    raw: true,
+  }).then((posts) => posts.map((post) => post.id));
+
+  const posts = await Post.findAll({
+    where: {
+      id: {
+        [Op.in]: postIds,
+      },
+    },
     include: [
       {
         model: User,
@@ -65,24 +82,27 @@ export const getAllPostsService = async (
     order: orderClause,
   });
 
-  return posts.map((post) => ({
-    id: post.id,
-    title: post.title,
-    content: post.content,
-    publish_date: post.publish_date,
-    status: post.status,
-    image_url: post.image_url,
-    author_id: post.author_id,
-    author: post.author
-      ? {
-          id: post.author.id,
-          login: post.author.login,
-          profile_picture: post.author.profile_picture,
-        }
-      : null,
-    likes_count: post.getDataValue('likes_count'),
-    comments_count: post.getDataValue('comments_count'),
-  }));
+  return {
+    posts: posts.map((post) => ({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      publish_date: post.publish_date,
+      status: post.status,
+      image_url: post.image_url,
+      author_id: post.author_id,
+      author: post.author
+        ? {
+            id: post.author.id,
+            login: post.author.login,
+            profile_picture: post.author.profile_picture,
+          }
+        : null,
+      likes_count: post.getDataValue('likes_count'),
+      comments_count: post.getDataValue('comments_count'),
+    })),
+    totalItems: postIds.length,
+  };
 };
 
 export const getPostByIdService = async (postId: string) => {

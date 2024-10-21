@@ -31,17 +31,25 @@ export const getAllPosts = catchAsync(
     const status = getStringQueryParam(req.query.status);
     const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
     const order = getStringQueryParam(req.query.order) || 'DESC';
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const offset = (page - 1) * limit;
 
-    const posts = await getAllPostsService(
+    const { posts, totalItems } = await getAllPostsService(
       status as 'active' | 'inactive',
       sortBy as 'likes' | 'date',
       order as 'ASC' | 'DESC',
+      limit,
+      offset,
     );
 
     res.status(200).json({
       status: 'success',
       data: {
         posts,
+        totalItems,
+        totalPages: Math.ceil(Number(totalItems) / Number(limit)),
+        currentPage: page,
       },
     });
   },
