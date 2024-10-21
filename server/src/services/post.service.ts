@@ -382,7 +382,21 @@ export const deletePostService = async (
   });
 };
 
-export const getMyFavoritePostsService = async (userId: number) => {
+export const getMyFavoritePostsService = async (
+  userId: number,
+  status?: 'active' | 'inactive',
+  sortBy?: 'likes' | 'date',
+  order?: 'ASC' | 'DESC',
+) => {
+  const { whereClause, orderClause } = applyFilters({
+    status,
+    sortBy,
+    order,
+  }) as {
+    whereClause: { [key: string]: unknown };
+    orderClause: [string, string][];
+  };
+
   const query = `
     SELECT 
       p.id, 
@@ -400,10 +414,13 @@ export const getMyFavoritePostsService = async (userId: number) => {
     JOIN posts p ON f.post_id = p.id
     JOIN users u ON p.author_id = u.id
     WHERE f.user_id = :userId
+    ${status ? `AND p.status = :status` : ''}
+    GROUP BY p.id, u.id
+    ORDER BY ${sortBy === 'likes' ? 'likes_count' : 'p.publish_date'} ${order};
   `;
 
   const favoritePosts = await sequelize.query<PostWithCounts>(query, {
-    replacements: { userId },
+    replacements: { userId, status },
     type: QueryTypes.SELECT,
   });
 

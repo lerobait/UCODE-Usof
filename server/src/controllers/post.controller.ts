@@ -214,7 +214,16 @@ export const getMyFavoritePosts = catchAsync(
       return next(new AppError('User not authenticated', 401));
     }
 
-    const favoritePosts = await getMyFavoritePostsService(userId);
+    const status = getStringQueryParam(req.query.status);
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const order = getStringQueryParam(req.query.order) || 'DESC';
+
+    const favoritePosts = await getMyFavoritePostsService(
+      userId,
+      status,
+      sortBy,
+      order,
+    );
     res.status(200).json({
       status: 'success',
       data: {
