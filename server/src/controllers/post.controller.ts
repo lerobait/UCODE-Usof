@@ -220,9 +220,9 @@ export const getMyFavoritePosts = catchAsync(
 
     const favoritePosts = await getMyFavoritePostsService(
       userId,
-      status,
-      sortBy,
-      order,
+      status as 'active' | 'inactive',
+      sortBy as 'likes' | 'date',
+      order as 'ASC' | 'DESC',
     );
     res.status(200).json({
       status: 'success',

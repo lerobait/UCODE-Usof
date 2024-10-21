@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as CategoryService from '../services/category.service';
 import catchAsync from '../utils/catchAsync';
+import { getStringQueryParam } from '../utils/filters';
 
 export const getAllCategories = catchAsync(
   async (req: Request, res: Response) => {
@@ -37,13 +38,22 @@ export const getPostsByCategoryId = catchAsync(
     const { category_id } = req.params;
     const id = parseInt(category_id);
 
-    const posts = await CategoryService.getPostsByCategoryId(id);
+    const status = getStringQueryParam(req.query.status);
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const order = getStringQueryParam(req.query.order) || 'DESC';
+
+    const posts = await CategoryService.getPostsByCategoryId(
+      id,
+      status as 'active' | 'inactive',
+      sortBy as 'likes' | 'date',
+      order as 'ASC' | 'DESC',
+    );
 
     res.status(200).json({
       status: 'success',
       results: posts.length,
       data: {
-        posts,
+        posts: posts,
       },
     });
   },

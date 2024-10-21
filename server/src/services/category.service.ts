@@ -1,9 +1,22 @@
 import { Category } from '../../database/models/Category';
 import { Post } from '../../database/models/Post';
-import { User } from '../../database/models/User';
-import { Comment } from '../../database/models/Comment';
-import { Like } from '../../database/models/Like';
 import AppError from '../utils/appError';
+import { QueryTypes } from 'sequelize';
+import sequelize from '../../database/db';
+
+interface PostWithCounts {
+  id: number;
+  title: string;
+  content: string;
+  publish_date: Date;
+  status: 'active' | 'inactive';
+  image_url?: string;
+  author_id: number;
+  author_login: string;
+  author_profile_picture?: string;
+  likes_count: number;
+  comments_count: number;
+}
 
 export const getAllCategories = async () => {
   return await Category.findAll();
@@ -39,57 +52,63 @@ export const formatPost = (post: Post) => ({
   })),
 });
 
-export const getPostsByCategoryId = async (categoryId: number) => {
-  const category = await Category.findByPk(categoryId, {
-    include: [
-      {
-        model: Post,
-        include: [
-          {
-            model: User,
-            attributes: ['id', 'login', 'profile_picture'],
-          },
-          {
-            model: Comment,
-            attributes: [],
-          },
-          {
-            model: Like,
-            attributes: [],
-          },
-        ],
-      },
-    ],
+export const getPostsByCategoryId = async (
+  categoryId: number,
+  status?: 'active' | 'inactive',
+  sortBy?: 'likes' | 'date',
+  order?: 'ASC' | 'DESC',
+) => {
+  const whereClause = status ? `AND p.status = :status` : '';
+  const orderClause =
+    sortBy === 'likes' ? 'ORDER BY likes_count' : 'ORDER BY p.publish_date';
+  const direction = order ? order : 'DESC';
+
+  const query = `
+    SELECT 
+      p.id, 
+      p.title, 
+      p.content, 
+      p.publish_date, 
+      p.status, 
+      p.image_url, 
+      u.id AS author_id, 
+      u.login AS author_login, 
+      u.profile_picture AS author_profile_picture,
+      (SELECT COUNT(*) FROM comments WHERE comments.post_id = p.id) AS comments_count,
+      (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id) AS likes_count
+    FROM post_categories pc
+    JOIN posts p ON pc.post_id = p.id
+    JOIN users u ON p.author_id = u.id
+    WHERE pc.category_id = :categoryId
+    ${whereClause}
+    GROUP BY p.id, u.id
+    ${orderClause} ${direction};
+  `;
+
+  const posts = await sequelize.query<PostWithCounts>(query, {
+    replacements: { categoryId, status },
+    type: QueryTypes.SELECT,
   });
 
-  if (!category) {
-    throw new AppError('Category not found', 404);
+  if (!posts.length) {
+    throw new AppError('Category not found or no posts available', 404);
   }
 
-  const formattedPosts = await Promise.all(
-    (category.posts ?? []).map(async (post) => {
-      const likesCount = await post.$get('likes');
-      const commentsCount = await post.$get('comments');
-
-      return {
-        id: post.id,
-        author: {
-          id: post.author?.id,
-          login: post.author?.login,
-          profile_picture: post.author?.profile_picture,
-        },
-        status: post.status,
-        publish_date: post.publish_date,
-        title: post.title,
-        content: post.content,
-        image_url: post.image_url,
-        likes_count: likesCount.length,
-        comments_count: commentsCount.length,
-      };
-    }),
-  );
-
-  return formattedPosts;
+  return posts.map((post: PostWithCounts) => ({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    publish_date: post.publish_date,
+    status: post.status,
+    image_url: post.image_url,
+    author: {
+      id: post.author_id,
+      login: post.author_login,
+      profile_picture: post.author_profile_picture,
+    },
+    likes_count: post.likes_count,
+    comments_count: post.comments_count,
+  }));
 };
 
 export const createCategory = async (title: string, description?: string) => {
