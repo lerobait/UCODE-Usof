@@ -7,6 +7,7 @@ import {
   ForeignKey,
   DataType,
   BelongsTo,
+  HasMany,
   Default,
 } from 'sequelize-typescript';
 import {
@@ -16,6 +17,7 @@ import {
 } from 'sequelize/types';
 import { User } from './User';
 import { Post } from './Post';
+import { Like } from './Like';
 
 @Table({ tableName: 'comments', timestamps: false })
 export class Comment extends Model<
@@ -54,4 +56,9 @@ export class Comment extends Model<
 
   @BelongsTo(() => Post)
   post?: Post;
+
+  @HasMany(() => Like)
+  likes?: Like[];
+
+  likes_count?: number;
 }
