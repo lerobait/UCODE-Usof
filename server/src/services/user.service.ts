@@ -1,6 +1,9 @@
 import { User } from '../../database/models/User';
 import bcrypt from 'bcrypt';
 import AppError from '../utils/appError';
+import { Post } from '../../database/models/Post';
+import { Like } from '../../database/models/Like';
+import { Comment } from '../../database/models/Comment';
 
 export class UserService {
   async getMe(userId: number) {
@@ -129,13 +132,60 @@ export class UserService {
           'email_verification_expires_at',
         ],
       },
+      include: [
+        {
+          model: Post,
+          as: 'posts',
+          attributes: [
+            'id',
+            'status',
+            'publish_date',
+            'title',
+            'content',
+            'image_url',
+          ],
+          include: [
+            {
+              model: User,
+              as: 'author',
+              attributes: ['id', 'login', 'full_name', 'profile_picture'],
+            },
+            {
+              model: Like,
+              attributes: [],
+            },
+            {
+              model: Comment,
+              attributes: [],
+            },
+          ],
+        },
+      ],
     });
 
     if (!user) {
       throw new AppError('User not found', 404);
     }
 
-    return user;
+    const postsWithCounts = await Promise.all(
+      user.posts.map(async (post) => {
+        const likesCount = await Like.count({ where: { post_id: post.id } });
+        const commentsCount = await Comment.count({
+          where: { post_id: post.id },
+        });
+
+        return {
+          ...post.toJSON(),
+          likes_count: likesCount,
+          comments_count: commentsCount,
+        };
+      }),
+    );
+
+    return {
+      ...user.toJSON(),
+      posts: postsWithCounts,
+    };
   }
 
   async createUser(

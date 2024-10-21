@@ -136,7 +136,29 @@ export const getUserById = catchAsync(
     res.status(200).json({
       status: 'success',
       data: {
-        user,
+        user: {
+          id: user.id,
+          login: user.login,
+          full_name: user.full_name,
+          profile_picture: user.profile_picture,
+          rating: user.rating,
+        },
+        posts: user.posts.map((post) => ({
+          id: post.id,
+          author: {
+            id: post.author?.id,
+            login: post.author?.login,
+            full_name: post.author?.full_name,
+            profile_picture: post.author?.profile_picture,
+          },
+          status: post.status,
+          publish_date: post.publish_date,
+          title: post.title,
+          content: post.content,
+          image_url: post.image_url,
+          likes_count: post.likes_count,
+          comments_count: post.comments_count,
+        })),
       },
     });
   },
