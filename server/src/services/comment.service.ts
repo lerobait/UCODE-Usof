@@ -1,6 +1,7 @@
 import { Comment } from '../../database/models/Comment';
 import { User } from '../../database/models/User';
 import { Like } from '../../database/models/Like';
+import { updateUserRating } from '../utils/rating';
 import AppError from '../utils/appError';
 
 export const findCommentById = async (commentId: number) => {
@@ -128,6 +129,9 @@ export const toggleLikeForComment = async (
     } else {
       existingLike.type = type;
       await existingLike.save();
+
+      await updateUserRating(comment.author_id);
+
       return existingLike;
     }
   }
@@ -139,6 +143,8 @@ export const toggleLikeForComment = async (
     type,
   });
 
+  await updateUserRating(comment.author_id);
+
   return like;
 };
 
@@ -146,6 +152,8 @@ export const deleteLikeFromComment = async (
   commentId: number,
   userId: number,
 ) => {
+  const comment = await findCommentById(commentId);
+
   const like = await Like.findOne({
     where: {
       comment_id: commentId,
@@ -158,4 +166,6 @@ export const deleteLikeFromComment = async (
   }
 
   await like.destroy();
+
+  await updateUserRating(comment.author_id);
 };

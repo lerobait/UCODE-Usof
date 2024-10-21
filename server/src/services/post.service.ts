@@ -9,6 +9,7 @@ import AppError from '../utils/appError';
 import { Op, QueryTypes } from 'sequelize';
 import { Transaction } from 'sequelize';
 import { applyFilters } from '../utils/filters';
+import { updateUserRating } from '../utils/rating';
 import sequelize from '../../database/db';
 
 interface PostWithCounts {
@@ -539,10 +540,13 @@ export const toggleLikeForPostService = async (
 
   if (existingLike) {
     if (existingLike.type === type) {
-      throw new AppError(`You have already ${type}d this comment`, 400);
+      throw new AppError(`You have already ${type}d this post`, 400);
     } else {
       existingLike.type = type;
       await existingLike.save();
+
+      await updateUserRating(post.author_id);
+
       return existingLike;
     }
   } else {
@@ -551,6 +555,9 @@ export const toggleLikeForPostService = async (
       author_id: userId,
       type,
     });
+
+    await updateUserRating(post.author_id);
+
     return like;
   }
 };
@@ -559,6 +566,12 @@ export const deleteLikeFromPostService = async (
   postId: number,
   userId: number,
 ) => {
+  const post = await Post.findByPk(postId);
+
+  if (!post) {
+    throw new AppError('Post not found', 404);
+  }
+
   const like = await Like.findOne({
     where: {
       post_id: postId,
@@ -574,6 +587,8 @@ export const deleteLikeFromPostService = async (
   }
 
   await like.destroy();
+
+  await updateUserRating(post.author_id);
 };
 
 export const createCommentService = async (
