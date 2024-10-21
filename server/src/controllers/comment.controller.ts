@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as CommentService from '../services/comment.service';
 import catchAsync from '../utils/catchAsync';
+import AppError from '../utils/appError';
 
 interface CustomRequest extends Request {
   user?: {
@@ -92,8 +93,17 @@ export const addLikeToComment = catchAsync(
   async (req: CustomRequest, res: Response) => {
     const commentId = parseInt(req.params.comment_id, 10);
     const userId = req.user?.id ?? 0;
+    const { type } = req.body;
 
-    const like = await CommentService.addLikeToComment(commentId, userId);
+    if (type !== 'like' && type !== 'dislike') {
+      throw new AppError('Invalid like type', 400);
+    }
+
+    const like = await CommentService.toggleLikeForComment(
+      commentId,
+      userId,
+      type,
+    );
 
     return res.status(201).json({
       status: 'success',

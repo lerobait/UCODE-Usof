@@ -100,15 +100,19 @@ export const getLikesForComment = async (commentId: number) => {
   return likes;
 };
 
-export const addLikeToComment = async (commentId: number, userId: number) => {
+export const toggleLikeForComment = async (
+  commentId: number,
+  userId: number,
+  type: 'like' | 'dislike',
+) => {
   const comment = await findCommentById(commentId);
 
   if (comment.status === 'inactive') {
-    throw new AppError('Cannot like an inactive comment', 403);
+    throw new AppError('Cannot like or dislike an inactive comment', 403);
   }
 
   if (comment.author_id === userId) {
-    throw new AppError('You cannot like your own comment', 403);
+    throw new AppError('You cannot like or dislike your own comment', 403);
   }
 
   const existingLike = await Like.findOne({
@@ -119,14 +123,20 @@ export const addLikeToComment = async (commentId: number, userId: number) => {
   });
 
   if (existingLike) {
-    throw new AppError('You have already liked this comment', 400);
+    if (existingLike.type === type) {
+      throw new AppError(`You have already ${type}d this comment`, 400);
+    } else {
+      existingLike.type = type;
+      await existingLike.save();
+      return existingLike;
+    }
   }
 
   const like = await Like.create({
     comment_id: commentId,
     author_id: userId,
     post_id: comment.post_id,
-    type: 'like',
+    type,
   });
 
   return like;

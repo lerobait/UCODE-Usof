@@ -9,7 +9,7 @@ import {
   createCommentService,
   getCommentsForPostService,
   getCategoriesForPostService,
-  addLikeToPostService,
+  toggleLikeForPostService,
   deleteLikeFromPostService,
   getLikesForPostService,
   addPostToFavoritesService,
@@ -280,13 +280,14 @@ export const getLikesForPost = catchAsync(
 export const addlikeToPost = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { post_id } = req.params;
+    const { type } = req.body;
     const userId = req.user?.id;
 
     if (!userId) {
       return next(new AppError('User not authenticated', 401));
     }
 
-    const like = await addLikeToPostService(Number(post_id), userId);
+    const like = await toggleLikeForPostService(Number(post_id), userId, type);
 
     res.status(201).json({
       status: 'success',

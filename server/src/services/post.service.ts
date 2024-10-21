@@ -511,7 +511,11 @@ export const getLikesForPostService = async (postId: number) => {
   return likes;
 };
 
-export const addLikeToPostService = async (postId: number, userId: number) => {
+export const toggleLikeForPostService = async (
+  postId: number,
+  userId: number,
+  type: 'like' | 'dislike',
+) => {
   const post = await Post.findByPk(postId);
 
   if (!post) {
@@ -523,7 +527,7 @@ export const addLikeToPostService = async (postId: number, userId: number) => {
   }
 
   if (post.author_id === userId) {
-    throw new AppError('You cannot like your own post', 403);
+    throw new AppError('You cannot like or dislike your own post', 403);
   }
 
   const existingLike = await Like.findOne({
@@ -534,15 +538,21 @@ export const addLikeToPostService = async (postId: number, userId: number) => {
   });
 
   if (existingLike) {
-    throw new AppError('You already liked this post', 400);
+    if (existingLike.type === type) {
+      throw new AppError(`You have already ${type}d this comment`, 400);
+    } else {
+      existingLike.type = type;
+      await existingLike.save();
+      return existingLike;
+    }
+  } else {
+    const like = await Like.create({
+      post_id: postId,
+      author_id: userId,
+      type,
+    });
+    return like;
   }
-
-  const like = await Like.create({
-    post_id: postId,
-    author_id: userId,
-    type: 'like',
-  });
-  return like;
 };
 
 export const deleteLikeFromPostService = async (
