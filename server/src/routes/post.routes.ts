@@ -16,6 +16,7 @@ import {
   getLikesForPost,
   addPostToFavorites,
   getMyFavoritePosts,
+  getUserPosts,
 } from '../controllers/post.controller';
 
 const router = Router();
@@ -27,6 +28,7 @@ router.get('/:post_id', getPostById);
 router.get('/:post_id/comments', getCommentsForPost);
 
 router.use(protect);
+router.get('/user/:user_id', getUserPosts);
 router.post('/', createPost);
 router.patch('/:post_id', updatePost);
 router.delete('/:post_id', deletePost);

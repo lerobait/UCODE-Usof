@@ -107,9 +107,14 @@ export class UserService {
     return await User.findAll({
       attributes: {
         exclude: [
+          'full_name',
+          'email',
+          'role',
           'password',
           'email_verification_token',
           'email_verification_expires_at',
+          'email_verified',
+          'created_at',
         ],
       },
     });
