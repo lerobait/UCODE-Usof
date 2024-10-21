@@ -4,6 +4,13 @@ import AppError from '../utils/appError';
 import { Post } from '../../database/models/Post';
 import { Like } from '../../database/models/Like';
 import { Comment } from '../../database/models/Comment';
+import { applyFilters } from '../utils/filters';
+
+interface Filters {
+  status?: 'active' | 'inactive';
+  sortBy?: 'likes' | 'date';
+  order?: 'ASC' | 'DESC';
+}
 
 export class UserService {
   async getMe(userId: number) {
@@ -123,7 +130,7 @@ export class UserService {
     });
   }
 
-  async getUserById(userId: number) {
+  async getUserById(userId: number, filters: Filters) {
     const user = await User.findByPk(userId, {
       attributes: {
         exclude: [
@@ -167,8 +174,31 @@ export class UserService {
       throw new AppError('User not found', 404);
     }
 
-    const postsWithCounts = await Promise.all(
-      user.posts.map(async (post) => {
+    const { whereClause, orderClause } = applyFilters(filters);
+
+    const postsWithCounts = await Post.findAll({
+      where: whereClause,
+      order: orderClause,
+      group: ['Post.id'],
+      include: [
+        {
+          model: User,
+          as: 'author',
+          attributes: ['id', 'login', 'full_name', 'profile_picture'],
+        },
+        {
+          model: Like,
+          attributes: [],
+        },
+        {
+          model: Comment,
+          attributes: [],
+        },
+      ],
+    });
+
+    const postsWithDetailedCounts = await Promise.all(
+      postsWithCounts.map(async (post) => {
         const likesCount = await Like.count({ where: { post_id: post.id } });
         const commentsCount = await Comment.count({
           where: { post_id: post.id },
@@ -184,7 +214,7 @@ export class UserService {
 
     return {
       ...user.toJSON(),
-      posts: postsWithCounts,
+      posts: postsWithDetailedCounts,
     };
   }
 

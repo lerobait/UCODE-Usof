@@ -4,10 +4,17 @@ import UserService from '../services/user.service';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import uploadImage from '../utils/upload';
+import { getStringQueryParam } from '../utils/filters';
 
 interface CustomRequest extends Request {
   user?: User;
   file?: Express.Multer.File | Express.MulterS3.File;
+}
+
+interface Filters {
+  status?: 'active' | 'inactive';
+  sortBy?: 'likes' | 'date' | undefined;
+  order?: 'ASC' | 'DESC' | undefined;
 }
 
 export const getMe = catchAsync(
@@ -131,7 +138,22 @@ export const getUserById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { user_id } = req.params;
 
-    const user = await UserService.getUserById(Number(user_id));
+    const filters: Filters = {
+      status: getStringQueryParam(req.query.status) as
+        | 'active'
+        | 'inactive'
+        | undefined,
+      sortBy:
+        (getStringQueryParam(req.query.sortBy) as
+          | 'likes'
+          | 'date'
+          | undefined) || 'likes',
+      order:
+        (getStringQueryParam(req.query.order) as 'ASC' | 'DESC' | undefined) ||
+        'DESC',
+    };
+
+    const user = await UserService.getUserById(Number(user_id), filters);
 
     res.status(200).json({
       status: 'success',
