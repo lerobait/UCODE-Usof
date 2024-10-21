@@ -73,7 +73,17 @@ export const getMyPosts = catchAsync(
       return next(new AppError('User not authenticated', 401));
     }
 
-    const posts = await getMyPostsService(userId);
+    const status = getStringQueryParam(req.query.status);
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const order = getStringQueryParam(req.query.order) || 'DESC';
+
+    const posts = await getMyPostsService(
+      userId,
+      status as 'active' | 'inactive',
+      sortBy as 'likes' | 'date',
+      order as 'ASC' | 'DESC',
+    );
+
     res.status(200).json({
       status: 'success',
       data: {

@@ -30,7 +30,14 @@ export const getAllPostsService = async (
   sortBy?: 'likes' | 'date',
   order?: 'ASC' | 'DESC',
 ) => {
-  const { whereClause, orderClause } = applyFilters({ status, sortBy, order });
+  const { whereClause, orderClause } = applyFilters({
+    status,
+    sortBy,
+    order,
+  }) as {
+    whereClause: { [key: string]: unknown };
+    orderClause: [string, string][];
+  };
 
   const posts = await Post.findAll({
     where: whereClause,
@@ -116,9 +123,25 @@ export const getPostByIdService = async (postId: string) => {
   };
 };
 
-export const getMyPostsService = async (userId: number) => {
+export const getMyPostsService = async (
+  userId: number,
+  status?: 'active' | 'inactive',
+  sortBy?: 'likes' | 'date',
+  order?: 'ASC' | 'DESC',
+) => {
+  const { whereClause, orderClause } = applyFilters({
+    status,
+    sortBy,
+    order,
+  }) as {
+    whereClause: { [key: string]: unknown; author_id?: number };
+    orderClause: [string, string][];
+  };
+
+  whereClause['author_id'] = userId;
+
   const posts = await Post.findAll({
-    where: { author_id: userId },
+    where: whereClause,
     include: [
       {
         model: User,
@@ -140,6 +163,7 @@ export const getMyPostsService = async (userId: number) => {
       ],
     },
     group: ['Post.id', 'author.id'],
+    order: orderClause,
   });
 
   return posts.map((post) => ({
@@ -345,6 +369,8 @@ export const deletePostService = async (
       await Favorite.destroy({ where: { post_id: postId }, transaction });
 
       await Post.destroy({ where: { id: postId }, transaction });
+
+      return true;
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.stack);

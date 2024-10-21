@@ -7,9 +7,13 @@ interface Filters {
   order?: 'ASC' | 'DESC';
 }
 
+type OrderItem =
+  | [string, 'ASC' | 'DESC']
+  | [ReturnType<typeof sequelize.fn>, 'ASC' | 'DESC'];
+
 export const applyFilters = (filters: Filters) => {
   const whereClause: { status?: 'active' | 'inactive' } = {};
-  const orderClause: any[] = [];
+  const orderClause: OrderItem[] = [];
 
   if (filters.status) {
     whereClause.status = filters.status;
@@ -19,9 +23,9 @@ export const applyFilters = (filters: Filters) => {
     orderClause.push([
       sequelize.fn('COUNT', sequelize.col('likes.id')),
       filters.order || 'DESC',
-    ]);
+    ] as OrderItem);
   } else if (filters.sortBy === 'date') {
-    orderClause.push(['publish_date', filters.order || 'DESC']);
+    orderClause.push(['publish_date', filters.order || 'DESC'] as OrderItem);
   }
 
   return { whereClause, orderClause };
