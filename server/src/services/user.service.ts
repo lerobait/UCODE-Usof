@@ -226,7 +226,10 @@ export class UserService {
 
     const postsWithDetailedCounts = await Promise.all(
       postsWithCounts.map(async (post) => {
-        const likesCount = await Like.count({ where: { post_id: post.id } });
+        const likesCount = await Like.count({
+          where: { post_id: post.id, type: 'like' },
+        });
+
         const commentsCount = await Comment.count({
           where: { post_id: post.id },
         });

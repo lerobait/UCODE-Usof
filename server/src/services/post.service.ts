@@ -46,7 +46,7 @@ export const getAllPostsService = async (
     where: whereClause,
     attributes: ['id'],
     order: sequelize.literal(
-      `(SELECT COUNT(*) FROM likes WHERE likes.post_id = Post.id) DESC`,
+      `(SELECT COUNT(*) FROM likes WHERE likes.post_id = Post.id AND likes.type = 'like') DESC`,
     ),
     limit,
     offset,
@@ -76,7 +76,13 @@ export const getAllPostsService = async (
     attributes: {
       include: [
         [sequelize.fn('COUNT', sequelize.col('comments.id')), 'comments_count'],
-        [sequelize.fn('COUNT', sequelize.col('likes.id')), 'likes_count'],
+        [
+          sequelize.fn(
+            'COUNT',
+            sequelize.literal(`CASE WHEN likes.type = 'like' THEN 1 END`),
+          ),
+          'likes_count',
+        ],
       ],
     },
     group: ['Post.id', 'author.id'],
@@ -133,12 +139,16 @@ export const getPostByIdService = async (postId: string) => {
           {
             model: Like,
             attributes: ['id'],
+            where: { type: 'like' },
+            required: false,
           },
         ],
       },
       {
         model: Like,
         attributes: ['id'],
+        where: { type: 'like' },
+        required: false,
       },
     ],
   });
@@ -209,6 +219,8 @@ export const getMyPostsService = async (
       {
         model: Like,
         attributes: [],
+        where: { type: 'like' },
+        required: false,
       },
     ],
     attributes: {
@@ -464,7 +476,7 @@ export const getMyFavoritePostsService = async (
       u.login AS author_login, 
       u.profile_picture AS author_profile_picture,
       (SELECT COUNT(*) FROM comments WHERE comments.post_id = p.id) AS comments_count,
-      (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id) AS likes_count
+      (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.type = 'like') AS likes_count
     FROM favorites f
     JOIN posts p ON f.post_id = p.id
     JOIN users u ON p.author_id = u.id
