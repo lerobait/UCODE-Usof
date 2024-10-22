@@ -16,6 +16,7 @@ import {
   getLikesForPost,
   addPostToFavorites,
   getMyFavoritePosts,
+  removePostFromFavorites,
 } from '../controllers/post.controller';
 
 const router = Router();
@@ -31,6 +32,7 @@ router.post('/', createPost);
 router.patch('/:post_id', updatePost);
 router.delete('/:post_id', deletePost);
 router.post('/:post_id/favorite', addPostToFavorites);
+router.delete('/:post_id/favorite', removePostFromFavorites);
 router.post('/:post_id/like', addlikeToPost);
 router.delete('/:post_id/like', deleteLikeFromPost);
 router.post('/:post_id/comments', createComment);

@@ -536,6 +536,24 @@ export const addPostToFavoritesService = async (
   return favorite;
 };
 
+export const removePostFromFavoritesService = async (
+  postId: number,
+  userId: number,
+) => {
+  const favorite = await Favorite.findOne({
+    where: {
+      post_id: postId,
+      user_id: userId,
+    },
+  });
+
+  if (!favorite) {
+    throw new AppError('Favorite post not found', 404);
+  }
+
+  await favorite.destroy();
+};
+
 export const getLikesForPostService = async (postId: number) => {
   const post = await Post.findByPk(postId);
 

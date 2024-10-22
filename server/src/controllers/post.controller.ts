@@ -14,6 +14,7 @@ import {
   getLikesForPostService,
   addPostToFavoritesService,
   getMyFavoritePostsService,
+  removePostFromFavoritesService,
 } from '../services/post.service';
 import uploadImage from '../utils/upload';
 import catchAsync from '../utils/catchAsync';
@@ -258,6 +259,21 @@ export const addPostToFavorites = catchAsync(
         favorite,
       },
     });
+  },
+);
+
+export const removePostFromFavorites = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { post_id } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return next(new AppError('User not authenticated', 401));
+    }
+
+    await removePostFromFavoritesService(Number(post_id), userId);
+
+    res.status(204).send();
   },
 );
 
