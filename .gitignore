@@ -2,5 +2,5 @@ node_modules/
 dist/
 config/
 .vscode/
+server/config.env
 *.sql
-*.env
