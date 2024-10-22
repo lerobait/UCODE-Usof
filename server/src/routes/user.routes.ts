@@ -20,8 +20,8 @@ const router = Router();
 router.use(protect);
 
 router.get('/', getAllUsers);
-router.get('/:user_id', getUserById);
 router.get('/me', getMe);
+router.get('/:user_id', getUserById);
 router.patch('/updateMyPassword', updateMyPassword);
 router.patch('/avatar', uploadUserAvatar);
 router.patch('/updateMe', updateMe);
@@ -35,7 +35,5 @@ router
   .get(getUserByIdAdmin)
   .patch(updateUser)
   .delete(deleteUser);
-
-// SHOULD MODIFY DELETED USER TO DELETE ALL POSTS AND COMMENTS WITH THAT USER ID
 
 export default router;
