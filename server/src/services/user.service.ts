@@ -5,6 +5,8 @@ import { Post } from '../../database/models/Post';
 import { Like } from '../../database/models/Like';
 import { Comment } from '../../database/models/Comment';
 import { applyFilters } from '../utils/filters';
+import { PostCategory } from '../../database/models/PostCategory';
+import { Op } from 'sequelize';
 
 interface Filters {
   status?: 'active' | 'inactive';
@@ -105,10 +107,35 @@ export class UserService {
   }
 
   async deleteMe(userId: number) {
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, {
+      include: [Post, Comment, Like],
+    });
+
     if (!user) {
       throw new AppError('User not found', 404);
     }
+
+    await Like.destroy({
+      where: {
+        comment_id: {
+          [Op.in]: user.comments.map((comment) => comment.id),
+        },
+      },
+    });
+
+    await Comment.destroy({ where: { author_id: userId } });
+
+    await Like.destroy({
+      where: { post_id: { [Op.in]: user.posts.map((post) => post.id) } },
+    });
+
+    await PostCategory.destroy({
+      where: { post_id: { [Op.in]: user.posts.map((post) => post.id) } },
+    });
+
+    await Post.destroy({ where: { author_id: userId } });
+
+    await Like.destroy({ where: { author_id: userId } });
 
     await user.destroy();
   }
@@ -269,10 +296,35 @@ export class UserService {
   }
 
   async deleteUser(userId: number) {
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, {
+      include: [Post, Comment, Like],
+    });
+
     if (!user) {
       throw new AppError('User not found', 404);
     }
+
+    await Like.destroy({
+      where: {
+        comment_id: {
+          [Op.in]: user.comments.map((comment) => comment.id),
+        },
+      },
+    });
+
+    await Comment.destroy({ where: { author_id: userId } });
+
+    await Like.destroy({
+      where: { post_id: { [Op.in]: user.posts.map((post) => post.id) } },
+    });
+
+    await PostCategory.destroy({
+      where: { post_id: { [Op.in]: user.posts.map((post) => post.id) } },
+    });
+
+    await Post.destroy({ where: { author_id: userId } });
+
+    await Like.destroy({ where: { author_id: userId } });
 
     await user.destroy();
   }
