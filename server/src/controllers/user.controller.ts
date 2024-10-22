@@ -237,3 +237,18 @@ export const deleteUser = catchAsync(
     });
   },
 );
+
+export const getUserByIdAdmin = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { user_id } = req.params;
+
+    const user = await UserService.getUserByIdAdmin(Number(user_id));
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user,
+      },
+    });
+  },
+);

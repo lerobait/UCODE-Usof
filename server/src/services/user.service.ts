@@ -276,6 +276,24 @@ export class UserService {
 
     await user.destroy();
   }
+
+  async getUserByIdAdmin(userId: number) {
+    const user = await User.findByPk(userId, {
+      attributes: {
+        exclude: [
+          'password',
+          'email_verification_token',
+          'email_verification_expires_at',
+        ],
+      },
+    });
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    return user;
+  }
 }
 
 export default new UserService();
