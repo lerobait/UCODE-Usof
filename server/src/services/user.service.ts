@@ -20,6 +20,8 @@ export class UserService {
       attributes: {
         exclude: [
           'password',
+          'role',
+          'created_at',
           'email_verification_token',
           'email_verification_expires_at',
         ],
