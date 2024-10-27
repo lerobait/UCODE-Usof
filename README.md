@@ -36,13 +36,13 @@ Before you begin, ensure that you have the following installed and configured:
 
 4. **Configure environment variables:**:
 
-   Rename the example.env file to config.env:
+   Rename the example.env file to .env:
 
    ```bash
-   mv example.env config.env
+   mv example.env .env
    ```
 
-   Then, update config.env with your own credentials for MySQL, AWS S3, and Mailtrap.
+   Then, update .env with your own credentials for MySQL, AWS S3, and Mailtrap.
 
 5. **Build the project:**:
 
@@ -66,7 +66,15 @@ Before you begin, ensure that you have the following installed and configured:
    npm run migrate:undo
    ```
 
-7. **Start the server:**:
+7. **Run seeds:**:
+
+   Finally, start the project:
+
+   ```bash
+   npm run seed
+   ```
+
+8. **Start the server:**:
 
    Finally, start the project:
 
@@ -74,14 +82,5 @@ Before you begin, ensure that you have the following installed and configured:
    npm run start
    ```
 
-8. **API Documentation:**:
+9. **API Documentation:**:
    You can explore the API documentation using this link: [API Documentation](https://documenter.getpostman.com/view/34523688/2sAXxY5V2S).
-
-9. **Accessing the Admin Panel:**
-   To access the admin panel, you need to comment out the following line in `server/routes/user.routes.ts`:
-
-   ```typescript
-   // router.use(restrictTo('admin'));
-   ```
-
-   After that, use the Update User route to set the user's role to "admin".

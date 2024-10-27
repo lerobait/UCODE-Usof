@@ -10,7 +10,7 @@ import { Favorite } from './models/Favorite';
 import dotenv from 'dotenv';
 import path from 'path';
 
-const envPath = path.join(__dirname, '../../config.env');
+const envPath = path.join(__dirname, '../../.env');
 dotenv.config({ path: envPath });
 
 const DB_HOST = process.env.DB_HOST;

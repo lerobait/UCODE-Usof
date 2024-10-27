@@ -2,7 +2,7 @@ import { connectDatabase } from '../database/db';
 import app from './app';
 import dotenv from 'dotenv';
 
-dotenv.config({ path: '../config.env' });
+dotenv.config({ path: '../.env' });
 const port = process.env.PORT || 3000;
 
 process.on('uncaughtException', (err) => {

@@ -10,7 +10,12 @@
     "lint:server": "eslint 'server/**/*.ts'",
     "lint:client": "eslint 'client/**/*.tsx'",
     "lint": "npm run lint:server && npm run lint:client",
-    "format": "prettier --write 'client/**/*.{ts,tsx}' 'server/**/*.{ts,tsx}'"
+    "format": "prettier --write 'client/**/*.{ts,tsx}' 'server/**/*.{ts,tsx}'",
+    "server:build": "npm run --workspace=server build",
+    "server:start": "npm run --workspace=server start",
+    "server:migrate": "npm run --workspace=server migrate",
+    "server:migrate:undo": "npm run --workspace=server migrate:undo",
+    "server:seed": "npm run --workspace=server seed"
   },
   "author": "Artem Nikulin",
   "license": "ISC",
