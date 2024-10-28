@@ -12,10 +12,19 @@ import userRouter from './routes/user.routes';
 import categoryRouter from './routes/category.routes';
 import postRouter from './routes/post.routes';
 import commentRouter from './routes/comment.routes';
+import cors from 'cors';
 
 const app = express();
 
 app.use(helmet());
+
+app.use(
+  cors({
+    origin: 'http://localhost:5174',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true,
+  }),
+);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

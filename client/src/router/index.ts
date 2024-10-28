@@ -1,4 +1,5 @@
 import Login from '../pages/Login';
+import Posts from '../pages/Posts';
 
 interface Route {
   path: string;
@@ -8,4 +9,5 @@ interface Route {
 
 export const publicRoutes: Route[] = [
   { path: '/login', component: Login, exact: true },
+  { path: '/posts', component: Posts, exact: true },
 ];
