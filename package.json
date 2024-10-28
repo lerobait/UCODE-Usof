@@ -4,7 +4,8 @@
   "description": "Campus-UCODE-Usof-2024",
   "private": true,
   "workspaces": [
-    "server"
+    "server",
+    "client"
   ],
   "scripts": {
     "lint:server": "eslint 'server/**/*.ts'",
@@ -15,7 +16,9 @@
     "server:start": "npm run --workspace=server start",
     "server:migrate": "npm run --workspace=server migrate",
     "server:migrate:undo": "npm run --workspace=server migrate:undo",
-    "server:seed": "npm run --workspace=server seed"
+    "server:seed": "npm run --workspace=server seed",
+    "client:start": "npm run --workspace=client start",
+    "client:build": "npm run --workspace=client build"
   },
   "author": "Artem Nikulin",
   "license": "ISC",
@@ -31,6 +34,9 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.13",
+    "@eslint/js": "^9.13.0",
+    "typescript-eslint": "^8.10.0",
     "prettier": "^3.3.3"
   }
 }

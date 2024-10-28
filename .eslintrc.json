@@ -7,7 +7,12 @@
       "jsx": true
     }
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "jsx-a11y"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks",
+    "jsx-a11y"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -34,11 +39,7 @@
   },
   "overrides": [
     {
-      "files": ["**/*.ts", "**/*.tsx"],
-      "rules": {}
-    },
-    {
-      "files": ["client/**/*.tsx"],
+      "files": ["client/**/*.tsx", "client/**/*.ts"],
       "env": {
         "browser": true
       }
@@ -49,5 +50,9 @@
         "node": true
       }
     }
+  ],
+  "ignorePatterns": [
+    "dist",
+    "node_modules"
   ]
 }
