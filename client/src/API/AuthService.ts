@@ -1,4 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
+interface RegisterRequest {
+  login: string;
+  email: string;
+  password: string;
+  full_name: string;
+  password_confirm: string;
+}
+
+interface RegisterResponse {
+  message: string;
+}
 
 interface LoginResponse {
   token: string;
@@ -35,6 +46,16 @@ export default class PostAuth {
   ): Promise<AxiosResponse<void>> {
     const response = await axios.post<void>(
       'http://localhost:3000/api/auth/password-reset',
+      data,
+    );
+    return response;
+  }
+
+  static async register(
+    data: RegisterRequest,
+  ): Promise<AxiosResponse<RegisterResponse>> {
+    const response = await axios.post<RegisterResponse>(
+      'http://localhost:3000/api/auth/register',
       data,
     );
     return response;

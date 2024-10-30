@@ -15,24 +15,47 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
-  const [fetchRegister, isLoading, error] = useFetching(async () => {
+  const [fetchRegister, isLoading] = useFetching(async () => {
     try {
       if (validateInputs()) {
         const response = await AuthService.register({
-          fullName,
+          full_name: fullName,
           login,
           email,
           password,
+          password_confirm: passwordConfirm,
         });
+        setSuccessMessage(response.data.message);
+        setErrorMessage('');
         console.log('Registration successful:', response.data);
       }
     } catch (err) {
       const axiosError = err as AxiosError;
+
       if (axiosError.response && axiosError.response.status === 400) {
-        throw new Error('Registration failed. Please check your details.');
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(
+          axiosError.response.data as string,
+          'text/html',
+        );
+        const errorText =
+          doc.querySelector('pre')?.textContent ||
+          'Registration failed. Please check your details.';
+
+        if (errorText.includes('login')) {
+          setErrorMessage('A user with this login already exists.');
+        } else if (errorText.includes('email')) {
+          setErrorMessage('A user with this email already exists.');
+        } else {
+          setErrorMessage('Registration failed. Please check your details.');
+        }
+
+        setSuccessMessage('');
       }
     }
   });
@@ -161,7 +184,10 @@ const Register: React.FC = () => {
             />
           </div>
 
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
+          {successMessage && (
+            <p className="text-green-500 mb-4">{successMessage}</p>
+          )}
           {isLoading && <p className="text-blue-500 mb-4">Loading...</p>}
 
           <Button
@@ -178,7 +204,7 @@ const Register: React.FC = () => {
               className="text-blue-500 cursor-pointer"
               onClick={() => navigate('/login')}
             >
-              Login
+              Log in
             </Button>
           </div>
         </form>
