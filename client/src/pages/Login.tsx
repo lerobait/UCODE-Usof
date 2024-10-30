@@ -5,16 +5,15 @@ import Button from '../components/Common/Button';
 import PasswordResetModal from '../components/Auth/PasswordResetModal';
 import { useFetching } from '../hooks/useFetching';
 import useAuthStore from '../hooks/useAuthStore';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { AxiosError } from 'axios';
 import AppInfo from '../components/Auth/AppInfo';
 import { useNavigate } from 'react-router-dom';
+import PasswordInput from '../components/Auth/PasswordInput';
 
 const Login: React.FC = () => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -112,9 +111,9 @@ const Login: React.FC = () => {
             {emailError && <p className="text-red-500">{emailError}</p>}
           </div>
 
-          <div className="mb-6 relative">
-            <div className="relative flex justify-between items-center">
-              <label htmlFor="password" className="block text-gray-700 mb-2">
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <label htmlFor="password" className="block text-gray-700">
                 Password <span className="text-red-500">*</span>
               </label>
               <Button
@@ -128,24 +127,13 @@ const Login: React.FC = () => {
                 Forgot password?
               </Button>
             </div>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-              />
-              <Button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-blue-500 hover:text-blue-700 focus:outline-none"
-              >
-                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-              </Button>
-            </div>
-            {passwordError && <p className="text-red-500">{passwordError}</p>}
+            <PasswordInput
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              error={passwordError}
+            />
           </div>
 
           {error && <p className="text-red-500 mb-4">{error}</p>}

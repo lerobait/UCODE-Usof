@@ -6,6 +6,7 @@ import AppInfo from '../components/Auth/AppInfo';
 import { useFetching } from '../hooks/useFetching';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import PasswordInput from '../components/Auth/PasswordInput';
 
 const Register: React.FC = () => {
   const [fullName, setFullName] = useState('');
@@ -135,37 +136,29 @@ const Register: React.FC = () => {
             <label htmlFor="password" className="block text-gray-700 mb-2">
               Password <span className="text-red-500">*</span>
             </label>
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
-              placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter password"
+              error={errors.password}
             />
-            {errors.password && (
-              <p className="text-red-500">{errors.password}</p>
-            )}
           </div>
 
-          <div className="mb-6">
+          <div className="mb-4">
             <label
               htmlFor="passwordConfirm"
               className="block text-gray-700 mb-2"
             >
               Confirm Password <span className="text-red-500">*</span>
             </label>
-            <Input
+            <PasswordInput
               id="passwordConfirm"
-              type="password"
-              placeholder="Confirm password"
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Confirm password"
+              error={errors.passwordConfirm}
             />
-            {errors.passwordConfirm && (
-              <p className="text-red-500">{errors.passwordConfirm}</p>
-            )}
           </div>
 
           {error && <p className="text-red-500 mb-4">{error}</p>}
