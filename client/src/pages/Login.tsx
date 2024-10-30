@@ -12,6 +12,8 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const setUser = useAuthStore((state) => state.setUser);
 
@@ -33,9 +35,32 @@ const Login: React.FC = () => {
     }
   });
 
+  const validateInputs = () => {
+    let isValid = true;
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      setEmailError('Please enter a valid email address.');
+      isValid = false;
+    } else {
+      setEmailError('');
+    }
+
+    if (!password || password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long.');
+      isValid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    return isValid;
+  };
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetchLogin();
+
+    if (validateInputs()) {
+      await fetchLogin();
+    }
   };
 
   return (
@@ -72,6 +97,7 @@ const Login: React.FC = () => {
             required
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
           />
+          {emailError && <p className="text-red-500">{emailError}</p>}
         </div>
         <div className="mb-6 relative">
           <label htmlFor="password" className="block text-gray-700 mb-2">
@@ -95,6 +121,7 @@ const Login: React.FC = () => {
               {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
             </Button>
           </div>
+          {passwordError && <p className="text-red-500">{passwordError}</p>}
         </div>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {isLoading && <p className="text-blue-500 mb-4">Loading...</p>}
