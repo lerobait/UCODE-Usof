@@ -8,6 +8,7 @@ import useAuthStore from '../hooks/useAuthStore';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { AxiosError } from 'axios';
 import AppInfo from '../components/Auth/AppInfo';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const [login, setLogin] = useState('');
@@ -20,6 +21,7 @@ const Login: React.FC = () => {
   const [loginError, setLoginError] = useState('');
 
   const setUser = useAuthStore((state) => state.setUser);
+  const navigate = useNavigate();
 
   const [fetchLogin, isLoading, error] = useFetching(async () => {
     try {
@@ -160,8 +162,8 @@ const Login: React.FC = () => {
           <div className="mt-4 text-center">
             <span className="text-gray-700">Don&apos;t have an account? </span>
             <Button
-              className="text-blue-500 cursor-not-allowed"
-              onClick={(e) => e.preventDefault()}
+              className="text-blue-500 cursor-pointer"
+              onClick={() => navigate('/register')}
             >
               Sign up
             </Button>
