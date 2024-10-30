@@ -9,6 +9,7 @@ export const useFetching = <T extends any[]>(
   const [error, setError] = useState<string>('');
 
   const fetching = async (...args: T): Promise<void> => {
+    setError('');
     try {
       setIsLoading(true);
       await callback(...args);
@@ -18,6 +19,7 @@ export const useFetching = <T extends any[]>(
       } else {
         setError('An unknown error occurred');
       }
+      throw e;
     } finally {
       setIsLoading(false);
     }

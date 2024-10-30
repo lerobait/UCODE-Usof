@@ -6,6 +6,7 @@ import { User } from '../../database/models/User';
 import { PasswordReset } from '../../database/models/PasswordReset';
 import AppError from '../utils/appError';
 import sendEmail from '../utils/email';
+import { Op } from 'sequelize';
 
 const signToken = (userId: number) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET as string, {
@@ -136,8 +137,34 @@ export const sendPasswordResetEmail = async (email: string) => {
     );
   }
 
+  const existingToken = await PasswordReset.findOne({
+    where: {
+      email: user.email,
+      expires_at: {
+        [Op.gt]: new Date(),
+      },
+    },
+  });
+
+  if (existingToken) {
+    throw new AppError(
+      'Please check your email for the password reset link.',
+      400,
+    );
+  }
+
+  await PasswordReset.destroy({
+    where: {
+      email: user.email,
+      expires_at: {
+        [Op.lt]: new Date(),
+      },
+    },
+  });
+
   const token = crypto.randomBytes(32).toString('hex');
   const expiresAt = new Date(Date.now() + 3600000);
+
   await PasswordReset.create({
     email: user.email,
     token,

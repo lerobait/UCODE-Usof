@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AuthService from '../API/AuthService';
 import Input from '../components/Common/Input';
 import Button from '../components/Common/Button';
+import PasswordResetModal from '../components/Auth/PasswordResetModal';
 import { useFetching } from '../hooks/useFetching';
 import useAuthStore from '../hooks/useAuthStore';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
@@ -12,8 +13,10 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   const setUser = useAuthStore((state) => state.setUser);
 
@@ -38,18 +41,24 @@ const Login: React.FC = () => {
   const validateInputs = () => {
     let isValid = true;
 
+    // Reset errors
+    setEmailError('');
+    setPasswordError('');
+    setLoginError('');
+
+    if (!login) {
+      setLoginError('Please enter your login.');
+      isValid = false;
+    }
+
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError('Please enter a valid email address.');
       isValid = false;
-    } else {
-      setEmailError('');
     }
 
     if (!password || password.length < 6) {
       setPasswordError('Password must be at least 6 characters long.');
       isValid = false;
-    } else {
-      setPasswordError('');
     }
 
     return isValid;
@@ -80,9 +89,10 @@ const Login: React.FC = () => {
             placeholder="Enter login"
             value={login}
             onChange={(e) => setLogin(e.target.value)}
-            required
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
           />
+          {loginError && <p className="text-red-500">{loginError}</p>}{' '}
+          {/* Display login error */}
         </div>
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-700 mb-2">
@@ -90,11 +100,10 @@ const Login: React.FC = () => {
           </label>
           <Input
             id="email"
-            type="email"
+            type="text"
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
           />
           {emailError && <p className="text-red-500">{emailError}</p>}
@@ -110,7 +119,6 @@ const Login: React.FC = () => {
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
             />
             <Button
@@ -127,11 +135,26 @@ const Login: React.FC = () => {
         {isLoading && <p className="text-blue-500 mb-4">Loading...</p>}
         <Button
           className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200"
+          type="submit"
           disabled={isLoading}
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </Button>
+        <Button
+          className="mt-4 text-center text-blue-500 cursor-pointer"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsModalOpen(true);
+          }}
+        >
+          Forgot password?
+        </Button>
       </form>
+      <PasswordResetModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
