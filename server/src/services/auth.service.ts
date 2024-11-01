@@ -177,13 +177,15 @@ export const sendPasswordResetEmail = async (email: string) => {
   } as PasswordReset);
 
   const resetURL = `${process.env.FRONTEND_URL}/password-reset/${token}`;
-  const message = `To reset your password, please follow the link below: ${resetURL}`;
 
-  // await sendEmail({
-  //   to: email,
-  //   subject: 'Reset password',
-  //   text: message,
-  // });
+  await sendEmail({
+    to: email,
+    subject: 'Password Reset for CodeUnity',
+    template: 'resetPassword',
+    context: {
+      resetUrl: resetURL,
+    },
+  });
 };
 
 export const resetUserPassword = async (

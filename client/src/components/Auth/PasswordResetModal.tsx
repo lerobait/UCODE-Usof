@@ -53,6 +53,13 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
           );
         } else if (
           err instanceof Error &&
+          (err as { response?: { status?: number } }).response?.status === 403
+        ) {
+          setErrorMessage(
+            'Please verify your email before requesting a password reset.',
+          );
+        } else if (
+          err instanceof Error &&
           (err as { response?: { status?: number } }).response?.status === 404
         ) {
           setErrorMessage(

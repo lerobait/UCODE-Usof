@@ -60,4 +60,19 @@ export default class PostAuth {
     );
     return response;
   }
+
+  static async resetPassword(data: {
+    new_password: string;
+    confirm_password: string;
+    token: string;
+  }): Promise<AxiosResponse<void>> {
+    const response = await axios.post<void>(
+      `http://localhost:3000/api/auth/password-reset/${data.token}`,
+      {
+        new_password: data.new_password,
+        confirm_password: data.confirm_password,
+      },
+    );
+    return response;
+  }
 }
