@@ -32,10 +32,14 @@ export const confirmEmail: RequestHandler = catchAsync(
 
     await authService.confirmUserEmail(token);
 
-    res.status(200).json({
-      status: 'success',
-      message: 'Email successfully verified. You can now log in.',
-    });
+    if (req.headers.accept?.includes('application/json')) {
+      return res.status(200).json({
+        status: 'success',
+        message: 'Email successfully verified. You can now log in.',
+      });
+    }
+
+    res.redirect(`${process.env.FRONTEND_URL}/login`);
   },
 );
 

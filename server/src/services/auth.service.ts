@@ -65,11 +65,15 @@ export const registerUser = async (
     passwordResets: [],
   });
 
-  const confirmURL = `${process.env.FRONTEND_URL}/confirm-email/${emailToken}`;
+  const confirmURL = `${process.env.BACKEND_URL}/api/auth/confirm-email/${emailToken}`;
   await sendEmail({
     to: email,
-    subject: 'Email confirmation',
-    text: `Please confirm your email: ${confirmURL}`,
+    subject: 'Confirm Your Email for CodeUnity',
+    template: 'confirmEmail',
+    context: {
+      name: fullName,
+      confirmUrl: confirmURL,
+    },
   });
 
   return newUser;
@@ -175,11 +179,11 @@ export const sendPasswordResetEmail = async (email: string) => {
   const resetURL = `${process.env.FRONTEND_URL}/password-reset/${token}`;
   const message = `To reset your password, please follow the link below: ${resetURL}`;
 
-  await sendEmail({
-    to: email,
-    subject: 'Reset password',
-    text: message,
-  });
+  // await sendEmail({
+  //   to: email,
+  //   subject: 'Reset password',
+  //   text: message,
+  // });
 };
 
 export const resetUserPassword = async (

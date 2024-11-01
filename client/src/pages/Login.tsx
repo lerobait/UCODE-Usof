@@ -18,6 +18,7 @@ const Login: React.FC = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const setUser = useAuthStore((state) => state.setUser);
   const navigate = useNavigate();
@@ -27,13 +28,29 @@ const Login: React.FC = () => {
       const response = await AuthService.login({ login, email, password });
       console.log('Login successful:', response.data);
       setUser(response.data.user);
+      setErrorMessage('');
     } catch (err) {
       const axiosError = err as AxiosError;
 
       if (axiosError.response && axiosError.response.status === 401) {
-        throw new Error('Invalid credentials. Please try again.');
+        setErrorMessage('Invalid credentials. Please try again.');
+      } else if (axiosError.response && axiosError.response.status === 403) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(
+          axiosError.response.data as string,
+          'text/html',
+        );
+        const errorText = doc.querySelector('pre')?.textContent;
+
+        if (errorText && errorText.includes('Please verify your email')) {
+          setErrorMessage('Please verify your email before logging in.');
+        } else {
+          setErrorMessage(
+            'There was an error signing you in. Please try again later.',
+          );
+        }
       } else {
-        throw new Error(
+        setErrorMessage(
           'There was an error signing you in. Please try again later.',
         );
       }
@@ -136,7 +153,7 @@ const Login: React.FC = () => {
             />
           </div>
 
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
           {isLoading && <p className="text-blue-500 mb-4">Loading...</p>}
 
           <Button
