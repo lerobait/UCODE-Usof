@@ -20,15 +20,15 @@ const Login: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const setUser = useAuthStore((state) => state.setUser);
+  const { setUser } = useAuthStore();
   const navigate = useNavigate();
 
   const [fetchLogin, isLoading, error] = useFetching(async () => {
     try {
       const response = await AuthService.login({ login, email, password });
-      console.log('Login successful:', response.data);
-      setUser(response.data.user);
+      setUser({ ...response.data.user, token: response.data.token });
       setErrorMessage('');
+      navigate('/posts');
     } catch (err) {
       const axiosError = err as AxiosError;
 
