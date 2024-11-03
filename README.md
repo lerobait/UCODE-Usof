@@ -25,7 +25,7 @@ Before you begin, ensure that you have the following installed and configured:
    Navigate to the project folder and run:
 
    ```bash
-   npm install
+   npm install --prefix ./server
    ```
 
 3. **Navigate to the server directory:**:
