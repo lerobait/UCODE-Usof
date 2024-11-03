@@ -11,6 +11,7 @@ interface Route {
 const AppRouter: React.FC = () => {
   return (
     <Routes>
+      {/* <Route path="/" element={<Navigate to="/posts" />} /> */}
       {publicRoutes.map((route: Route) => (
         <Route
           key={route.path}
@@ -18,7 +19,7 @@ const AppRouter: React.FC = () => {
           path={route.path}
         />
       ))}
-      <Route path="*" element={<Navigate to="/login" />} />
+      <Route path="*" element={<Navigate to="/posts" />} />
     </Routes>
   );
 };

@@ -5,7 +5,7 @@ import NewPass from '../pages/NewPass';
 
 interface Route {
   path: string;
-  component: React.ComponentType<any>;
+  component: React.ComponentType<object>;
   exact?: boolean;
 }
 
