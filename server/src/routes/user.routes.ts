@@ -17,11 +17,12 @@ import {
 
 const router = Router();
 
+router.get('/:user_id', getUserById);
+
 router.use(protect);
 
 router.get('/', getAllUsers);
 router.get('/me', getMe);
-router.get('/:user_id', getUserById);
 router.patch('/updateMyPassword', updateMyPassword);
 router.patch('/avatar', uploadUserAvatar);
 router.patch('/updateMe', updateMe);

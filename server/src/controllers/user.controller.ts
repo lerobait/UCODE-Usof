@@ -4,17 +4,10 @@ import UserService from '../services/user.service';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import uploadImage from '../utils/upload';
-import { getStringQueryParam } from '../utils/filters';
 
 interface CustomRequest extends Request {
   user?: User;
   file?: Express.Multer.File | Express.MulterS3.File;
-}
-
-interface Filters {
-  status?: 'active' | 'inactive';
-  sortBy?: 'likes' | 'date' | undefined;
-  order?: 'ASC' | 'DESC' | undefined;
 }
 
 export const getMe = catchAsync(
@@ -134,57 +127,24 @@ export const getAllUsers = catchAsync(
   },
 );
 
-export const getUserById = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { user_id } = req.params;
+export const getUserById = catchAsync(async (req: Request, res: Response) => {
+  const { user_id } = req.params;
 
-    const filters: Filters = {
-      status: getStringQueryParam(req.query.status) as
-        | 'active'
-        | 'inactive'
-        | undefined,
-      sortBy:
-        (getStringQueryParam(req.query.sortBy) as
-          | 'likes'
-          | 'date'
-          | undefined) || 'likes',
-      order:
-        (getStringQueryParam(req.query.order) as 'ASC' | 'DESC' | undefined) ||
-        'DESC',
-    };
+  const user = await UserService.getUserById(Number(user_id));
 
-    const user = await UserService.getUserById(Number(user_id), filters);
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user: {
-          id: user.id,
-          login: user.login,
-          full_name: user.full_name,
-          profile_picture: user.profile_picture,
-          rating: user.rating,
-        },
-        posts: user.posts.map((post) => ({
-          id: post.id,
-          author: {
-            id: post.author?.id,
-            login: post.author?.login,
-            full_name: post.author?.full_name,
-            profile_picture: post.author?.profile_picture,
-          },
-          status: post.status,
-          publish_date: post.publish_date,
-          title: post.title,
-          content: post.content,
-          image_url: post.image_url,
-          likes_count: post.likes_count,
-          comments_count: post.comments_count,
-        })),
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: {
+        id: user.id,
+        login: user.login,
+        full_name: user.full_name,
+        profile_picture: user.profile_picture,
+        rating: user.rating,
       },
-    });
-  },
-);
+    },
+  });
+});
 
 export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

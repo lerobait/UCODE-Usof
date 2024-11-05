@@ -159,7 +159,7 @@ export class UserService {
     });
   }
 
-  async getUserById(userId: number, filters: Filters) {
+  async getUserById(userId: number) {
     const user = await User.findByPk(userId, {
       attributes: {
         exclude: [
@@ -168,86 +168,13 @@ export class UserService {
           'email_verification_expires_at',
         ],
       },
-      include: [
-        {
-          model: Post,
-          as: 'posts',
-          attributes: [
-            'id',
-            'status',
-            'publish_date',
-            'title',
-            'content',
-            'image_url',
-          ],
-          include: [
-            {
-              model: User,
-              as: 'author',
-              attributes: ['id', 'login', 'full_name', 'profile_picture'],
-            },
-            {
-              model: Like,
-              attributes: [],
-            },
-            {
-              model: Comment,
-              attributes: [],
-            },
-          ],
-        },
-      ],
     });
 
     if (!user) {
       throw new AppError('User not found', 404);
     }
 
-    const { whereClause, orderClause } = applyFilters(filters);
-
-    const postsWithCounts = await Post.findAll({
-      where: whereClause,
-      order: orderClause,
-      group: ['Post.id'],
-      include: [
-        {
-          model: User,
-          as: 'author',
-          attributes: ['id', 'login', 'full_name', 'profile_picture'],
-        },
-        {
-          model: Like,
-          attributes: [],
-        },
-        {
-          model: Comment,
-          attributes: [],
-        },
-      ],
-    });
-
-    const postsWithDetailedCounts = await Promise.all(
-      postsWithCounts.map(async (post) => {
-        const likesCount = await Like.count({
-          where: { post_id: post.id, type: 'like' },
-        });
-
-        const commentsCount = await Comment.count({
-          where: { post_id: post.id },
-        });
-
-        return {
-          ...post.toJSON(),
-          likes_count: likesCount,
-          comments_count: commentsCount,
-        };
-      }),
-    );
-
-    return {
-      ...user.toJSON(),
-      posts: postsWithDetailedCounts,
-    };
+    return user.toJSON();
   }
 
   async createUser(

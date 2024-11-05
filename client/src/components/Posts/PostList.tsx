@@ -9,6 +9,7 @@ interface Post {
   content: string;
   username: string;
   publish_date: string;
+  author_id: number;
   status: string;
   categories?: string[];
   likes_count: number;
@@ -39,9 +40,10 @@ const PostList: React.FC = () => {
       {posts.map((post) => (
         <PostItem
           key={post.id}
+          id={post.id}
           title={post.title}
           content={post.content}
-          username={post.username || 'Anonymous'}
+          authorId={post.author_id}
           date={new Date(post.publish_date).toLocaleDateString()}
           status={post.status}
           categories={

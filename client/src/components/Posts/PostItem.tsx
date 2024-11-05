@@ -1,10 +1,12 @@
 import React from 'react';
+import PostAuthor from './PostAuthor';
 import Button from '../Common/Button';
 
 interface PostItemProps {
+  id: number;
   title: string;
   content: string;
-  username: string;
+  authorId: number;
   date: string;
   status: string;
   categories: string[];
@@ -15,7 +17,7 @@ interface PostItemProps {
 const PostItem: React.FC<PostItemProps> = ({
   title,
   content,
-  username,
+  authorId,
   date,
   status,
   categories,
@@ -24,16 +26,9 @@ const PostItem: React.FC<PostItemProps> = ({
 }) => {
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
-      <div className="flex items-center space-x-4">
-        <img
-          src="/images/avatars/default-avatar.png"
-          alt="User avatar"
-          className="w-12 h-12 rounded-full"
-        />
-        <div>
-          <span className="text-sm text-gray-500">{username}</span>
-          <span className="text-xs text-gray-400 ml-2">{date}</span>
-        </div>
+      <PostAuthor authorId={authorId} />
+      <div>
+        <span className="text-xs text-gray-400 ml-2">{date}</span>
       </div>
 
       <h2 className="text-2xl font-semibold text-gray-800 mt-4">{title}</h2>
