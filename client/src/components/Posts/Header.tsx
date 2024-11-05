@@ -12,19 +12,31 @@ const Header: React.FC = () => {
     localStorage.removeItem('authToken');
   };
 
+  const defaultAvatar = '/images/avatars/default-avatar.png';
+
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center">
       <h1 className="text-2xl font-bold text-blue-600">CodeUnity</h1>
 
+      <div className="flex-1 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search"
+          className="border border-gray-300 rounded-lg py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full max-w-xs"
+          disabled
+        />
+      </div>
+
       <div className="flex items-center space-x-4">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search"
-            className="border border-gray-300 rounded-lg py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            disabled
-          />
-        </div>
+        {user && (
+          <div className="flex items-center space-x-2">
+            <img
+              src={user.profile_picture || defaultAvatar}
+              alt="User Avatar"
+              className="w-10 h-10 rounded-full"
+            />
+          </div>
+        )}
 
         {user ? (
           <Button
