@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PostItem from './PostItem';
 import { useFetching } from '../../hooks/useFetching';
-import { getAllPosts } from '../../API/PostService';
+import PostService from '../../API/PostService';
 
 interface Post {
   id: number;
@@ -11,7 +11,6 @@ interface Post {
   publish_date: string;
   author_id: number;
   status: string;
-  categories?: string[];
   likes_count: number;
   comments_count: number;
 }
@@ -19,7 +18,7 @@ interface Post {
 const PostList: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [fetchPosts, isLoading, error] = useFetching(async () => {
-    const fetchedPosts = await getAllPosts();
+    const fetchedPosts = await PostService.getAllPosts();
     setPosts(fetchedPosts);
   });
 
@@ -46,9 +45,6 @@ const PostList: React.FC = () => {
           authorId={post.author_id}
           date={new Date(post.publish_date).toLocaleDateString()}
           status={post.status}
-          categories={
-            post.categories || ['JavaScript', 'Backend', 'API', 'Express']
-          }
           likeCount={post.likes_count}
           commentCount={post.comments_count}
         />

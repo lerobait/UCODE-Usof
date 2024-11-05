@@ -1,6 +1,7 @@
 import React from 'react';
 import PostAuthor from './PostAuthor';
 import Button from '../Common/Button';
+import PostCategories from './PostCategories';
 
 interface PostItemProps {
   id: number;
@@ -9,18 +10,17 @@ interface PostItemProps {
   authorId: number;
   date: string;
   status: string;
-  categories: string[];
   likeCount: number;
   commentCount: number;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
+  id,
   title,
   content,
   authorId,
   date,
   status,
-  categories,
   likeCount,
   commentCount,
 }) => {
@@ -34,16 +34,7 @@ const PostItem: React.FC<PostItemProps> = ({
       <h2 className="text-2xl font-semibold text-gray-800 mt-4">{title}</h2>
       <p className="text-gray-600 mt-2">{content}</p>
 
-      <div className="flex flex-wrap mt-4">
-        {categories.map((category, index) => (
-          <span
-            key={index}
-            className="text-sm bg-blue-100 text-blue-500 rounded-full px-2 py-1 mr-2 mb-2"
-          >
-            {category}
-          </span>
-        ))}
-      </div>
+      <PostCategories postId={id} />
 
       <div className="flex justify-between items-center mt-4">
         <span className="text-sm text-gray-500">{status}</span>

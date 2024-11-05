@@ -26,6 +26,7 @@ router.get('/myPosts', protect, getMyPosts);
 router.get('/myFavoritePosts', protect, getMyFavoritePosts);
 router.get('/:post_id', getPostById);
 router.get('/:post_id/comments', getCommentsForPost);
+router.get('/:post_id/categories', getCategoriesForPost);
 
 router.use(protect);
 router.post('/', createPost);
@@ -39,7 +40,6 @@ router.post('/:post_id/comments', createComment);
 
 router.use(restrictTo('admin'));
 
-router.get('/:post_id/categories', getCategoriesForPost);
 router.get('/:post_id/like', getLikesForPost);
 
 export default router;
