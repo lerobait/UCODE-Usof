@@ -1,34 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PostItem from './PostItem';
+import { useFetching } from '../../hooks/useFetching';
+import { getAllPosts } from '../../API/PostService';
 
-const posts = [
-  {
-    title: 'First Post',
-    content: 'This is the content of the first post.',
-    username: 'User123',
-    date: '2023-11-05',
-    status: 'Active',
-    categories: ['React', 'TypeScript', 'Frontend', 'Vite'],
-    likeCount: 10,
-    commentCount: 5,
-  },
-  {
-    title: 'Second Post',
-    content: 'Another example of a post content.',
-    username: 'User456',
-    date: '2023-11-04',
-    status: 'Active',
-    categories: ['JavaScript', 'Backend', 'API', 'Express'],
-    likeCount: 8,
-    commentCount: 3,
-  },
-];
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  username: string;
+  publish_date: string;
+  status: string;
+  categories?: string[];
+  likes_count: number;
+  comments_count: number;
+}
 
 const PostList: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [fetchPosts, isLoading, error] = useFetching(async () => {
+    const fetchedPosts = await getAllPosts();
+    setPosts(fetchedPosts);
+  });
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading posts...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div className="space-y-6">
-      {posts.map((post, index) => (
-        <PostItem key={index} {...post} />
+      {posts.map((post) => (
+        <PostItem
+          key={post.id}
+          title={post.title}
+          content={post.content}
+          username={post.username || 'Anonymous'}
+          date={new Date(post.publish_date).toLocaleDateString()}
+          status={post.status}
+          categories={
+            post.categories || ['JavaScript', 'Backend', 'API', 'Express']
+          }
+          likeCount={post.likes_count}
+          commentCount={post.comments_count}
+        />
       ))}
     </div>
   );

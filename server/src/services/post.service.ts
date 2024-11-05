@@ -62,7 +62,7 @@ export const getAllPostsService = async (
     include: [
       {
         model: User,
-        attributes: ['id', 'login', 'profile_picture'],
+        attributes: ['id'],
       },
       {
         model: Comment,
@@ -98,13 +98,6 @@ export const getAllPostsService = async (
       status: post.status,
       image_url: post.image_url,
       author_id: post.author_id,
-      author: post.author
-        ? {
-            id: post.author.id,
-            login: post.author.login,
-            profile_picture: post.author.profile_picture,
-          }
-        : null,
       likes_count: post.getDataValue('likes_count'),
       comments_count: post.getDataValue('comments_count'),
     })),
