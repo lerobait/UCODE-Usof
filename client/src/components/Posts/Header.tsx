@@ -12,7 +12,7 @@ const Header: React.FC = () => {
     localStorage.removeItem('authToken');
   };
 
-  const defaultAvatar = '/images/avatars/default-avatar.png';
+  const defaultAvatar = 'public/images/avatars/default-avatar.png';
 
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center">

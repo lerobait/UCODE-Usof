@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import Button from '../components/Common/Button';
 import Header from '../components/Posts/Header';
 import useAuthStore from '../hooks/useAuthStore';
+import PostList from '../components/Posts/PostList';
 
 const Posts: React.FC = () => {
   const { user } = useAuthStore();
@@ -21,36 +21,7 @@ const Posts: React.FC = () => {
           Posts
         </h1>
 
-        <div className="space-y-6">
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-gray-800">Post Title</h2>
-            <p className="text-gray-600 mt-2">
-              This is a short description of the post. It gives an idea of the
-              content.
-            </p>
-            <div className="flex justify-between items-center mt-4">
-              <span className="text-sm text-gray-500">Posted by User123</span>
-              <Button className="text-blue-500 hover:underline">
-                Read More
-              </Button>
-            </div>
-          </div>
-
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-gray-800">
-              Another Post Title
-            </h2>
-            <p className="text-gray-600 mt-2">
-              Another example of a post. This is a placeholder description.
-            </p>
-            <div className="flex justify-between items-center mt-4">
-              <span className="text-sm text-gray-500">Posted by User456</span>
-              <Button className="text-blue-500 hover:underline">
-                Read More
-              </Button>
-            </div>
-          </div>
-        </div>
+        <PostList />
 
         {!user && (
           <div className="text-center text-gray-500 mt-6">
