@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PostAuthor from './PostAuthor';
 import Button from '../Common/Button';
 import PostCategories from './PostCategories';
+import PostLike from './PostLike';
 
 interface PostItemProps {
   id: number;
@@ -12,6 +13,7 @@ interface PostItemProps {
   status: string;
   likeCount: number;
   commentCount: number;
+  initialLikeStatus: 'like' | 'dislike' | null;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -23,7 +25,31 @@ const PostItem: React.FC<PostItemProps> = ({
   status,
   likeCount,
   commentCount,
+  initialLikeStatus,
 }) => {
+  const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
+  const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(
+    initialLikeStatus,
+  );
+
+  const handleLikeUpdate = (newStatus: 'like' | 'dislike' | null) => {
+    if (newStatus === 'like') {
+      setCurrentLikeCount((prevCount) =>
+        likeStatus === 'dislike' ? prevCount + 1 : prevCount + 1,
+      );
+    } else if (newStatus === 'dislike') {
+      setCurrentLikeCount((prevCount) =>
+        likeStatus === 'like' ? prevCount - 1 : prevCount,
+      );
+    } else {
+      setCurrentLikeCount((prevCount) =>
+        likeStatus === 'like' ? prevCount - 1 : prevCount,
+      );
+    }
+
+    setLikeStatus(newStatus);
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <PostAuthor authorId={authorId} />
@@ -42,9 +68,14 @@ const PostItem: React.FC<PostItemProps> = ({
           <Button className="text-blue-500 hover:underline">
             Add to Favorites
           </Button>
-          <Button className="text-gray-500 hover:text-gray-700">
-            👍 {likeCount}
-          </Button>
+          <div className="flex items-center">
+            <PostLike
+              postId={id}
+              initialLikeStatus={likeStatus}
+              onLikeStatusChange={handleLikeUpdate}
+            />
+            <span className="ml-2 text-gray-500">{currentLikeCount}</span>
+          </div>
           <Button className="text-gray-500 hover:text-gray-700">
             💬 {commentCount}
           </Button>

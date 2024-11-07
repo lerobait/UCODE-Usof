@@ -558,12 +558,6 @@ export const getLikesForPostService = async (postId: number) => {
     where: {
       post_id: postId,
     },
-    include: [
-      {
-        model: User,
-        attributes: ['id', 'login', 'full_name', 'profile_picture'],
-      },
-    ],
   });
 
   return likes;
@@ -596,9 +590,7 @@ export const toggleLikeForPostService = async (
   });
 
   if (existingLike) {
-    if (existingLike.type === type) {
-      throw new AppError(`You have already ${type}d this post`, 400);
-    } else {
+    if (existingLike.type !== type) {
       existingLike.type = type;
       await existingLike.save();
 
@@ -606,6 +598,8 @@ export const toggleLikeForPostService = async (
 
       return existingLike;
     }
+
+    throw new AppError(`You have already ${type}d this post`, 400);
   } else {
     const like = await Like.create({
       post_id: postId,

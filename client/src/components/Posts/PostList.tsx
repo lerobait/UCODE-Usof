@@ -47,6 +47,7 @@ const PostList: React.FC = () => {
           status={post.status}
           likeCount={post.likes_count}
           commentCount={post.comments_count}
+          initialLikeStatus={null}
         />
       ))}
     </div>

@@ -37,9 +37,8 @@ router.delete('/:post_id/favorite', removePostFromFavorites);
 router.post('/:post_id/like', addlikeToPost);
 router.delete('/:post_id/like', deleteLikeFromPost);
 router.post('/:post_id/comments', createComment);
+router.get('/:post_id/like', getLikesForPost);
 
 router.use(restrictTo('admin'));
-
-router.get('/:post_id/like', getLikesForPost);
 
 export default router;

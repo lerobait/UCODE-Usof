@@ -34,7 +34,6 @@ const sequelize = new Sequelize({
     PasswordReset,
     Favorite,
   ],
-  logging: console.log,
 });
 
 export const connectDatabase = async () => {

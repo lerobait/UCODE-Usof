@@ -11,6 +11,7 @@ interface Post {
   likes_count: number;
   comments_count: number;
 }
+
 interface Category {
   id: number;
   title: string;
@@ -29,5 +30,36 @@ export default class PostService {
     const response: AxiosResponse<{ data: { categories: Category[] } }> =
       await axios.get(`${this.baseUrl}/${postId}/categories`);
     return response.data.data.categories;
+  }
+
+  static async createLike(postId: number, likeStatus: 'like' | 'dislike') {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    const response = await axios.post(
+      `${this.baseUrl}/${postId}/like`,
+      { type: likeStatus },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response.data;
+  }
+
+  static async deleteLike(postId: number): Promise<void> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    await axios.delete(`${this.baseUrl}/${postId}/like`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 }
