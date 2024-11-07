@@ -24,6 +24,16 @@ const useAuthStore = create<AuthStore>((set) => ({
   clearUser: () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
+
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    if (storedUser && storedUser.id) {
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith(`likeStatus-${storedUser.id}-`)) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+
     set({ user: null });
   },
 }));

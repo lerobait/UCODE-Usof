@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PostService from '../../API/PostService';
 import PostAuthor from './PostAuthor';
 import Button from '../Common/Button';
 import PostCategories from './PostCategories';
 import PostLike from './PostLike';
+import useAuthStore from '../../hooks/useAuthStore';
 
 interface PostItemProps {
   id: number;
@@ -13,7 +15,6 @@ interface PostItemProps {
   status: string;
   likeCount: number;
   commentCount: number;
-  initialLikeStatus: 'like' | 'dislike' | null;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -25,26 +26,50 @@ const PostItem: React.FC<PostItemProps> = ({
   status,
   likeCount,
   commentCount,
-  initialLikeStatus,
 }) => {
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
-  const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(
-    initialLikeStatus,
-  );
+  const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
+
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      if (user) {
+        try {
+          const response = await PostService.getLikesForPost(id);
+          const userLike = response.data.likes.find(
+            (like: { author_id: number; type: string }) =>
+              like.author_id === user.id,
+          );
+          if (userLike) {
+            setLikeStatus(userLike.type === 'like' ? 'like' : 'dislike');
+          }
+        } catch (error) {
+          console.error('Error fetching like status:', error);
+        }
+      }
+    };
+
+    fetchLikeStatus();
+  }, [id, user]);
 
   const handleLikeUpdate = (newStatus: 'like' | 'dislike' | null) => {
     if (newStatus === 'like') {
-      setCurrentLikeCount((prevCount) =>
-        likeStatus === 'dislike' ? prevCount + 1 : prevCount + 1,
-      );
+      if (likeStatus === 'dislike') {
+        setCurrentLikeCount((prevCount) => prevCount + 1);
+      } else if (likeStatus === 'like') {
+        setCurrentLikeCount((prevCount) => prevCount - 1);
+      } else {
+        setCurrentLikeCount((prevCount) => prevCount + 1);
+      }
     } else if (newStatus === 'dislike') {
-      setCurrentLikeCount((prevCount) =>
-        likeStatus === 'like' ? prevCount - 1 : prevCount,
-      );
+      if (likeStatus === 'like') {
+        setCurrentLikeCount((prevCount) => prevCount - 1);
+      }
     } else {
-      setCurrentLikeCount((prevCount) =>
-        likeStatus === 'like' ? prevCount - 1 : prevCount,
-      );
+      if (likeStatus === 'like') {
+        setCurrentLikeCount((prevCount) => prevCount - 1);
+      }
     }
 
     setLikeStatus(newStatus);

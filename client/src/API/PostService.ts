@@ -32,6 +32,19 @@ export default class PostService {
     return response.data.data.categories;
   }
 
+  static async getLikesForPost(postId: number) {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+    const response = await axios.get(`${this.baseUrl}/${postId}/like`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+
   static async createLike(postId: number, likeStatus: 'like' | 'dislike') {
     const token = localStorage.getItem('authToken');
     if (!token) {

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PostService from '../../API/PostService';
 import Button from '../Common/Button';
+import useAuthStore from '../../hooks/useAuthStore';
 
 interface PostLikeProps {
   postId: number;
@@ -13,11 +14,25 @@ const PostLike: React.FC<PostLikeProps> = ({
   initialLikeStatus,
   onLikeStatusChange,
 }) => {
+  const { user, clearUser } = useAuthStore();
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(
     initialLikeStatus,
   );
 
+  useEffect(() => {
+    if (user) {
+      const savedLikeStatus = localStorage.getItem(
+        `likeStatus-${user.id}-${postId}`,
+      );
+      setLikeStatus(savedLikeStatus as 'like' | 'dislike' | null);
+    } else {
+      setLikeStatus(null);
+    }
+  }, [postId, user]);
+
   const handleLikeClick = async () => {
+    if (!user) return;
+
     const newStatus = likeStatus === 'like' ? null : 'like';
     try {
       if (newStatus === 'like') {
@@ -26,6 +41,7 @@ const PostLike: React.FC<PostLikeProps> = ({
         await PostService.deleteLike(postId);
       }
       setLikeStatus(newStatus);
+      localStorage.setItem(`likeStatus-${user.id}-${postId}`, newStatus || '');
       onLikeStatusChange(newStatus);
     } catch (error) {
       console.error('Error liking the post:', error);
@@ -33,6 +49,8 @@ const PostLike: React.FC<PostLikeProps> = ({
   };
 
   const handleDislikeClick = async () => {
+    if (!user) return;
+
     const newStatus = likeStatus === 'dislike' ? null : 'dislike';
     try {
       if (newStatus === 'dislike') {
@@ -41,10 +59,15 @@ const PostLike: React.FC<PostLikeProps> = ({
         await PostService.deleteLike(postId);
       }
       setLikeStatus(newStatus);
+      localStorage.setItem(`likeStatus-${user.id}-${postId}`, newStatus || '');
       onLikeStatusChange(newStatus);
     } catch (error) {
       console.error('Error disliking the post:', error);
     }
+  };
+
+  const handleLogout = () => {
+    clearUser();
   };
 
   return (
