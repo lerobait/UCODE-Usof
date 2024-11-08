@@ -98,8 +98,8 @@ const PostItem: React.FC<PostItemProps> = ({
               postId={id}
               initialLikeStatus={likeStatus}
               onLikeStatusChange={handleLikeUpdate}
+              currentLikeCount={currentLikeCount}
             />
-            <span className="ml-2 text-gray-500">{currentLikeCount}</span>
           </div>
           <Button className="text-gray-500 hover:text-gray-700">
             💬 {commentCount}

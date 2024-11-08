@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AiOutlineLike, AiOutlineDislike } from 'react-icons/ai';
 import PostService from '../../API/PostService';
 import Button from '../Common/Button';
 import Modal from '../Modal/Modal';
@@ -9,12 +10,14 @@ interface PostLikeProps {
   postId: number;
   initialLikeStatus: 'like' | 'dislike' | null;
   onLikeStatusChange: (newStatus: 'like' | 'dislike' | null) => void;
+  currentLikeCount: number;
 }
 
 const PostLike: React.FC<PostLikeProps> = ({
   postId,
   initialLikeStatus,
   onLikeStatusChange,
+  currentLikeCount,
 }) => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
@@ -39,7 +42,6 @@ const PostLike: React.FC<PostLikeProps> = ({
       setModalOpen(true);
       return;
     }
-
     const newStatus = likeStatus === 'like' ? null : 'like';
     try {
       if (newStatus === 'like') {
@@ -60,7 +62,6 @@ const PostLike: React.FC<PostLikeProps> = ({
       setModalOpen(true);
       return;
     }
-
     const newStatus = likeStatus === 'dislike' ? null : 'dislike';
     try {
       if (newStatus === 'dislike') {
@@ -79,18 +80,21 @@ const PostLike: React.FC<PostLikeProps> = ({
   const closeModal = () => setModalOpen(false);
 
   return (
-    <div>
-      <Button
-        onClick={handleLikeClick}
-        className={`${likeStatus === 'like' ? 'text-blue-500 border-2 border-blue-500' : 'text-gray-500'} hover:border-2 hover:border-blue-300 focus:outline-none`}
-      >
-        👍
+    <div className="flex items-center">
+      <Button onClick={handleLikeClick} className="focus:outline-none">
+        <AiOutlineLike
+          className={`text-2xl ${
+            likeStatus === 'like' ? 'text-blue-500' : 'text-gray-500'
+          } hover:text-blue-300`}
+        />
       </Button>
-      <Button
-        onClick={handleDislikeClick}
-        className={`${likeStatus === 'dislike' ? 'text-red-500 border-2 border-red-500' : 'text-gray-500'} hover:border-2 hover:border-red-300 focus:outline-none`}
-      >
-        👎
+      <span className="mx-2 text-gray-500">{currentLikeCount}</span>
+      <Button onClick={handleDislikeClick} className="focus:outline-none">
+        <AiOutlineDislike
+          className={`text-2xl ${
+            likeStatus === 'dislike' ? 'text-red-500' : 'text-gray-500'
+          } hover:text-red-300`}
+        />
       </Button>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
