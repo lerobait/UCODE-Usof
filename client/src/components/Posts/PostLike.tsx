@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PostService from '../../API/PostService';
 import Button from '../Common/Button';
+import Modal from '../Modal/Modal';
 import useAuthStore from '../../hooks/useAuthStore';
+import { useNavigate } from 'react-router-dom';
 
 interface PostLikeProps {
   postId: number;
@@ -14,10 +16,12 @@ const PostLike: React.FC<PostLikeProps> = ({
   initialLikeStatus,
   onLikeStatusChange,
 }) => {
-  const { user, clearUser } = useAuthStore();
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(
     initialLikeStatus,
   );
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -31,7 +35,10 @@ const PostLike: React.FC<PostLikeProps> = ({
   }, [postId, user]);
 
   const handleLikeClick = async () => {
-    if (!user) return;
+    if (!user) {
+      setModalOpen(true);
+      return;
+    }
 
     const newStatus = likeStatus === 'like' ? null : 'like';
     try {
@@ -49,7 +56,10 @@ const PostLike: React.FC<PostLikeProps> = ({
   };
 
   const handleDislikeClick = async () => {
-    if (!user) return;
+    if (!user) {
+      setModalOpen(true);
+      return;
+    }
 
     const newStatus = likeStatus === 'dislike' ? null : 'dislike';
     try {
@@ -66,32 +76,43 @@ const PostLike: React.FC<PostLikeProps> = ({
     }
   };
 
-  const handleLogout = () => {
-    clearUser();
-  };
+  const closeModal = () => setModalOpen(false);
 
   return (
     <div>
       <Button
         onClick={handleLikeClick}
-        className={`${
-          likeStatus === 'like'
-            ? 'text-blue-500 border-2 border-blue-500'
-            : 'text-gray-500'
-        } hover:border-2 hover:border-blue-300 focus:outline-none`}
+        className={`${likeStatus === 'like' ? 'text-blue-500 border-2 border-blue-500' : 'text-gray-500'} hover:border-2 hover:border-blue-300 focus:outline-none`}
       >
         👍
       </Button>
       <Button
         onClick={handleDislikeClick}
-        className={`${
-          likeStatus === 'dislike'
-            ? 'text-red-500 border-2 border-red-500'
-            : 'text-gray-500'
-        } hover:border-2 hover:border-red-300 focus:outline-none`}
+        className={`${likeStatus === 'dislike' ? 'text-red-500 border-2 border-red-500' : 'text-gray-500'} hover:border-2 hover:border-red-300 focus:outline-none`}
       >
         👎
       </Button>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className="text-center">
+          <h2 className="text-lg font-bold mb-4">Authentication Required</h2>
+          <p className="mb-4">
+            You need to be logged in to like or dislike posts.
+          </p>
+          <Button
+            onClick={() => navigate('/login')}
+            className="bg-blue-500 text-white mb-2 w-full"
+          >
+            Login
+          </Button>
+          <Button
+            onClick={() => navigate('/register')}
+            className="bg-gray-500 text-white w-full"
+          >
+            Still don&apos;t have an account? Register
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
