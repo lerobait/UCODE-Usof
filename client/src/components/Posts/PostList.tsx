@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PostItem from './PostItem';
 import { useFetching } from '../../hooks/useFetching';
 import PostService from '../../API/PostService';
+import { useObserver } from '../../hooks/useObserver';
 
 interface Post {
   id: number;
@@ -17,18 +18,32 @@ interface Post {
 
 const PostList: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const lastElement = useRef<HTMLDivElement>(null);
+
   const [fetchPosts, isLoading, error] = useFetching(async () => {
-    const fetchedPosts = await PostService.getAllPosts();
-    setPosts(fetchedPosts);
+    const fetchedPosts = await PostService.getAllPosts(page, limit);
+    if (fetchedPosts.length < limit) {
+      setHasMore(false);
+    }
+
+    setPosts((prevPosts) => {
+      const newPosts = fetchedPosts.filter(
+        (newPost) => !prevPosts.some((prevPost) => prevPost.id === newPost.id),
+      );
+      return [...prevPosts, ...newPosts];
+    });
+  });
+
+  useObserver(lastElement, hasMore && !isLoading, isLoading, () => {
+    setPage((prevPage) => prevPage + 1);
   });
 
   useEffect(() => {
     fetchPosts();
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading posts...</div>;
-  }
+  }, [page]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -47,9 +62,10 @@ const PostList: React.FC = () => {
           status={post.status}
           likeCount={post.likes_count}
           commentCount={post.comments_count}
-          initialLikeStatus={null}
         />
       ))}
+      <div ref={lastElement} style={{ height: 20 }} />
+      {isLoading && <div>Loading more posts...</div>}
     </div>
   );
 };

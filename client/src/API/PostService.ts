@@ -20,9 +20,9 @@ interface Category {
 export default class PostService {
   private static baseUrl = 'http://localhost:3000/api/posts';
 
-  static async getAllPosts(): Promise<Post[]> {
+  static async getAllPosts(page: number, limit: number): Promise<Post[]> {
     const response: AxiosResponse<{ data: { posts: Post[] } }> =
-      await axios.get(`${this.baseUrl}/`);
+      await axios.get(`${this.baseUrl}/`, { params: { page, limit } });
     return response.data.data.posts;
   }
 
