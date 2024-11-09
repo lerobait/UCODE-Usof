@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import PostService from '../../API/PostService';
 import PostAuthor from './PostAuthor';
 import Button from '../Common/Button';
 import PostCategories from './PostCategories';
 import PostLike from './PostLike';
 import useAuthStore from '../../hooks/useAuthStore';
+
+dayjs.extend(relativeTime);
 
 interface PostItemProps {
   id: number;
@@ -81,7 +85,10 @@ const PostItem: React.FC<PostItemProps> = ({
     <div className="bg-white shadow-md rounded-lg p-6">
       <PostAuthor authorId={authorId} />
       <div>
-        <span className="text-xs text-gray-400 ml-2">{date}</span>
+        <span className="text-xs text-gray-400 ml-2">
+          {/* Используем dayjs для вычисления времени */}
+          {dayjs(date).fromNow()}
+        </span>
       </div>
 
       <h2 className="text-2xl font-semibold text-gray-800 mt-4">{title}</h2>
