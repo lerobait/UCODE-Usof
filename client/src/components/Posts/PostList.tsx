@@ -15,6 +15,7 @@ interface Post {
   status: string;
   likes_count: number;
   comments_count: number;
+  image_url?: string | null;
 }
 
 const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
@@ -99,6 +100,7 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
           status={post.status}
           likeCount={post.likes_count}
           commentCount={post.comments_count}
+          imageUrl={post.image_url}
         />
       ))}
       <div ref={lastElement} style={{ height: 20 }} />

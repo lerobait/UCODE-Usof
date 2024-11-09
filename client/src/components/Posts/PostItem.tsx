@@ -15,6 +15,7 @@ interface PostItemProps {
   status: string;
   likeCount: number;
   commentCount: number;
+  imageUrl?: string | null;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -26,6 +27,7 @@ const PostItem: React.FC<PostItemProps> = ({
   status,
   likeCount,
   commentCount,
+  imageUrl,
 }) => {
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
@@ -84,6 +86,12 @@ const PostItem: React.FC<PostItemProps> = ({
 
       <h2 className="text-2xl font-semibold text-gray-800 mt-4">{title}</h2>
       <p className="text-gray-600 mt-2">{content}</p>
+
+      {imageUrl && (
+        <div className="mt-4">
+          <img src={imageUrl} alt={title} className="max-w-full rounded-lg" />
+        </div>
+      )}
 
       <PostCategories postId={id} />
 
