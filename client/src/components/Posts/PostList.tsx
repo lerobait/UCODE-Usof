@@ -17,7 +17,7 @@ interface Post {
   comments_count: number;
 }
 
-const PostList: React.FC = () => {
+const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -75,6 +75,12 @@ const PostList: React.FC = () => {
     }));
   };
 
+  const filteredPosts = posts.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchText.toLowerCase()) ||
+      post.content.toLowerCase().includes(searchText.toLowerCase()),
+  );
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -82,7 +88,7 @@ const PostList: React.FC = () => {
   return (
     <div className="space-y-6">
       <PostFilter onFilterChange={handleFilterChange} />
-      {posts.map((post) => (
+      {filteredPosts.map((post) => (
         <PostItem
           key={post.id}
           id={post.id}
