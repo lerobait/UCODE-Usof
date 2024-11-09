@@ -11,6 +11,7 @@ interface PostLikeProps {
   initialLikeStatus: 'like' | 'dislike' | null;
   onLikeStatusChange: (newStatus: 'like' | 'dislike' | null) => void;
   currentLikeCount: number;
+  postStatus: string;
 }
 
 const PostLike: React.FC<PostLikeProps> = ({
@@ -18,6 +19,7 @@ const PostLike: React.FC<PostLikeProps> = ({
   initialLikeStatus,
   onLikeStatusChange,
   currentLikeCount,
+  postStatus,
 }) => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
@@ -42,6 +44,9 @@ const PostLike: React.FC<PostLikeProps> = ({
       setModalOpen(true);
       return;
     }
+    if (postStatus === 'inactive') {
+      return;
+    }
     const newStatus = likeStatus === 'like' ? null : 'like';
     try {
       if (newStatus === 'like') {
@@ -62,6 +67,9 @@ const PostLike: React.FC<PostLikeProps> = ({
       setModalOpen(true);
       return;
     }
+    if (postStatus === 'inactive') {
+      return;
+    }
     const newStatus = likeStatus === 'dislike' ? null : 'dislike';
     try {
       if (newStatus === 'dislike') {
@@ -79,21 +87,28 @@ const PostLike: React.FC<PostLikeProps> = ({
 
   const closeModal = () => setModalOpen(false);
 
+  const buttonClass =
+    postStatus === 'inactive' ? 'cursor-not-allowed' : 'hover:text-blue-300';
+
   return (
     <div className="flex items-center">
-      <Button onClick={handleLikeClick} className="focus:outline-none">
+      <Button
+        onClick={handleLikeClick}
+        className={`focus:outline-none ${postStatus === 'inactive' ? 'text-gray-400' : 'text-2xl'} ${buttonClass}`}
+        disabled={postStatus === 'inactive'}
+      >
         <AiOutlineLike
-          className={`text-2xl ${
-            likeStatus === 'like' ? 'text-blue-500' : 'text-gray-500'
-          } hover:text-blue-300`}
+          className={`text-2xl ${likeStatus === 'like' ? 'text-blue-500' : 'text-gray-500'} ${buttonClass}`}
         />
       </Button>
       <span className="mx-2 text-gray-500">{currentLikeCount}</span>
-      <Button onClick={handleDislikeClick} className="focus:outline-none">
+      <Button
+        onClick={handleDislikeClick}
+        className={`focus:outline-none ${postStatus === 'inactive' ? 'text-gray-400' : 'text-2xl'} ${buttonClass}`}
+        disabled={postStatus === 'inactive'}
+      >
         <AiOutlineDislike
-          className={`text-2xl ${
-            likeStatus === 'dislike' ? 'text-red-500' : 'text-gray-500'
-          } hover:text-red-300`}
+          className={`text-2xl ${likeStatus === 'dislike' ? 'text-red-500' : 'text-gray-500'} ${buttonClass}`}
         />
       </Button>
 
@@ -108,12 +123,6 @@ const PostLike: React.FC<PostLikeProps> = ({
             className="bg-blue-500 text-white mb-2 w-full"
           >
             Login
-          </Button>
-          <Button
-            onClick={() => navigate('/register')}
-            className="bg-gray-500 text-white w-full"
-          >
-            Still don&apos;t have an account? Register
           </Button>
         </div>
       </Modal>
