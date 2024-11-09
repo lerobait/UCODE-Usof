@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
+// import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import xss from 'xss-clean';
 import AppError from './utils/appError';
@@ -30,13 +30,13 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-const limiter = rateLimit({
-  max: 200,
-  windowMs: 60 * 60 * 1000,
-  message: 'Too many requests from this IP, please try again in an hour!',
-  skip: (req, res) => res.statusCode === 304,
-});
-app.use('/api', limiter);
+// const limiter = rateLimit({
+//   max: 200,
+//   windowMs: 60 * 60 * 1000,
+//   message: 'Too many requests from this IP, please try again in an hour!',
+//   skip: (req, res) => res.statusCode === 304,
+// });
+// app.use('/api', limiter);
 
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));

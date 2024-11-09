@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PostItem from './PostItem';
+import PostFilter from './PostFilter';
 import { useFetching } from '../../hooks/useFetching';
 import PostService from '../../API/PostService';
 import { useObserver } from '../../hooks/useObserver';
@@ -19,16 +20,30 @@ interface Post {
 const PostList: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
-  const [limit] = useState(1);
+  const [limit] = useState(10);
   const [hasMore, setHasMore] = useState(true);
+  const [filter, setFilter] = useState<{
+    sortBy: 'likes' | 'date' | undefined;
+    order: 'ASC' | 'DESC' | undefined;
+    status?: 'active' | 'inactive' | undefined;
+  }>({
+    sortBy: 'likes',
+    order: 'DESC' as 'ASC' | 'DESC',
+    status: undefined,
+  });
   const lastElement = useRef<HTMLDivElement>(null);
 
   const [fetchPosts, isLoading, error] = useFetching(async () => {
-    const fetchedPosts = await PostService.getAllPosts(page, limit);
+    const fetchedPosts = await PostService.getAllPosts(
+      page,
+      limit,
+      filter.sortBy,
+      filter.order,
+      filter.status,
+    );
     if (fetchedPosts.length < limit) {
       setHasMore(false);
     }
-
     setPosts((prevPosts) => {
       const newPosts = fetchedPosts.filter(
         (newPost) => !prevPosts.some((prevPost) => prevPost.id === newPost.id),
@@ -42,8 +57,23 @@ const PostList: React.FC = () => {
   });
 
   useEffect(() => {
+    setPage(1);
     fetchPosts();
-  }, [page]);
+  }, [filter]);
+
+  const handleFilterChange = (newFilter: {
+    sortBy: 'likes' | 'date' | undefined;
+    order: 'ASC' | 'DESC' | undefined;
+    status?: 'active' | 'inactive' | undefined;
+  }) => {
+    setPosts([]);
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      ...newFilter,
+      sortBy: newFilter.sortBy ?? prevFilter.sortBy,
+      order: newFilter.order ?? prevFilter.order,
+    }));
+  };
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -51,6 +81,7 @@ const PostList: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      <PostFilter onFilterChange={handleFilterChange} />
       {posts.map((post) => (
         <PostItem
           key={post.id}

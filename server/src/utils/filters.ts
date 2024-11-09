@@ -21,7 +21,11 @@ export const applyFilters = (filters: Filters) => {
 
   if (filters.sortBy === 'likes') {
     orderClause.push([
-      sequelize.fn('COUNT', sequelize.col('likes.id')),
+      sequelize.literal(`(
+        SELECT COUNT(*) 
+        FROM likes 
+        WHERE likes.post_id = Post.id AND likes.type = 'like'
+      )`) as unknown as string,
       filters.order || 'DESC',
     ] as OrderItem);
   } else if (filters.sortBy === 'date') {
