@@ -28,6 +28,9 @@ const useAuthStore = create<AuthStore>((set) => ({
     const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
     if (storedUser && storedUser.id) {
       Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith(`favoriteStatus-${storedUser.id}-`)) {
+          localStorage.removeItem(key);
+        }
         if (key.startsWith(`likeStatus-${storedUser.id}-`)) {
           localStorage.removeItem(key);
         }

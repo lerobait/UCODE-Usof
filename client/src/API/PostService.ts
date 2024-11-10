@@ -83,4 +83,50 @@ export default class PostService {
       },
     });
   }
+
+  static async addFavorite(postId: number) {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    await axios.post(
+      `${this.baseUrl}/${postId}/favorite`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
+
+  static async deleteFavorite(postId: number) {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    await axios.delete(`${this.baseUrl}/${postId}/favorite`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  static async getUserFavorites(): Promise<Post[]> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    const response: AxiosResponse<{ data: { favorites: Post[] } }> =
+      await axios.get(`${this.baseUrl}/myFavoritePosts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+    return response.data.data.favorites;
+  }
 }

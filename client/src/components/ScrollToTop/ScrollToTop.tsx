@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Button from '../Common/Button';
 
 const ScrollToTop: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -22,12 +23,12 @@ const ScrollToTop: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <button
+    <Button
       onClick={scrollToTop}
       className="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
     >
       ⬆️
-    </button>
+    </Button>
   );
 };
 

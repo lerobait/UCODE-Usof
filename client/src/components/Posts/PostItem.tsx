@@ -7,6 +7,7 @@ import Button from '../Common/Button';
 import PostCategories from './PostCategories';
 import PostLike from './PostLike';
 import useAuthStore from '../../hooks/useAuthStore';
+import PostFavorite from './PostFavorite';
 
 dayjs.extend(relativeTime);
 
@@ -86,7 +87,6 @@ const PostItem: React.FC<PostItemProps> = ({
       <PostAuthor authorId={authorId} />
       <div>
         <span className="text-xs text-gray-400 ml-2">
-          {/* Используем dayjs для вычисления времени */}
           {dayjs(date).fromNow()}
         </span>
       </div>
@@ -105,9 +105,7 @@ const PostItem: React.FC<PostItemProps> = ({
       <div className="flex justify-between items-center mt-4">
         <span className="text-sm text-gray-500">{status}</span>
         <div className="flex items-center space-x-4">
-          <Button className="text-blue-500 hover:underline">
-            Add to Favorites
-          </Button>
+          <PostFavorite postId={id} />
           <div className="flex items-center">
             <PostLike
               postId={id}
