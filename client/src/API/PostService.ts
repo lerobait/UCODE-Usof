@@ -27,10 +27,23 @@ export default class PostService {
     order?: 'ASC' | 'DESC',
     status?: 'active' | 'inactive',
   ): Promise<Post[]> {
+    const params: {
+      page: number;
+      limit: number;
+      sortBy?: 'likes' | 'date';
+      order?: 'ASC' | 'DESC';
+      status?: 'active' | 'inactive';
+    } = {
+      page,
+      limit,
+    };
+
+    if (sortBy && sortBy !== 'likes') params.sortBy = sortBy;
+    if (order && order !== 'DESC') params.order = order;
+    if (status) params.status = status;
+
     const response: AxiosResponse<{ data: { posts: Post[] } }> =
-      await axios.get(`${this.baseUrl}/`, {
-        params: { page, limit, sortBy, order, status },
-      });
+      await axios.get(this.baseUrl, { params });
     return response.data.data.posts;
   }
 

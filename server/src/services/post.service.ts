@@ -30,8 +30,8 @@ export const getAllPostsService = async (
   status?: 'active' | 'inactive',
   sortBy?: 'likes' | 'date',
   order?: 'ASC' | 'DESC',
-  limit?: number,
-  offset?: number,
+  limit: number = 0,
+  offset: number = 0,
 ) => {
   const { whereClause, orderClause } = applyFilters({
     status,
@@ -42,21 +42,21 @@ export const getAllPostsService = async (
     orderClause: [string, string][];
   };
 
-  const postIds = await Post.findAll({
+  const allPostIds = await Post.findAll({
     where: whereClause,
     attributes: ['id'],
     order: sequelize.literal(
       `(SELECT COUNT(*) FROM likes WHERE likes.post_id = Post.id AND likes.type = 'like') DESC`,
     ),
-    limit,
-    offset,
     raw: true,
   }).then((posts) => posts.map((post) => post.id));
+
+  const paginatedPostIds = allPostIds.slice(offset, offset + limit);
 
   const posts = await Post.findAll({
     where: {
       id: {
-        [Op.in]: postIds,
+        [Op.in]: paginatedPostIds,
       },
     },
     include: [
@@ -101,7 +101,7 @@ export const getAllPostsService = async (
       likes_count: post.getDataValue('likes_count'),
       comments_count: post.getDataValue('comments_count'),
     })),
-    totalItems: postIds.length,
+    totalItems: allPostIds.length,
   };
 };
 

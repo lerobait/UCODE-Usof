@@ -24,6 +24,7 @@ const sequelize = new Sequelize({
   username: DB_USER,
   password: DB_PASSWORD,
   host: DB_HOST,
+  logging: false,
   models: [
     User,
     Post,

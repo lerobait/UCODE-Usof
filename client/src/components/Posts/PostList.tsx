@@ -21,7 +21,7 @@ interface Post {
 const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(3);
   const [hasMore, setHasMore] = useState(true);
   const [filter, setFilter] = useState<{
     sortBy: 'likes' | 'date' | undefined;
@@ -29,28 +29,35 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
     status?: 'active' | 'inactive' | undefined;
   }>({
     sortBy: 'likes',
-    order: 'DESC' as 'ASC' | 'DESC',
+    order: 'DESC',
     status: undefined,
   });
   const lastElement = useRef<HTMLDivElement>(null);
 
   const [fetchPosts, isLoading, error] = useFetching(async () => {
     const fetchedPosts = await PostService.getAllPosts(
-      page,
-      limit,
+      1,
+      Number.MAX_SAFE_INTEGER,
       filter.sortBy,
       filter.order,
       filter.status,
     );
-    if (fetchedPosts.length < limit) {
-      setHasMore(false);
+
+    const paginatedPosts = fetchedPosts.slice((page - 1) * limit, page * limit);
+
+    if (page === 1) {
+      setPosts(paginatedPosts);
+    } else {
+      setPosts((prevPosts) => [
+        ...prevPosts,
+        ...paginatedPosts.filter(
+          (newPost) =>
+            !prevPosts.some((prevPost) => prevPost.id === newPost.id),
+        ),
+      ]);
     }
-    setPosts((prevPosts) => {
-      const newPosts = fetchedPosts.filter(
-        (newPost) => !prevPosts.some((prevPost) => prevPost.id === newPost.id),
-      );
-      return [...prevPosts, ...newPosts];
-    });
+
+    setHasMore(paginatedPosts.length === limit);
   });
 
   useObserver(lastElement, hasMore && !isLoading, isLoading, () => {
@@ -58,22 +65,18 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
   });
 
   useEffect(() => {
-    setPage(1);
     fetchPosts();
-  }, [filter]);
+  }, [page, filter]);
 
   const handleFilterChange = (newFilter: {
     sortBy: 'likes' | 'date' | undefined;
     order: 'ASC' | 'DESC' | undefined;
     status?: 'active' | 'inactive' | undefined;
   }) => {
+    setPage(1);
     setPosts([]);
-    setFilter((prevFilter) => ({
-      ...prevFilter,
-      ...newFilter,
-      sortBy: newFilter.sortBy ?? prevFilter.sortBy,
-      order: newFilter.order ?? prevFilter.order,
-    }));
+    setHasMore(true);
+    setFilter(newFilter);
   };
 
   const filteredPosts = posts.filter(
