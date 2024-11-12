@@ -45,7 +45,7 @@ const PostFilter: React.FC<PostFilterProps> = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="fixed right-2 top-[calc(20vh+40px)] bg-white shadow-lg p-6 rounded-lg space-y-6 w-48 border border-gray-200">
+    <div className="fixed right-2 top-[calc(5vh+40px)] bg-white shadow-lg p-6 rounded-lg space-y-6 w-48 border border-gray-200 mr-12">
       <h2 className="text-xl font-semibold text-gray-800">Filters</h2>
 
       <Button
