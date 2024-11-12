@@ -47,6 +47,40 @@ export default class PostService {
     return response.data.data.posts;
   }
 
+  static async getUserFavoritePosts(
+    page: number,
+    limit: number,
+    sortBy?: 'likes' | 'date',
+    order?: 'ASC' | 'DESC',
+    status?: 'active' | 'inactive',
+  ): Promise<Post[]> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    const params: {
+      page: number;
+      limit: number;
+      sortBy?: 'likes' | 'date';
+      order?: 'ASC' | 'DESC';
+      status?: 'active' | 'inactive';
+    } = { page, limit };
+
+    if (sortBy && sortBy !== 'likes') params.sortBy = sortBy;
+    if (order && order !== 'DESC') params.order = order;
+    if (status) params.status = status;
+
+    const response: AxiosResponse<{ data: { posts: Post[] } }> =
+      await axios.get(`${this.baseUrl}/myFavoritePosts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params,
+      });
+    return response.data.data.posts;
+  }
+
   static async getCategoriesForPost(postId: number): Promise<Category[]> {
     const response: AxiosResponse<{ data: { categories: Category[] } }> =
       await axios.get(`${this.baseUrl}/${postId}/categories`);
