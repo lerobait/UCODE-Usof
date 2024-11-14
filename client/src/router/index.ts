@@ -4,6 +4,7 @@ import Register from '../pages/Register';
 import NewPass from '../pages/NewPass';
 import FavoritePosts from '../pages/FavoritePosts';
 import Categories from '../pages/Categories';
+import CategoryPosts from '../pages/CategoryPosts';
 
 interface Route {
   path: string;
@@ -21,4 +22,5 @@ export const publicRoutes: Route[] = [
   { path: '/register', component: Register, exact: true },
   { path: '/posts', component: Posts, exact: true },
   { path: '/categories', component: Categories, exact: true },
+  { path: '/category-posts/:id', component: CategoryPosts, exact: true },
 ];

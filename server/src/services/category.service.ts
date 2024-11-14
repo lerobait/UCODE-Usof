@@ -72,8 +72,6 @@ export const getPostsByCategoryId = async (
       p.status, 
       p.image_url, 
       u.id AS author_id, 
-      u.login AS author_login, 
-      u.profile_picture AS author_profile_picture,
       (SELECT COUNT(*) FROM comments WHERE comments.post_id = p.id) AS comments_count,
       (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.type = 'like') AS likes_count
     FROM post_categories pc
@@ -101,11 +99,7 @@ export const getPostsByCategoryId = async (
     publish_date: post.publish_date,
     status: post.status,
     image_url: post.image_url,
-    author: {
-      id: post.author_id,
-      login: post.author_login,
-      profile_picture: post.author_profile_picture,
-    },
+    author_id: post.author_id,
     likes_count: post.likes_count,
     comments_count: post.comments_count,
   }));
