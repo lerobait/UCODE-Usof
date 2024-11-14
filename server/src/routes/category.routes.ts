@@ -12,9 +12,10 @@ import {
 
 const router = Router();
 
+router.get('/', getAllCategories);
+
 router.use(protect);
 
-router.get('/', getAllCategories);
 router.get('/:category_id', getCategoryById);
 router.get('/:category_id/posts', getPostsByCategoryId);
 
