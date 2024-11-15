@@ -17,11 +17,13 @@ import {
   addPostToFavorites,
   getMyFavoritePosts,
   removePostFromFavorites,
+  getUserPosts,
 } from '../controllers/post.controller';
 
 const router = Router();
 
 router.get('/', getAllPosts);
+router.get('/user/:user_id/posts', getUserPosts);
 router.get('/myPosts', protect, getMyPosts);
 router.get('/myFavoritePosts', protect, getMyFavoritePosts);
 router.get('/:post_id', getPostById);

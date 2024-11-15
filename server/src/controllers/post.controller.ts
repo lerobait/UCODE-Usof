@@ -74,6 +74,34 @@ export const getPostById = catchAsync(
   },
 );
 
+export const getUserPosts = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = parseInt(req.params.user_id, 10);
+
+    if (!userId) {
+      return next(new AppError('User ID is required', 400));
+    }
+
+    const status = getStringQueryParam(req.query.status);
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const order = getStringQueryParam(req.query.order) || 'DESC';
+
+    const posts = await getMyPostsService(
+      userId,
+      status as 'active' | 'inactive',
+      sortBy as 'likes' | 'date',
+      order as 'ASC' | 'DESC',
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        posts,
+      },
+    });
+  },
+);
+
 export const getMyPosts = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
