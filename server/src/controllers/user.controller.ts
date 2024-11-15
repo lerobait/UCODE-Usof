@@ -146,6 +146,27 @@ export const getUserById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+export const getUserByLogin = catchAsync(
+  async (req: Request, res: Response) => {
+    const { login } = req.params;
+
+    const user = await UserService.getUserByLogin(login);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user: {
+          id: user.id,
+          login: user.login,
+          full_name: user.full_name,
+          profile_picture: user.profile_picture,
+          rating: user.rating,
+        },
+      },
+    });
+  },
+);
+
 export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { login, password, passwordConfirmation, email, role } = req.body;

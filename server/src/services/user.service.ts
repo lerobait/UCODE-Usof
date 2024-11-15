@@ -4,15 +4,8 @@ import AppError from '../utils/appError';
 import { Post } from '../../database/models/Post';
 import { Like } from '../../database/models/Like';
 import { Comment } from '../../database/models/Comment';
-import { applyFilters } from '../utils/filters';
 import { PostCategory } from '../../database/models/PostCategory';
 import { Op } from 'sequelize';
-
-interface Filters {
-  status?: 'active' | 'inactive';
-  sortBy?: 'likes' | 'date';
-  order?: 'ASC' | 'DESC';
-}
 
 export class UserService {
   async getMe(userId: number) {
@@ -161,6 +154,25 @@ export class UserService {
 
   async getUserById(userId: number) {
     const user = await User.findByPk(userId, {
+      attributes: {
+        exclude: [
+          'password',
+          'email_verification_token',
+          'email_verification_expires_at',
+        ],
+      },
+    });
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    return user.toJSON();
+  }
+
+  async getUserByLogin(login: string) {
+    const user = await User.findOne({
+      where: { login },
       attributes: {
         exclude: [
           'password',

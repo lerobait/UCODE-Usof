@@ -135,6 +135,37 @@ export default class PostService {
     return response.data.data.posts;
   }
 
+  static async getUserPosts(
+    username: string,
+    page: number,
+    limit: number,
+    sortBy?: 'likes' | 'date',
+    order?: 'ASC' | 'DESC',
+    status?: 'active' | 'inactive',
+  ): Promise<Post[]> {
+    const params: {
+      page: number;
+      limit: number;
+      sortBy?: 'likes' | 'date';
+      order?: 'ASC' | 'DESC';
+      status?: 'active' | 'inactive';
+    } = {
+      page,
+      limit,
+    };
+
+    if (sortBy) params.sortBy = sortBy;
+    if (order) params.order = order;
+    if (status) params.status = status;
+
+    const response: AxiosResponse<{ data: { posts: Post[] } }> =
+      await axios.get(`${this.baseUrl}/user/${username}/posts`, {
+        params,
+      });
+
+    return response.data.data.posts;
+  }
+
   static async createLike(postId: number, likeStatus: 'like' | 'dislike') {
     const token = localStorage.getItem('authToken');
     if (!token) {

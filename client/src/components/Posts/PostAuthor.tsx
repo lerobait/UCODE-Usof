@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserService from '../../API/UserService';
 
 interface PostAuthorProps {
@@ -13,6 +14,7 @@ interface User {
 
 const PostAuthor: React.FC<PostAuthorProps> = ({ authorId }) => {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -30,14 +32,40 @@ const PostAuthor: React.FC<PostAuthorProps> = ({ authorId }) => {
     return <span>Loading...</span>;
   }
 
+  const handleAuthorClick = () => {
+    navigate(`/posts/${user.login}`);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      handleAuthorClick();
+    }
+  };
+
   return (
     <div className="flex items-center space-x-4">
-      <img
-        src={user.profile_picture || '/images/avatars/default-avatar.png'}
-        alt="User avatar"
-        className="w-12 h-12 rounded-full"
-      />
-      <span className="text-sm text-gray-500">{user.login}</span>
+      <div
+        role="button"
+        className="w-12 h-12 rounded-full cursor-pointer"
+        onClick={handleAuthorClick}
+        tabIndex={0}
+        onKeyDown={handleKeyPress}
+      >
+        <img
+          src={user.profile_picture || '/images/avatars/default-avatar.png'}
+          alt="User avatar"
+          className="w-12 h-12 rounded-full"
+        />
+      </div>
+      <div
+        role="button"
+        className="text-sm text-gray-500"
+        onClick={handleAuthorClick}
+        onKeyDown={handleKeyPress}
+        tabIndex={0}
+      >
+        {user.login}
+      </div>
     </div>
   );
 };

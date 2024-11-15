@@ -17,6 +17,7 @@ import {
   removePostFromFavoritesService,
 } from '../services/post.service';
 import uploadImage from '../utils/upload';
+import { User } from '../../database/models/User';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import { getStringQueryParam } from '../utils/filters';
@@ -76,11 +77,21 @@ export const getPostById = catchAsync(
 
 export const getUserPosts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId = parseInt(req.params.user_id, 10);
+    const userLogin = req.params.login;
 
-    if (!userId) {
-      return next(new AppError('User ID is required', 400));
+    if (!userLogin) {
+      return next(new AppError('User login is required', 400));
     }
+
+    const user = await User.findOne({
+      where: { login: userLogin },
+    });
+
+    if (!user) {
+      return next(new AppError('User not found', 404));
+    }
+
+    const userId = user.id;
 
     const status = getStringQueryParam(req.query.status);
     const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';

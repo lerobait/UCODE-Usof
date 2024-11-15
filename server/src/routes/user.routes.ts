@@ -13,12 +13,14 @@ import {
   deleteMe,
   uploadUserAvatar,
   getUserByIdAdmin,
+  getUserByLogin,
 } from '../controllers/user.controller';
 
 const router = Router();
 
 router.get('/me', protect, getMe);
 router.get('/:user_id', getUserById);
+router.get('/login/:login', getUserByLogin);
 
 router.use(protect);
 

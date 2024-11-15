@@ -46,4 +46,17 @@ export default class UserService {
       throw new Error('Error fetching user');
     }
   }
+
+  static async getUserByLogin(login: string): Promise<User> {
+    try {
+      const response: AxiosResponse<{ data: { user: User } }> = await axios.get(
+        `${this.baseUrl}/login/${login}`,
+      );
+
+      return response.data.data.user;
+    } catch (error) {
+      console.error(`Error fetching user with login ${login}:`, error);
+      throw new Error('Error fetching user');
+    }
+  }
 }
