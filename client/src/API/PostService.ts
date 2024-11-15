@@ -100,6 +100,41 @@ export default class PostService {
     return response.data;
   }
 
+  static async getMyPosts(
+    page: number,
+    limit: number,
+    sortBy?: 'likes' | 'date',
+    order?: 'ASC' | 'DESC',
+    status?: 'active' | 'inactive',
+  ): Promise<Post[]> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    const params: {
+      page: number;
+      limit: number;
+      sortBy?: 'likes' | 'date';
+      order?: 'ASC' | 'DESC';
+      status?: 'active' | 'inactive';
+    } = { page, limit };
+
+    if (sortBy) params.sortBy = sortBy;
+    if (order) params.order = order;
+    if (status) params.status = status;
+
+    const response: AxiosResponse<{ data: { posts: Post[] } }> =
+      await axios.get(`${this.baseUrl}/myPosts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params,
+      });
+
+    return response.data.data.posts;
+  }
+
   static async createLike(postId: number, likeStatus: 'like' | 'dislike') {
     const token = localStorage.getItem('authToken');
     if (!token) {

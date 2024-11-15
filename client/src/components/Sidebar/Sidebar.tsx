@@ -21,7 +21,15 @@ const Sidebar: React.FC = () => {
 
   const handleFavoriteClick = () => {
     if (user) {
-      navigate('/posts-favorite');
+      navigate('/posts/favorite');
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleMyPostsClick = () => {
+    if (user) {
+      navigate('/posts/my');
     } else {
       setIsModalOpen(true);
     }
@@ -55,12 +63,19 @@ const Sidebar: React.FC = () => {
           >
             Categories
           </Button>
-          <Button className="w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded">
+          <Button
+            className={`w-full text-left font-semibold py-2 px-4 rounded ${
+              isActive('/posts/my')
+                ? 'bg-gray-200 text-gray-900'
+                : 'text-gray-700 hover:bg-gray-200'
+            }`}
+            onClick={handleMyPostsClick}
+          >
             My Posts
           </Button>
           <Button
             className={`w-full text-left font-semibold py-2 px-4 rounded ${
-              isActive('/posts-favorite')
+              isActive('/posts/favorite')
                 ? 'bg-gray-200 text-gray-900'
                 : 'text-gray-700 hover:bg-gray-200'
             }`}

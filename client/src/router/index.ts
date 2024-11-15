@@ -5,6 +5,7 @@ import NewPass from '../pages/NewPass';
 import FavoritePosts from '../pages/FavoritePosts';
 import Categories from '../pages/Categories';
 import CategoryPosts from '../pages/CategoryPosts';
+import MyPosts from '../pages/MyPosts';
 
 interface Route {
   path: string;
@@ -13,7 +14,8 @@ interface Route {
 }
 
 export const privateRoutes: Route[] = [
-  { path: '/posts-favorite', component: FavoritePosts, exact: true },
+  { path: '/posts/favorite', component: FavoritePosts, exact: true },
+  { path: '/posts/my', component: MyPosts, exact: true },
 ];
 
 export const publicRoutes: Route[] = [

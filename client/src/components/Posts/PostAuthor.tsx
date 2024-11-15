@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getUserById } from '../../API/UserService';
+import UserService from '../../API/UserService';
 
 interface PostAuthorProps {
   authorId: number;
@@ -17,8 +17,8 @@ const PostAuthor: React.FC<PostAuthorProps> = ({ authorId }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await getUserById(authorId);
-        setUser(response.data.user);
+        const response = await UserService.getUserById(authorId);
+        setUser(response);
       } catch (error) {
         console.error('Failed to fetch user:', error);
       }

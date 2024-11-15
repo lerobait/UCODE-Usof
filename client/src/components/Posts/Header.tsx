@@ -15,7 +15,7 @@ const Header: React.FC<{ onSearch: (searchText: string) => void }> = ({
     localStorage.removeItem('authToken');
   };
 
-  const defaultAvatar = 'public/images/avatars/default-avatar.png';
+  const defaultAvatar = '/images/avatars/default-avatar.png';
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
