@@ -7,6 +7,7 @@ import Categories from '../pages/Categories';
 import CategoryPosts from '../pages/CategoryPosts';
 import MyPosts from '../pages/MyPosts';
 import UserPosts from '../pages/UserPosts';
+import Users from '../pages/Users';
 
 interface Route {
   path: string;
@@ -27,4 +28,5 @@ export const publicRoutes: Route[] = [
   { path: '/categories', component: Categories, exact: true },
   { path: '/category-posts/:id', component: CategoryPosts, exact: true },
   { path: '/posts/:login', component: UserPosts, exact: true },
+  { path: '/users', component: Users, exact: true },
 ];

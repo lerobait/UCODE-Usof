@@ -19,6 +19,10 @@ const Sidebar: React.FC = () => {
     navigate('/categories');
   };
 
+  const handleUsersClick = () => {
+    navigate('/users');
+  };
+
   const handleFavoriteClick = () => {
     if (user) {
       navigate('/posts/favorite');
@@ -83,7 +87,14 @@ const Sidebar: React.FC = () => {
           >
             Favorites
           </Button>
-          <Button className="w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded">
+          <Button
+            className={`w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${
+              isActive('/users')
+                ? 'bg-gray-200 text-gray-900'
+                : 'text-gray-700 hover:bg-gray-200'
+            }`}
+            onClick={handleUsersClick}
+          >
             All Users
           </Button>
         </div>

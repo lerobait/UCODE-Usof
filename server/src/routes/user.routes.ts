@@ -21,10 +21,10 @@ const router = Router();
 router.get('/me', protect, getMe);
 router.get('/:user_id', getUserById);
 router.get('/login/:login', getUserByLogin);
+router.get('/', getAllUsers);
 
 router.use(protect);
 
-router.get('/', getAllUsers);
 router.patch('/updateMyPassword', updateMyPassword);
 router.patch('/avatar', uploadUserAvatar);
 router.patch('/updateMe', updateMe);

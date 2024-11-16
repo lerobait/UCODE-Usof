@@ -10,16 +10,16 @@ interface User {
 }
 
 const UserItem: React.FC = () => {
-  const { login } = useParams<{ login: string }>(); // Получаем логин из URL
+  const { login } = useParams<{ login: string }>();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (!login) return; // Если логин не передан, прекращаем загрузку данных
+      if (!login) return;
       try {
-        const userData = await UserService.getUserByLogin(login); // Получаем пользователя по логину
+        const userData = await UserService.getUserByLogin(login);
         setUser(userData);
       } catch (error) {
         setError('Error loading user data');
@@ -29,7 +29,7 @@ const UserItem: React.FC = () => {
     };
 
     fetchUser();
-  }, [login]); // Загрузка данных при изменении login
+  }, [login]);
 
   if (loading)
     return <div className="text-center text-gray-500">Loading...</div>;

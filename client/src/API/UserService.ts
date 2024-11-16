@@ -59,4 +59,15 @@ export default class UserService {
       throw new Error('Error fetching user');
     }
   }
+
+  static async getAllUsers(): Promise<User[]> {
+    try {
+      const response: AxiosResponse<{ data: { users: User[] } }> =
+        await axios.get(this.baseUrl);
+      return response.data.data.users;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      throw new Error('Error fetching users');
+    }
+  }
 }
