@@ -47,6 +47,13 @@ export default class PostService {
     return response.data.data.posts;
   }
 
+  static async getPostById(id: number): Promise<Post> {
+    const response: AxiosResponse<{ data: { post: Post } }> = await axios.get(
+      `${this.baseUrl}/${id}`,
+    );
+    return response.data.data.post;
+  }
+
   static async getUserFavoritePosts(
     page: number,
     limit: number,

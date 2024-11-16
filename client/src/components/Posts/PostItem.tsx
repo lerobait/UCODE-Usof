@@ -8,6 +8,7 @@ import PostCategories from './PostCategories';
 import PostLike from './PostLike';
 import useAuthStore from '../../hooks/useAuthStore';
 import PostFavorite from './PostFavorite';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(relativeTime);
 
@@ -38,6 +39,11 @@ const PostItem: React.FC<PostItemProps> = ({
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
 
   const { user } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleNavigateToPost = () => {
+    navigate(`/posts/${id}`);
+  };
 
   useEffect(() => {
     const fetchLikeStatus = async () => {
@@ -91,14 +97,26 @@ const PostItem: React.FC<PostItemProps> = ({
         </span>
       </div>
 
-      <h2 className="text-2xl font-semibold text-gray-800 mt-4">{title}</h2>
-      <p className="text-gray-600 mt-2">{content}</p>
+      <div
+        className="cursor-pointer"
+        onClick={handleNavigateToPost}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            handleNavigateToPost();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+      >
+        <h2 className="text-2xl font-semibold text-gray-800 mt-4">{title}</h2>
+        <p className="text-gray-600 mt-2">{content}</p>
 
-      {imageUrl && (
-        <div className="mt-4">
-          <img src={imageUrl} alt={title} className="max-w-full rounded-lg" />
-        </div>
-      )}
+        {imageUrl && (
+          <div className="mt-4">
+            <img src={imageUrl} alt={title} className="max-w-full rounded-lg" />
+          </div>
+        )}
+      </div>
 
       <PostCategories postId={id} />
 
@@ -115,7 +133,13 @@ const PostItem: React.FC<PostItemProps> = ({
               postStatus={status}
             />
           </div>
-          <Button className="text-gray-500 hover:text-gray-700">
+          <Button
+            className="text-gray-500 hover:text-gray-700"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/posts/${id}`);
+            }}
+          >
             💬 {commentCount}
           </Button>
         </div>

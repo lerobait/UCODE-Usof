@@ -111,7 +111,7 @@ export const getPostByIdService = async (postId: string) => {
     include: [
       {
         model: User,
-        attributes: ['id', 'login', 'profile_picture'],
+        attributes: ['id'], // Забираем только `id`
       },
       {
         model: PostCategory,
@@ -119,21 +119,6 @@ export const getPostByIdService = async (postId: string) => {
           {
             model: Category,
             attributes: ['id', 'title'],
-          },
-        ],
-      },
-      {
-        model: Comment,
-        include: [
-          {
-            model: User,
-            attributes: ['id', 'login', 'profile_picture'],
-          },
-          {
-            model: Like,
-            attributes: ['id'],
-            where: { type: 'like' },
-            required: false,
           },
         ],
       },
@@ -155,29 +140,9 @@ export const getPostByIdService = async (postId: string) => {
     publish_date: post.publish_date,
     status: post.status,
     image_url: post.image_url,
-    author: {
-      id: post.author?.id,
-      login: post.author?.login,
-      profile_picture: post.author?.profile_picture,
-    },
+    author_id: post.author?.id,
     likes_count: post.likes?.length || 0,
     comments_count: post.comments?.length || 0,
-    categories: post.postCategories?.map(({ category }) => ({
-      id: category?.id || 0,
-      title: category?.title || '',
-    })),
-    comments: post.comments?.map((comment) => ({
-      id: comment.id,
-      content: comment.content,
-      publish_date: comment.publish_date,
-      status: comment.status,
-      author: {
-        id: comment.author?.id,
-        login: comment.author?.login,
-        profile_picture: comment.author?.profile_picture,
-      },
-      likes_count: comment.likes?.length || 0,
-    })),
   };
 };
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Posts/Header';
 import Sidebar from '../components/Sidebar/Sidebar';
-import CategoryItem from '../components/Categories/CategoryItem'; // Импорт компонента
+import CategoryItem from '../components/Categories/CategoryItem';
 import CategoryPostsList from '../components/Categories/CategoryPostList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 
