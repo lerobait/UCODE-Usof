@@ -46,7 +46,7 @@ export const getAllPostsService = async (
     where: whereClause,
     attributes: ['id'],
     order: sequelize.literal(
-      `(SELECT COUNT(*) FROM likes WHERE likes.post_id = Post.id AND likes.type = 'like') DESC`,
+      `(SELECT COUNT(*) FROM likes WHERE likes.post_id = Post.id AND likes.type = 'like' AND likes.comment_id IS NULL) DESC`,
     ),
     raw: true,
   }).then((posts) => posts.map((post) => post.id));
@@ -64,30 +64,27 @@ export const getAllPostsService = async (
         model: User,
         attributes: ['id'],
       },
-      {
-        model: Comment,
-        attributes: [],
-        duplicating: false,
-      },
-      {
-        model: Like,
-        attributes: [],
-        duplicating: false,
-      },
     ],
     attributes: {
       include: [
-        [sequelize.fn('COUNT', sequelize.col('comments.id')), 'comments_count'],
         [
-          sequelize.fn(
-            'COUNT',
-            sequelize.literal(`CASE WHEN likes.type = 'like' THEN 1 END`),
-          ),
+          sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM comments AS c
+            WHERE c.post_id = Post.id
+          )`),
+          'comments_count',
+        ],
+        [
+          sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM likes AS l
+            WHERE l.post_id = Post.id AND l.type = 'like' AND l.comment_id IS NULL
+          )`),
           'likes_count',
         ],
       ],
     },
-    group: ['Post.id', 'author.id'],
     order: orderClause,
   });
 
@@ -115,30 +112,27 @@ export const getPostByIdService = async (postId: string) => {
         model: User,
         attributes: ['id'],
       },
-      {
-        model: Comment,
-        attributes: [],
-        duplicating: false,
-      },
-      {
-        model: Like,
-        attributes: [],
-        duplicating: false,
-      },
     ],
     attributes: {
       include: [
-        [sequelize.fn('COUNT', sequelize.col('comments.id')), 'comments_count'],
         [
-          sequelize.fn(
-            'COUNT',
-            sequelize.literal(`CASE WHEN likes.type = 'like' THEN 1 END`),
-          ),
+          sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM comments AS c
+            WHERE c.post_id = Post.id
+          )`),
+          'comments_count',
+        ],
+        [
+          sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM likes AS l
+            WHERE l.post_id = Post.id AND l.type = 'like' AND l.comment_id IS NULL
+          )`),
           'likes_count',
         ],
       ],
     },
-    group: ['Post.id', 'author.id'],
   });
 
   if (!post) return null;
@@ -175,30 +169,40 @@ export const getMyPostsService = async (
 
   const posts = await Post.findAll({
     where: whereClause,
-    include: [
-      {
-        model: Comment,
-        attributes: [],
-      },
-      {
-        model: Like,
-        attributes: [],
-        where: { type: 'like' },
-        required: false,
-      },
-    ],
     attributes: {
       include: [
-        'author_id',
-        [sequelize.fn('COUNT', sequelize.col('comments.id')), 'comments_count'],
-        [sequelize.fn('COUNT', sequelize.col('likes.id')), 'likes_count'],
+        [
+          sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM comments AS c
+            WHERE c.post_id = Post.id
+          )`),
+          'comments_count',
+        ],
+        [
+          sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM likes AS l
+            WHERE l.post_id = Post.id AND l.type = 'like' AND l.comment_id IS NULL
+          )`),
+          'likes_count',
+        ],
       ],
     },
-    group: ['Post.id'],
     order: orderClause,
   });
 
-  return posts;
+  return posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    publish_date: post.publish_date,
+    status: post.status,
+    image_url: post.image_url,
+    author_id: post.author_id,
+    likes_count: post.getDataValue('likes_count'),
+    comments_count: post.getDataValue('comments_count'),
+  }));
 };
 
 export const getCommentsForPostService = async (postId: string) => {
@@ -207,18 +211,34 @@ export const getCommentsForPostService = async (postId: string) => {
     include: [
       {
         model: User,
-        attributes: ['id', 'full_name', 'profile_picture'],
+        attributes: ['id'],
+        as: 'author',
       },
     ],
   });
 
-  return comments.map(({ id, content, publish_date, status, author }) => ({
-    id,
-    content,
-    publish_date,
-    status,
-    author,
-  }));
+  const commentsWithLikesCount = await Promise.all(
+    comments.map(async (comment) => {
+      const likesCount = await Like.count({
+        where: {
+          comment_id: comment.id,
+          post_id: postId,
+          type: 'like',
+        },
+      });
+
+      return {
+        id: comment.id,
+        content: comment.content,
+        publish_date: comment.publish_date,
+        status: comment.status,
+        author_id: comment.author?.id,
+        likes_count: likesCount || 0,
+      };
+    }),
+  );
+
+  return commentsWithLikesCount;
 };
 
 export const getCategoriesForPostService = async (postId: string) => {
@@ -421,7 +441,7 @@ export const getMyFavoritePostsService = async (
       p.image_url, 
       u.id AS author_id, 
       (SELECT COUNT(*) FROM comments WHERE comments.post_id = p.id) AS comments_count,
-      (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.type = 'like') AS likes_count
+      (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.type = 'like' AND likes.comment_id IS NULL) AS likes_count
     FROM favorites f
     JOIN posts p ON f.post_id = p.id
     JOIN users u ON p.author_id = u.id
@@ -611,16 +631,11 @@ export const createCommentService = async (
     status: 'active',
   });
 
-  const author = await User.findOne({
-    where: { id: userId },
-    attributes: ['id', 'full_name', 'profile_picture', 'rating'],
-  });
-
   return {
     id: comment.id,
     content: comment.content,
     post_id: comment.post_id,
-    author,
+    author_id: comment.author_id,
     status: comment.status,
   };
 };

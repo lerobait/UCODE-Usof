@@ -17,6 +17,15 @@ interface Category {
   title: string;
 }
 
+export interface PostComment {
+  id: number;
+  content: string;
+  author_id: number;
+  publish_date: string;
+  status: string;
+  likes_count: number;
+}
+
 export default class PostService {
   private static baseUrl = 'http://localhost:3000/api/posts';
 
@@ -52,6 +61,12 @@ export default class PostService {
       `${this.baseUrl}/${id}`,
     );
     return response.data.data.post;
+  }
+
+  static async getCommentsForPost(postId: number): Promise<PostComment[]> {
+    const response: AxiosResponse<{ data: { comments: PostComment[] } }> =
+      await axios.get(`${this.baseUrl}/${postId}/comments`);
+    return response.data.data.comments;
   }
 
   static async getUserFavoritePosts(

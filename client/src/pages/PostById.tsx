@@ -5,6 +5,7 @@ import PostItem from '../components/Posts/PostItem';
 import Header from '../components/Posts/Header';
 import Sidebar from '../components/Sidebar/Sidebar';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
+import CommentList from '../components/Comments/CommentList';
 
 interface Post {
   id: number;
@@ -71,6 +72,8 @@ const PostById: React.FC = () => {
               commentCount={post.comments_count}
               imageUrl={post.image_url}
             />
+            <h2 className="text-xl font-semibold mt-8">Comments</h2>
+            <CommentList postId={post.id} />
           </div>
           <ScrollToTop />
         </div>

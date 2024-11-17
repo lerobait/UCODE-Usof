@@ -73,7 +73,7 @@ export const getPostsByCategoryId = async (
       p.image_url, 
       u.id AS author_id, 
       (SELECT COUNT(*) FROM comments WHERE comments.post_id = p.id) AS comments_count,
-      (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.type = 'like') AS likes_count
+      (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.id AND likes.type = 'like' AND likes.comment_id IS NULL) AS likes_count
     FROM post_categories pc
     JOIN posts p ON pc.post_id = p.id
     JOIN users u ON p.author_id = u.id
