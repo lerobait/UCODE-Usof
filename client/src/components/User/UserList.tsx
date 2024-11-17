@@ -47,7 +47,7 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
   if (error) return <div>{error}</div>;
 
   const handleUserClick = (login: string) => {
-    navigate(`/posts/${login}`);
+    navigate(`/posts/user/${login}`);
   };
 
   return (

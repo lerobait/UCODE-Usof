@@ -29,6 +29,6 @@ export const publicRoutes: Route[] = [
   { path: '/posts/:id', component: PostById, exact: true },
   { path: '/categories', component: Categories, exact: true },
   { path: '/category-posts/:id', component: CategoryPosts, exact: true },
-  { path: '/posts/:login', component: UserPosts, exact: true },
+  { path: '/posts/user/:login', component: UserPosts, exact: true },
   { path: '/users', component: Users, exact: true },
 ];

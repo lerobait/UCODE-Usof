@@ -33,7 +33,7 @@ const PostAuthor: React.FC<PostAuthorProps> = ({ authorId }) => {
   }
 
   const handleAuthorClick = () => {
-    navigate(`/posts/${user.login}`);
+    navigate(`/posts/user/${user.login}`);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
