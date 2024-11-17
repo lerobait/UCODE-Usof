@@ -67,10 +67,12 @@ export const getAllPostsService = async (
       {
         model: Comment,
         attributes: [],
+        duplicating: false,
       },
       {
         model: Like,
         attributes: [],
+        duplicating: false,
       },
     ],
     attributes: {
@@ -111,24 +113,32 @@ export const getPostByIdService = async (postId: string) => {
     include: [
       {
         model: User,
-        attributes: ['id'], // Забираем только `id`
+        attributes: ['id'],
       },
       {
-        model: PostCategory,
-        include: [
-          {
-            model: Category,
-            attributes: ['id', 'title'],
-          },
-        ],
+        model: Comment,
+        attributes: [],
+        duplicating: false,
       },
       {
         model: Like,
-        attributes: ['id'],
-        where: { type: 'like' },
-        required: false,
+        attributes: [],
+        duplicating: false,
       },
     ],
+    attributes: {
+      include: [
+        [sequelize.fn('COUNT', sequelize.col('comments.id')), 'comments_count'],
+        [
+          sequelize.fn(
+            'COUNT',
+            sequelize.literal(`CASE WHEN likes.type = 'like' THEN 1 END`),
+          ),
+          'likes_count',
+        ],
+      ],
+    },
+    group: ['Post.id', 'author.id'],
   });
 
   if (!post) return null;
@@ -140,9 +150,9 @@ export const getPostByIdService = async (postId: string) => {
     publish_date: post.publish_date,
     status: post.status,
     image_url: post.image_url,
-    author_id: post.author?.id,
-    likes_count: post.likes?.length || 0,
-    comments_count: post.comments?.length || 0,
+    author_id: post.author_id,
+    likes_count: post.getDataValue('likes_count'),
+    comments_count: post.getDataValue('comments_count'),
   };
 };
 
