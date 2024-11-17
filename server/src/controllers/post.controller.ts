@@ -163,9 +163,23 @@ export const getCommentsForPost = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { post_id } = req.params;
 
-    const comments = await getCommentsForPostService(post_id);
+    const status = getStringQueryParam(req.query.status);
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const order = getStringQueryParam(req.query.order) || 'DESC';
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const offset = (page - 1) * limit;
 
-    if (!comments) {
+    const { comments, totalItems } = await getCommentsForPostService(
+      post_id,
+      status as 'active' | 'inactive',
+      sortBy as 'likes' | 'date',
+      order as 'ASC' | 'DESC',
+      limit,
+      offset,
+    );
+
+    if (!comments || comments.length === 0) {
       return next(new AppError('No comments found for this post', 404));
     }
 
@@ -173,6 +187,9 @@ export const getCommentsForPost = catchAsync(
       status: 'success',
       data: {
         comments,
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
       },
     });
   },

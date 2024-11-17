@@ -13,6 +13,8 @@ import {
 
 const router = Router();
 
+router.get('/:comment_id/like', getLikesForComment);
+
 router.use(protect);
 router.patch('/:comment_id', updateComment);
 router.delete('/:comment_id', deleteComment);
@@ -21,7 +23,6 @@ router.delete('/:comment_id/like', deleteLikeFromComment);
 
 router.use(restrictTo('admin'));
 router.get('/:comment_id', getCommentById);
-router.get('/:comment_id/like', getLikesForComment);
 router.delete('/admin/:comment_id', deleteCommentByAdmin);
 
 export default router;

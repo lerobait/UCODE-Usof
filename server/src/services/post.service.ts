@@ -205,9 +205,41 @@ export const getMyPostsService = async (
   }));
 };
 
-export const getCommentsForPostService = async (postId: string) => {
+export const getCommentsForPostService = async (
+  postId: string,
+  status?: 'active' | 'inactive',
+  sortBy: 'likes' | 'date' = 'likes',
+  order: 'ASC' | 'DESC' = 'DESC',
+  limit: number = 10,
+  offset: number = 0,
+) => {
+  const whereClause: { [key: string]: string | number | undefined } = {
+    post_id: postId,
+  };
+  if (status) whereClause.status = status;
+
+  const allCommentIds = await Comment.findAll({
+    where: whereClause,
+    attributes: ['id'],
+    order: sequelize.literal(
+      sortBy === 'likes'
+        ? `
+        (SELECT COUNT(*)
+         FROM likes
+         WHERE likes.comment_id = Comment.id AND likes.type = 'like') ${order}`
+        : `"publish_date" ${order}`,
+    ),
+    raw: true,
+  }).then((comments) => comments.map((comment) => comment.id));
+
+  const paginatedCommentIds = allCommentIds.slice(offset, offset + limit);
+
   const comments = await Comment.findAll({
-    where: { post_id: postId },
+    where: {
+      id: {
+        [Op.in]: paginatedCommentIds,
+      },
+    },
     include: [
       {
         model: User,
@@ -215,30 +247,35 @@ export const getCommentsForPostService = async (postId: string) => {
         as: 'author',
       },
     ],
+    attributes: {
+      include: [
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*)
+              FROM likes AS l
+              WHERE l.comment_id = Comment.id AND l.type = 'like')`,
+          ),
+          'likes_count',
+        ],
+      ],
+    },
+    order:
+      sortBy === 'likes'
+        ? [[sequelize.literal('likes_count'), order]]
+        : [['publish_date', order]],
   });
 
-  const commentsWithLikesCount = await Promise.all(
-    comments.map(async (comment) => {
-      const likesCount = await Like.count({
-        where: {
-          comment_id: comment.id,
-          post_id: postId,
-          type: 'like',
-        },
-      });
-
-      return {
-        id: comment.id,
-        content: comment.content,
-        publish_date: comment.publish_date,
-        status: comment.status,
-        author_id: comment.author?.id,
-        likes_count: likesCount || 0,
-      };
-    }),
-  );
-
-  return commentsWithLikesCount;
+  return {
+    comments: comments.map((comment) => ({
+      id: comment.id,
+      content: comment.content,
+      publish_date: comment.publish_date,
+      status: comment.status,
+      author_id: comment.author?.id,
+      likes_count: comment.getDataValue('likes_count'),
+    })),
+    totalItems: allCommentIds.length,
+  };
 };
 
 export const getCategoriesForPostService = async (postId: string) => {

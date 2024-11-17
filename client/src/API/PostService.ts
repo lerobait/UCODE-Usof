@@ -63,9 +63,31 @@ export default class PostService {
     return response.data.data.post;
   }
 
-  static async getCommentsForPost(postId: number): Promise<PostComment[]> {
+  static async getCommentsForPost(
+    postId: number,
+    page: number,
+    limit: number,
+    sortBy?: 'likes' | 'date',
+    order?: 'ASC' | 'DESC',
+    status?: 'active' | 'inactive',
+  ): Promise<PostComment[]> {
+    const params: {
+      page: number;
+      limit: number;
+      sortBy?: 'likes' | 'date';
+      order?: 'ASC' | 'DESC';
+      status?: 'active' | 'inactive';
+    } = {
+      page,
+      limit,
+    };
+
+    if (sortBy && sortBy !== 'likes') params.sortBy = sortBy;
+    if (order && order !== 'DESC') params.order = order;
+    if (status) params.status = status;
+
     const response: AxiosResponse<{ data: { comments: PostComment[] } }> =
-      await axios.get(`${this.baseUrl}/${postId}/comments`);
+      await axios.get(`${this.baseUrl}/${postId}/comments`, { params });
     return response.data.data.comments;
   }
 

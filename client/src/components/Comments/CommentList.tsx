@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import CommentItem from './CommentItem';
+import CommentFilter from './CommentFilter';
+import { useFetching } from '../../hooks/useFetching';
 import PostService from '../../API/PostService';
+import { useObserver } from '../../hooks/useObserver';
 
 interface PostComment {
   id: number;
@@ -11,34 +14,89 @@ interface PostComment {
   likes_count: number;
 }
 
-const CommentList: React.FC<{ postId: number }> = ({ postId }) => {
+const CommentList: React.FC<{ postId: number; searchText: string }> = ({
+  postId,
+  searchText,
+}) => {
   const [comments, setComments] = useState<PostComment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(2);
+  const [hasMore, setHasMore] = useState(true);
+  const [filter, setFilter] = useState<{
+    sortBy: 'likes' | 'date' | undefined;
+    order: 'ASC' | 'DESC' | undefined;
+    status?: 'active' | 'inactive' | undefined;
+  }>({
+    sortBy: 'likes',
+    order: 'DESC',
+    status: undefined,
+  });
+
+  const lastElement = useRef<HTMLDivElement>(null);
+
+  const [fetchComments, isLoading, error] = useFetching(async () => {
+    const fetchedComments = await PostService.getCommentsForPost(
+      postId,
+      1,
+      Number.MAX_SAFE_INTEGER,
+      filter.sortBy,
+      filter.order,
+      filter.status,
+    );
+
+    const paginatedComments = fetchedComments.slice(
+      (page - 1) * limit,
+      page * limit,
+    );
+
+    if (page === 1) {
+      setComments(paginatedComments);
+    } else {
+      setComments((prevComments) => [
+        ...prevComments,
+        ...paginatedComments.filter(
+          (newComment) =>
+            !prevComments.some(
+              (prevComment) => prevComment.id === newComment.id,
+            ),
+        ),
+      ]);
+    }
+
+    setHasMore(paginatedComments.length === limit);
+  });
+
+  useObserver(lastElement, hasMore && !isLoading, isLoading, () => {
+    setPage((prevPage) => prevPage + 1);
+  });
 
   useEffect(() => {
-    const fetchComments = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedComments = await PostService.getCommentsForPost(postId);
-        setComments(fetchedComments);
-      } catch {
-        setError('Failed to load comments');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchComments();
-  }, [postId]);
+  }, [page, filter]);
 
-  if (isLoading) return <div>Loading comments...</div>;
-  if (error) return <div>{error}</div>;
-  if (comments.length === 0) return <div>No comments found</div>;
+  const handleFilterChange = (newFilter: {
+    sortBy: 'likes' | 'date' | undefined;
+    order: 'ASC' | 'DESC' | undefined;
+    status?: 'active' | 'inactive' | undefined;
+  }) => {
+    setPage(1);
+    setComments([]);
+    setHasMore(true);
+    setFilter(newFilter);
+  };
+
+  const filteredPosts = comments.filter((comments) =>
+    comments.content.toLowerCase().includes(searchText.toLowerCase()),
+  );
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="space-y-4">
-      {comments.map((comment) => (
+      <CommentFilter onFilterChange={handleFilterChange} />
+      {filteredPosts.map((comment) => (
         <CommentItem
           key={comment.id}
           id={comment.id}
@@ -49,6 +107,8 @@ const CommentList: React.FC<{ postId: number }> = ({ postId }) => {
           likeCount={comment.likes_count}
         />
       ))}
+      <div ref={lastElement} style={{ height: 20 }} />
+      {isLoading && <div>Loading more comments...</div>}
     </div>
   );
 };

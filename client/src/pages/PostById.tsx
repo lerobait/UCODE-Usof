@@ -32,6 +32,13 @@ const PostById: React.FC = () => {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.log('User is not authenticated');
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchPost = async () => {
       setIsLoading(true);
       try {
@@ -73,7 +80,7 @@ const PostById: React.FC = () => {
               imageUrl={post.image_url}
             />
             <h2 className="text-xl font-semibold mt-8">Comments</h2>
-            <CommentList postId={post.id} />
+            <CommentList postId={post.id} searchText={searchText} />
           </div>
           <ScrollToTop />
         </div>
