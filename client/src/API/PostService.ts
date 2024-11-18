@@ -286,4 +286,18 @@ export default class PostService {
 
     return response.data.data.favorites;
   }
+
+  static async createPost(formData: FormData): Promise<void> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    await axios.post(`${this.baseUrl}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
 }

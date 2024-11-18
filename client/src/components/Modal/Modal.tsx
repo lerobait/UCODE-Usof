@@ -5,9 +5,17 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  width?: string;
+  height?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  width = '500px',
+  height = 'auto',
+}) => {
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('overflow-hidden');
@@ -42,7 +50,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       aria-label="Close modal"
     >
       <div
-        className="bg-white p-6 rounded-lg shadow-lg min-w-[260px] cursor-default"
+        className="bg-white p-6 rounded-lg shadow-lg cursor-default"
+        style={{ width, height }}
         aria-hidden="true"
         onClick={(e) => e.stopPropagation()}
       >

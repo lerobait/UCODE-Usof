@@ -13,6 +13,11 @@
   "author": "Nikulin Artem",
   "license": "ISC",
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.7",
+    "@mui/joy": "^5.0.0-beta.48",
+    "@mui/material": "^6.1.7",
     "axios": "^1.7.7",
     "dayjs": "^1.11.13",
     "react": "^18.3.1",

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import restrictTo from '../middlewares/restrict.middelware';
+import protect from '../middlewares/protect.middelware';
 import {
   createCategory,
   getAllCategories,
@@ -15,6 +16,7 @@ router.get('/', getAllCategories);
 router.get('/:category_id/posts', getPostsByCategoryId);
 router.get('/:category_id', getCategoryById);
 
+router.use(protect);
 router.use(restrictTo('admin'));
 
 router.post('/', createCategory);
