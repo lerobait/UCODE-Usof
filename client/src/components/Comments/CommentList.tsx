@@ -89,6 +89,12 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
     comments.content.toLowerCase().includes(searchText.toLowerCase()),
   );
 
+  const handleCommentDeleted = (commentId: number) => {
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment.id !== commentId),
+    );
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -105,6 +111,7 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
           publishDate={comment.publish_date}
           status={comment.status}
           likeCount={comment.likes_count}
+          onCommentDeleted={handleCommentDeleted}
         />
       ))}
       <div ref={lastElement} style={{ height: 20 }} />

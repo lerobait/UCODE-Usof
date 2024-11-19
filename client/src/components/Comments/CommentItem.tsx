@@ -5,6 +5,9 @@ import CommentAuthor from './CommentAuthor';
 import CommentLike from './CommentLike';
 import useAuthStore from '../../hooks/useAuthStore';
 import CommentService from '../../API/CommentService';
+import { IoMdMore } from 'react-icons/io';
+import Button from '../Common/Button';
+import CommentDelete from './CommentDelete';
 
 dayjs.extend(relativeTime);
 
@@ -15,6 +18,7 @@ interface CommentItemProps {
   publishDate: string;
   status: string;
   likeCount: number;
+  onCommentDeleted?: (commentId: number) => void;
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({
@@ -24,11 +28,18 @@ const CommentItem: React.FC<CommentItemProps> = ({
   publishDate,
   status,
   likeCount,
+  onCommentDeleted,
 }) => {
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
 
   const { user } = useAuthStore();
+  const [isActionsVisible, setIsActionsVisible] = useState(false);
+
+  const toggleActions = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsActionsVisible((prev) => !prev);
+  };
 
   useEffect(() => {
     const fetchLikeStatus = async () => {
@@ -74,17 +85,35 @@ const CommentItem: React.FC<CommentItemProps> = ({
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4">
+    <div className="bg-white shadow-md rounded-lg p-4 relative">
       <div className="flex items-center justify-between">
         <CommentAuthor authorId={authorId} />
-        <div>
-          <span className="text-sm text-gray-500">
-            {dayjs(publishDate).fromNow()}
-          </span>
-        </div>
+        {user && user.id === authorId && (
+          <div className="absolute top-4 right-4">
+            <Button
+              onClick={toggleActions}
+              className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
+            >
+              <IoMdMore size={24} />
+            </Button>
+            {isActionsVisible && (
+              <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md w-32">
+                {/* <CommentEdit commentId={id} /> */}
+                <CommentDelete
+                  commentId={id}
+                  onCommentDeleted={() => onCommentDeleted?.(id)}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <p className="text-gray-600 mt-2">{content}</p>
       <span className="ml-2 text-xs text-gray-400">{status}</span>
+
+      <div className="absolute bottom-4 right-4 text-sm text-gray-500">
+        {dayjs(publishDate).fromNow()}
+      </div>
 
       <CommentLike
         commentId={id}

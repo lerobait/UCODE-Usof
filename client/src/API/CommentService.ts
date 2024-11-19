@@ -46,4 +46,16 @@ export default class CommentService {
       },
     });
   }
+
+  static async deleteComment(commentId: number) {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+    return axios.delete(`${this.baseUrl}/${commentId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }
