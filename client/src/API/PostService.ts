@@ -335,4 +335,23 @@ export default class PostService {
       },
     });
   }
+
+  static async createComment(postId: number, content: string) {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    const response = await axios.post(
+      `${this.baseUrl}/${postId}/comments`,
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  }
 }

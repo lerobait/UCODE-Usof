@@ -6,6 +6,7 @@ import Header from '../components/Posts/Header';
 import Sidebar from '../components/Sidebar/Sidebar';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import CommentList from '../components/Comments/CommentList';
+import CommentCreate from '../components/Comments/CommentCreate';
 
 interface Post {
   id: number;
@@ -82,7 +83,10 @@ const PostById: React.FC = () => {
                 console.log(`Post with id ${deletedPostId} deleted`);
               }}
             />
-            <h2 className="text-xl font-semibold mt-8">Comments</h2>
+            <div className="flex justify-between items-center mt-8">
+              <h2 className="text-xl font-semibold">Comments</h2>
+              <CommentCreate postId={post.id} onCommentCreated={() => {}} />
+            </div>
             <CommentList postId={post.id} searchText={searchText} />
           </div>
           <ScrollToTop />
