@@ -9,6 +9,8 @@ import PostLike from './PostLike';
 import useAuthStore from '../../hooks/useAuthStore';
 import PostFavorite from './PostFavorite';
 import { useNavigate } from 'react-router-dom';
+import { IoMdMore } from 'react-icons/io';
+import PostDelete from './PostDelete';
 
 dayjs.extend(relativeTime);
 
@@ -22,6 +24,8 @@ interface PostItemProps {
   likeCount: number;
   commentCount: number;
   imageUrl?: string | null;
+  showActions?: boolean;
+  onPostDeleted: (deletedPostId: number) => void;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -34,15 +38,23 @@ const PostItem: React.FC<PostItemProps> = ({
   likeCount,
   commentCount,
   imageUrl,
+  showActions = false,
+  onPostDeleted,
 }) => {
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
+  const [isActionsVisible, setIsActionsVisible] = useState(false);
 
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
   const handleNavigateToPost = () => {
     navigate(`/posts/${id}`);
+  };
+
+  const toggleActions = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsActionsVisible((prev) => !prev);
   };
 
   useEffect(() => {
@@ -89,13 +101,41 @@ const PostItem: React.FC<PostItemProps> = ({
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
+    <div className="bg-white shadow-md rounded-lg p-6 relative">
       <PostAuthor authorId={authorId} />
       <div>
         <span className="text-xs text-gray-400 ml-2">
           {dayjs(date).fromNow()}
         </span>
       </div>
+
+      {showActions && (
+        <div className="absolute top-4 right-4">
+          <Button
+            onClick={toggleActions}
+            className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
+          >
+            <IoMdMore size={24} />
+          </Button>
+          {isActionsVisible && (
+            <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md w-32">
+              <Button
+                onClick={() => console.log(`Edit post ${id}`)}
+                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Edit
+              </Button>
+              <PostDelete
+                postId={id}
+                onPostDeleted={() => {
+                  setIsActionsVisible(false);
+                  onPostDeleted?.(id);
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       <div
         className="cursor-pointer"

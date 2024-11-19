@@ -300,4 +300,17 @@ export default class PostService {
       },
     });
   }
+
+  static async deletePost(postId: number): Promise<void> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    await axios.delete(`${this.baseUrl}/${postId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }

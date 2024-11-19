@@ -83,6 +83,12 @@ const PostMyList: React.FC<{ searchText: string }> = ({ searchText }) => {
       post.content.toLowerCase().includes(searchText.toLowerCase()),
   );
 
+  const handlePostDeleted = (deletedPostId: number) => {
+    setPosts((prevPosts) =>
+      prevPosts.filter((post) => post.id !== deletedPostId),
+    );
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -101,7 +107,8 @@ const PostMyList: React.FC<{ searchText: string }> = ({ searchText }) => {
           status={post.status}
           likeCount={post.likes_count}
           commentCount={post.comments_count}
-          imageUrl={post.image_url}
+          showActions={true}
+          onPostDeleted={handlePostDeleted}
         />
       ))}
       <div ref={lastElement} style={{ height: 20 }} />
