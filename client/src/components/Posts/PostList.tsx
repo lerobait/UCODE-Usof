@@ -99,7 +99,7 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
           title={post.title}
           content={post.content}
           authorId={post.author_id}
-          date={new Date(post.publish_date).toLocaleDateString()}
+          date={post.publish_date}
           status={post.status}
           likeCount={post.likes_count}
           commentCount={post.comments_count}
