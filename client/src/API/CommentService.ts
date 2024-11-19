@@ -58,4 +58,20 @@ export default class CommentService {
       },
     });
   }
+
+  static async updateComment(
+    commentId: number,
+    data: { content: string; status: string },
+  ) {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+    const response = await axios.patch(`${this.baseUrl}/${commentId}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
 }

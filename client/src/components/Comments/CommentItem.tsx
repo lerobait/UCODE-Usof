@@ -8,6 +8,7 @@ import CommentService from '../../API/CommentService';
 import { IoMdMore } from 'react-icons/io';
 import Button from '../Common/Button';
 import CommentDelete from './CommentDelete';
+import CommentEdit from './CommentEdit';
 
 dayjs.extend(relativeTime);
 
@@ -16,7 +17,7 @@ interface CommentItemProps {
   content: string;
   authorId: number;
   publishDate: string;
-  status: string;
+  status: 'active' | 'inactive';
   likeCount: number;
   onCommentDeleted?: (commentId: number) => void;
 }
@@ -98,7 +99,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
             </Button>
             {isActionsVisible && (
               <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md w-32">
-                {/* <CommentEdit commentId={id} /> */}
+                <CommentEdit
+                  commentId={id}
+                  initialContent={content}
+                  initialStatus={status}
+                />
                 <CommentDelete
                   commentId={id}
                   onCommentDeleted={() => onCommentDeleted?.(id)}
