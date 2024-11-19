@@ -78,6 +78,9 @@ const PostById: React.FC = () => {
               likeCount={post.likes_count}
               commentCount={post.comments_count}
               imageUrl={post.image_url}
+              onPostDeleted={(deletedPostId: number) => {
+                console.log(`Post with id ${deletedPostId} deleted`);
+              }}
             />
             <h2 className="text-xl font-semibold mt-8">Comments</h2>
             <CommentList postId={post.id} searchText={searchText} />

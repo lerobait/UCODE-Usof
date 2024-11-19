@@ -34,6 +34,14 @@ const PostMyList: React.FC<{ searchText: string }> = ({ searchText }) => {
   });
   const lastElement = useRef<HTMLDivElement>(null);
 
+  const handlePostUpdated = (updatedPost: Post) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === updatedPost.id ? updatedPost : post,
+      ),
+    );
+  };
+
   const [fetchMyPosts, isLoading, error] = useFetching(async () => {
     const fetchedPosts = await PostService.getMyPosts(
       page,
@@ -107,6 +115,7 @@ const PostMyList: React.FC<{ searchText: string }> = ({ searchText }) => {
           status={post.status}
           likeCount={post.likes_count}
           commentCount={post.comments_count}
+          imageUrl={post.image_url}
           showActions={true}
           onPostDeleted={handlePostDeleted}
         />

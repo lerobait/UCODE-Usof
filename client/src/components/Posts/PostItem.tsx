@@ -11,6 +11,7 @@ import PostFavorite from './PostFavorite';
 import { useNavigate } from 'react-router-dom';
 import { IoMdMore } from 'react-icons/io';
 import PostDelete from './PostDelete';
+import PostEdit from './PostEdit';
 
 dayjs.extend(relativeTime);
 
@@ -119,12 +120,12 @@ const PostItem: React.FC<PostItemProps> = ({
           </Button>
           {isActionsVisible && (
             <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md w-32">
-              <Button
-                onClick={() => console.log(`Edit post ${id}`)}
-                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Edit
-              </Button>
+              <PostEdit
+                postId={id}
+                onPostUpdated={() => {
+                  console.log('Post updated successfully!');
+                }}
+              />
               <PostDelete
                 postId={id}
                 onPostDeleted={() => {

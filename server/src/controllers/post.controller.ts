@@ -225,7 +225,7 @@ export const updatePost = [
     const { post_id } = req.params;
     const { title, content, categories, status } = req.body;
     const userId = req.user?.id;
-    const imageUrl = req.file?.location;
+    const imageUrl = req.file?.location ?? null;
 
     const updatedPost = await updatePostService(
       post_id,

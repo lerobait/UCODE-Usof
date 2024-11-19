@@ -10,6 +10,7 @@ interface Post {
   status: string;
   likes_count: number;
   comments_count: number;
+  image_url: string | null;
 }
 
 interface Category {
@@ -24,6 +25,13 @@ export interface PostComment {
   publish_date: string;
   status: string;
   likes_count: number;
+}
+
+interface PostResponse {
+  status: string;
+  data: {
+    post: Post;
+  };
 }
 
 export default class PostService {
@@ -57,7 +65,7 @@ export default class PostService {
   }
 
   static async getPostById(id: number): Promise<Post> {
-    const response: AxiosResponse<{ data: { post: Post } }> = await axios.get(
+    const response: AxiosResponse<PostResponse> = await axios.get(
       `${this.baseUrl}/${id}`,
     );
     return response.data.data.post;
@@ -310,6 +318,20 @@ export default class PostService {
     await axios.delete(`${this.baseUrl}/${postId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  static async updatePost(postId: number, formData: FormData): Promise<void> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('User is not authenticated');
+    }
+
+    await axios.patch(`${this.baseUrl}/${postId}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
     });
   }

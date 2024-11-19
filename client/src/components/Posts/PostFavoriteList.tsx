@@ -105,6 +105,11 @@ const PostFavoriteList: React.FC<{ searchText: string }> = ({ searchText }) => {
           likeCount={post.likes_count}
           commentCount={post.comments_count}
           imageUrl={post.image_url}
+          onPostDeleted={(deletedPostId) => {
+            setPosts((prevPosts) =>
+              prevPosts.filter((p) => p.id !== deletedPostId),
+            );
+          }}
         />
       ))}
       <div ref={lastElement} style={{ height: 20 }} />
