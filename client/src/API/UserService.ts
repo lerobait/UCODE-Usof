@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 interface User {
   id: number;
   login: string;
+  role: string;
   full_name: string;
   email: string;
   profile_picture: string;

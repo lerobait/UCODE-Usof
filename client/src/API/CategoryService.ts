@@ -74,4 +74,19 @@ export default class CategoryService {
       throw new Error('Error loading category');
     }
   }
+
+  static async createCategory(category: {
+    title: string;
+    description: string;
+  }): Promise<void> {
+    try {
+      await axios.post(this.baseUrl, category, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+    } catch {
+      throw new Error('Failed to create category');
+    }
+  }
 }

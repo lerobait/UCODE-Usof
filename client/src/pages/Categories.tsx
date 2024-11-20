@@ -3,6 +3,7 @@ import Header from '../components/Posts/Header';
 import CategoriesList from '../components/Categories/CategoryList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import Sidebar from '../components/Sidebar/Sidebar';
+import CategoryCreate from '../components/Categories/CategoryCreate';
 
 const Categories: React.FC = () => {
   const [searchText, setSearchText] = useState('');
@@ -27,6 +28,7 @@ const Categories: React.FC = () => {
         </div>
         <div className="flex-grow flex flex-col pl-8 pr-4">
           <div className="w-full mx-auto pl-20 pr-80">
+            <CategoryCreate />
             <CategoriesList />
           </div>
           <ScrollToTop />
