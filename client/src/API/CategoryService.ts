@@ -89,4 +89,19 @@ export default class CategoryService {
       throw new Error('Failed to create category');
     }
   }
+
+  static async updateCategory(
+    categoryId: number,
+    data: { title: string; description: string },
+  ): Promise<void> {
+    try {
+      await axios.patch(`${this.baseUrl}/${categoryId}`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+    } catch {
+      throw new Error('Failed to update category');
+    }
+  }
 }

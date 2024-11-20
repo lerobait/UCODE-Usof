@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import CategoryService from '../../API/CategoryService';
+
+interface CategoryItemProps {
+  categoryId: string;
+}
+import CategoryEdit from './CategoryEdit';
 
 interface Category {
   id: number;
   title: string;
   description: string;
-  created_at: string;
 }
-
-interface CategoryItemProps {
-  categoryId: number;
-}
+import CategoryService from '../../API/CategoryService';
 
 const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
   const [category, setCategory] = useState<Category | null>(null);
@@ -20,7 +20,9 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const fetchedCategory = await CategoryService.getCategory(categoryId);
+        const fetchedCategory = await CategoryService.getCategory(
+          Number(categoryId),
+        );
         setCategory(fetchedCategory);
       } catch {
         setError('Error loading category data');
@@ -31,6 +33,17 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
 
     fetchCategory();
   }, [categoryId]);
+
+  const handleCategoryUpdated = async () => {
+    try {
+      const updatedCategory = await CategoryService.getCategory(
+        Number(categoryId),
+      );
+      setCategory(updatedCategory);
+    } catch {
+      setError('Failed to refresh category data.');
+    }
+  };
 
   if (loading)
     return <div className="text-center text-gray-500">Loading...</div>;
@@ -44,6 +57,10 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
             {category.title}
           </h2>
           <p className="text-gray-600 mt-4">{category.description}</p>
+          <CategoryEdit
+            category={category}
+            onCategoryUpdated={handleCategoryUpdated}
+          />
         </>
       )}
     </div>
