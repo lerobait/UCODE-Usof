@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import useAuthStore from '../hooks/useAuthStore';
 
 interface User {
   id: number;
@@ -147,5 +148,38 @@ export default class UserService {
       console.error('Error deleting user:', error);
       throw new Error('Error deleting user');
     }
+  }
+
+  static async updateUserRole(userId: number, role: string): Promise<void> {
+    const token = localStorage.getItem('authToken');
+    if (!token) throw new Error('User is not authenticated');
+
+    await axios.patch(
+      `${this.baseUrl}/admin/${userId}`,
+      { role },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
+
+  static async getUserByAdmin(userId: number): Promise<User> {
+    const token = localStorage.getItem('authToken');
+    if (!token) throw new Error('User is not authenticated');
+
+    const currentUser = useAuthStore.getState().user;
+    if (currentUser?.role !== 'admin') {
+      throw new Error('Only admins can access this information');
+    }
+
+    const response = await axios.get(`${this.baseUrl}/admin/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data.user;
   }
 }

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import UserService from '../../API/UserService';
+import UserEdit from './UserEdit';
 
 interface User {
+  id: number;
   profile_picture: string | null;
   login: string;
   full_name: string;
   rating: number;
+  role: string;
 }
 
 const UserItem: React.FC = () => {
@@ -21,7 +24,7 @@ const UserItem: React.FC = () => {
       try {
         const userData = await UserService.getUserByLogin(login);
         setUser(userData);
-      } catch (error) {
+      } catch {
         setError('Error loading user data');
       } finally {
         setLoading(false);
@@ -38,6 +41,12 @@ const UserItem: React.FC = () => {
   const defaultAvatar = '/images/avatars/default-avatar.png';
   const profilePicture = user?.profile_picture || defaultAvatar;
 
+  const handleRoleUpdate = (newRole: string) => {
+    if (user) {
+      setUser({ ...user, role: newRole });
+    }
+  };
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mb-8 flex items-center">
       {user && (
@@ -53,6 +62,12 @@ const UserItem: React.FC = () => {
             </h2>
             <p className="text-lg text-gray-600">{user.full_name}</p>
             <p className="text-sm text-gray-500 mt-2">Rating: {user.rating}</p>
+
+            <UserEdit
+              userId={user.id}
+              currentRole={user.role}
+              onRoleUpdate={handleRoleUpdate}
+            />
           </div>
         </>
       )}
