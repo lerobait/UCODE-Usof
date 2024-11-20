@@ -9,6 +9,7 @@ import MyPosts from '../pages/MyPosts';
 import UserPosts from '../pages/UserPosts';
 import Users from '../pages/Users';
 import PostById from '../pages/PostById';
+import UserCabinet from '../pages/UserCabinet';
 
 interface Route {
   path: string;
@@ -19,6 +20,7 @@ interface Route {
 export const privateRoutes: Route[] = [
   { path: '/posts/favorite', component: FavoritePosts, exact: true },
   { path: '/posts/my', component: MyPosts, exact: true },
+  { path: '/users/me', component: UserCabinet, exact: true },
 ];
 
 export const publicRoutes: Route[] = [

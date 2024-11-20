@@ -22,7 +22,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
 
   return (
     <div className="mb-4">
-      <div className="relative flex items-center">
+      <div className="relative flex items-center max-w-md w-full">
         <Input
           id={id}
           type={showPassword ? 'text' : 'password'}
@@ -31,14 +31,14 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
           onChange={onChange}
           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
         />
-        <button
+        <Button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-0 p-2 text-blue-500 hover:text-blue-700 focus:outline-none"
-          style={{ transform: 'translateY(-50%)', top: '50%' }}
+          className="absolute right-2 p-2 text-blue-500 hover:text-blue-700 focus:outline-none"
+          style={{ top: '50%', transform: 'translateY(-50%)' }}
         >
           {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-        </button>
+        </Button>
       </div>
       {error && <p className="text-red-500 mt-1">{error}</p>}
     </div>

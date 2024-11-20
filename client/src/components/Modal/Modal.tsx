@@ -42,7 +42,9 @@ const Modal: React.FC<ModalProps> = ({
 
   return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center cursor-default z-50"
+      className={`fixed inset-0 flex justify-center items-center cursor-default z-50 transition-all duration-200 ${
+        isOpen ? 'bg-black bg-opacity-50 backdrop-blur-sm' : ''
+      }`}
       role="button"
       tabIndex={0}
       onClick={handleBackgroundClick}

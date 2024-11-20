@@ -70,4 +70,81 @@ export default class UserService {
       throw new Error('Error fetching users');
     }
   }
+
+  static async changeAvatar(
+    formData: FormData,
+  ): Promise<{ newAvatarUrl: string }> {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) throw new Error('User is not authenticated');
+
+      const response: AxiosResponse<{ newAvatarUrl: string }> =
+        await axios.patch(`${this.baseUrl}/avatar`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error changing avatar:', error);
+      throw new Error('Error changing avatar');
+    }
+  }
+
+  static async updateCurrentUser(data: {
+    login: string;
+    full_name: string;
+  }): Promise<void> {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) throw new Error('User is not authenticated');
+
+      await axios.patch(`${this.baseUrl}/updateMe`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new Error('Error updating user');
+    }
+  }
+
+  static async updateMyPassword(data: {
+    currentPassword: string;
+    newPassword: string;
+    passwordConfirmation: string;
+  }): Promise<void> {
+    const token = localStorage.getItem('authToken');
+    if (!token) throw new Error('User is not authenticated');
+
+    try {
+      await axios.patch(`${this.baseUrl}/updateMyPassword`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error('Error updating password:', error);
+      throw error;
+    }
+  }
+
+  static async deleteCurrentUser(): Promise<void> {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) throw new Error('User is not authenticated');
+
+      await axios.delete(`${this.baseUrl}/deleteMe`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      throw new Error('Error deleting user');
+    }
+  }
 }

@@ -23,6 +23,10 @@ const Sidebar: React.FC = () => {
     navigate('/users');
   };
 
+  const handleSettingsClick = () => {
+    navigate('/users/me');
+  };
+
   const handleFavoriteClick = () => {
     if (user) {
       navigate('/posts/favorite');
@@ -48,61 +52,47 @@ const Sidebar: React.FC = () => {
       <aside className="sticky top-16 h-[940px] bg-white shadow-lg flex flex-col p-4 w-64">
         <div className="flex-grow overflow-y-auto space-y-4">
           <Button
-            className={`w-full text-left font-semibold py-2 px-4 rounded ${
-              isActive('/posts')
-                ? 'bg-gray-200 text-gray-900'
-                : 'text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`w-full text-left font-semibold py-2 px-4 rounded ${isActive('/posts') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
             onClick={handleTrendsClick}
           >
             Trends
           </Button>
           <Button
-            className={`w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${
-              isActive('/categories')
-                ? 'bg-gray-200 text-gray-900'
-                : 'text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${isActive('/categories') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
             onClick={handleCategoriesClick}
           >
             Categories
           </Button>
           <Button
-            className={`w-full text-left font-semibold py-2 px-4 rounded ${
-              isActive('/posts/my')
-                ? 'bg-gray-200 text-gray-900'
-                : 'text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`w-full text-left font-semibold py-2 px-4 rounded ${isActive('/posts/my') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
             onClick={handleMyPostsClick}
           >
             My Posts
           </Button>
           <Button
-            className={`w-full text-left font-semibold py-2 px-4 rounded ${
-              isActive('/posts/favorite')
-                ? 'bg-gray-200 text-gray-900'
-                : 'text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`w-full text-left font-semibold py-2 px-4 rounded ${isActive('/posts/favorite') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
             onClick={handleFavoriteClick}
           >
             Favorites
           </Button>
           <Button
-            className={`w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${
-              isActive('/users')
-                ? 'bg-gray-200 text-gray-900'
-                : 'text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${isActive('/users') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
             onClick={handleUsersClick}
           >
             All Users
           </Button>
         </div>
-        <div className="pt-4">
-          <Button className="w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded">
-            Settings
-          </Button>
-        </div>
+
+        {user && (
+          <div className="pt-4">
+            <Button
+              className={`w-full text-left font-semibold text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${isActive('/users/me') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
+              onClick={handleSettingsClick}
+            >
+              Settings
+            </Button>
+          </div>
+        )}
       </aside>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
