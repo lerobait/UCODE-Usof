@@ -182,4 +182,20 @@ export default class UserService {
 
     return response.data.data.user;
   }
+
+  static async deleteUser(userId: number): Promise<void> {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) throw new Error('User is not authenticated');
+
+      await axios.delete(`${this.baseUrl}/admin/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      throw new Error('Error deleting user');
+    }
+  }
 }

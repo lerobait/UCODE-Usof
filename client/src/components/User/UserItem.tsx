@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import UserService from '../../API/UserService';
 import UserEdit from './UserEdit';
+import UserDelete from './UserDelete';
 
 interface User {
   id: number;
@@ -68,6 +69,7 @@ const UserItem: React.FC = () => {
               currentRole={user.role}
               onRoleUpdate={handleRoleUpdate}
             />
+            <UserDelete userId={user.id} />
           </div>
         </>
       )}
