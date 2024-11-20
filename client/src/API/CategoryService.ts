@@ -104,4 +104,16 @@ export default class CategoryService {
       throw new Error('Failed to update category');
     }
   }
+
+  static async deleteCategory(categoryId: number): Promise<void> {
+    try {
+      await axios.delete(`${this.baseUrl}/${categoryId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+    } catch {
+      throw new Error('Failed to delete category');
+    }
+  }
 }

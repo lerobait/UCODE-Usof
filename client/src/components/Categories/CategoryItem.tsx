@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import CategoryService from '../../API/CategoryService';
+import CategoryDelete from './CategoryDelete';
+import CategoryEdit from './CategoryEdit';
 
 interface CategoryItemProps {
   categoryId: string;
 }
-import CategoryEdit from './CategoryEdit';
 
 interface Category {
   id: number;
   title: string;
   description: string;
 }
-import CategoryService from '../../API/CategoryService';
 
 const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
   const [category, setCategory] = useState<Category | null>(null);
@@ -61,6 +62,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
             category={category}
             onCategoryUpdated={handleCategoryUpdated}
           />
+          <CategoryDelete categoryId={Number(categoryId)} />
         </>
       )}
     </div>
