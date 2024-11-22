@@ -53,7 +53,7 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-6 mt-6 px-4">
+    <div className="grid grid-cols-6 gap-6 mt-6">
       {filteredUsers.map((user) => {
         const normalizedRating = user.rating
           ? Math.min(user.rating / 20, 5)
@@ -70,7 +70,7 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
             }}
             role="button"
             tabIndex={0}
-            className="p-6 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg shadow-md text-center transition-all duration-300 cursor-pointer"
+            className="p-6 bg-white hover:bg-blue-100 rounded-lg shadow-md text-center transition-all duration-300 cursor-pointer"
           >
             <img
               src={user.profile_picture || '/images/avatars/default-avatar.png'}

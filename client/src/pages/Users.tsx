@@ -26,7 +26,8 @@ const Users: React.FC = () => {
           <Sidebar />
         </div>
         <div className="flex-grow flex flex-col pl-8 pr-4">
-          <div className="w-full mx-auto pl-20 pr-80">
+          <div className="w-full mx-auto pl-20 pr-20">
+            <h1 className="text-4xl font-bold text-blue-500 mt-8">Users</h1>
             <UserList searchText={searchText} />
           </div>
           <ScrollToTop />
