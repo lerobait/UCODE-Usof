@@ -59,10 +59,11 @@ const PostAuthor: React.FC<PostAuthorProps> = ({ authorId }) => {
       </div>
       <div
         role="button"
-        className="text-sm text-gray-500"
+        className="text-sm text-gray-500 font-semibold hover:text-gray-700 transition-all duration-200"
         onClick={handleAuthorClick}
         onKeyDown={handleKeyPress}
         tabIndex={0}
+        style={{ fontSize: '1.125rem' }}
       >
         {user.login}
       </div>

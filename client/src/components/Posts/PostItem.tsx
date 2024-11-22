@@ -8,7 +8,7 @@ import PostCategories from './PostCategories';
 import PostLike from './PostLike';
 import useAuthStore from '../../hooks/useAuthStore';
 import PostFavorite from './PostFavorite';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { IoMdMore } from 'react-icons/io';
 import PostDelete from './PostDelete';
 import PostEdit from './PostEdit';
@@ -49,6 +49,7 @@ const PostItem: React.FC<PostItemProps> = ({
 
   const { user } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleNavigateToPost = () => {
     navigate(`/posts/${id}`);
@@ -102,13 +103,31 @@ const PostItem: React.FC<PostItemProps> = ({
     setLikeStatus(newStatus);
   };
 
+  const statusClass =
+    status === 'active'
+      ? 'text-green-500 border border-green-500 rounded-full px-1 py-0.5 text-sm'
+      : status === 'inactive'
+        ? 'text-red-500 border border-red-500 rounded-full px-1 py-0.5 text-sm'
+        : 'text-gray-500 text-sm';
+
+  const truncateContent = (content: string, maxLength: number) => {
+    if (content.length > maxLength) {
+      const truncated = content.slice(0, maxLength).trim();
+      const lastSpaceIndex = truncated.lastIndexOf(' ');
+      return `${truncated.slice(0, lastSpaceIndex)}...`;
+    }
+    return content;
+  };
+
+  const maxLength = 600;
+  const shouldTruncate = !/\/posts\/\d+$/.test(location.pathname);
+
   return (
     <div className="bg-white shadow-md rounded-lg p-6 relative">
-      <PostAuthor authorId={authorId} />
-      <div>
-        <span className="text-xs text-gray-400 ml-2">
-          {dayjs(date).fromNow()}
-        </span>
+      <div className="flex items-center text-gray-500 text-sm">
+        <PostAuthor authorId={authorId} />
+        <span className="mx-2">•</span>
+        <span>{dayjs(date).fromNow()}</span>
       </div>
 
       {showActions && (
@@ -151,7 +170,9 @@ const PostItem: React.FC<PostItemProps> = ({
         tabIndex={0}
       >
         <h2 className="text-2xl font-semibold text-gray-800 mt-4">{title}</h2>
-        <p className="text-gray-600 mt-2">{content}</p>
+        <p className="text-gray-600 mt-2">
+          {shouldTruncate ? truncateContent(content, maxLength) : content}
+        </p>
 
         {imageUrl && (
           <div className="mt-4">
@@ -163,9 +184,7 @@ const PostItem: React.FC<PostItemProps> = ({
       <PostCategories postId={id} />
 
       <div className="flex justify-between items-center mt-4">
-        <span className="text-sm text-gray-500">{status}</span>
         <div className="flex items-center space-x-4">
-          <PostFavorite postId={id} />
           <div className="flex items-center">
             <PostLike
               postId={id}
@@ -185,7 +204,9 @@ const PostItem: React.FC<PostItemProps> = ({
             <LiaCommentSolid className="text-2xl" />
             <span className="mx-2">{commentCount}</span>
           </Button>
+          <PostFavorite postId={id} />
         </div>
+        <span className={statusClass}>{status}</span>
       </div>
     </div>
   );
