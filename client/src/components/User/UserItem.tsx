@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import UserService from '../../API/UserService';
 import UserEdit from './UserEdit';
 import UserDelete from './UserDelete';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
 
 interface User {
   id: number;
@@ -48,6 +50,8 @@ const UserItem: React.FC = () => {
     }
   };
 
+  const normalizedRating = user?.rating ? Math.min(user.rating / 20, 5) : 0;
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mb-8 flex items-center">
       {user && (
@@ -62,7 +66,14 @@ const UserItem: React.FC = () => {
               {user.login}
             </h2>
             <p className="text-lg text-gray-600">{user.full_name}</p>
-            <p className="text-sm text-gray-500 mt-2">Rating: {user.rating}</p>
+            <Box className="mt-2" sx={{ '& > legend': { mt: 2 } }}>
+              <Rating
+                name="user-rating"
+                value={normalizedRating}
+                precision={0.1}
+                readOnly
+              />
+            </Box>
 
             <UserEdit
               userId={user.id}

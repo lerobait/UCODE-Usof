@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UserService from '../../API/UserService';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
 
 interface User {
   profile_picture: string | null;
@@ -34,6 +36,7 @@ const UserCurrentItem: React.FC = () => {
 
   const defaultAvatar = '/images/avatars/default-avatar.png';
   const profilePicture = user?.profile_picture || defaultAvatar;
+  const normalizedRating = user?.rating ? Math.min(user.rating / 20, 5) : 0;
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mb-8 flex items-center">
@@ -49,7 +52,14 @@ const UserCurrentItem: React.FC = () => {
               {user.login}
             </h2>
             <p className="text-lg text-gray-600">{user.full_name}</p>
-            <p className="text-sm text-gray-500 mt-2">Rating: {user.rating}</p>
+            <Box className="mt-2" sx={{ '& > legend': { mt: 2 } }}>
+              <Rating
+                name="user-rating"
+                value={normalizedRating}
+                precision={0.1}
+                readOnly
+              />
+            </Box>
           </div>
         </>
       )}

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserService from '../../API/UserService';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
 
 interface User {
   id: number;
@@ -52,28 +54,41 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
 
   return (
     <div className="grid grid-cols-4 gap-6 mt-6 px-4">
-      {filteredUsers.map((user) => (
-        <div
-          key={user.id}
-          onClick={() => handleUserClick(user.login)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleUserClick(user.login);
-            }
-          }}
-          role="button"
-          tabIndex={0}
-          className="p-6 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg shadow-md text-center transition-all duration-300 cursor-pointer"
-        >
-          <img
-            src={user.profile_picture || '/images/avatars/default-avatar.png'}
-            alt={`${user.login} avatar`}
-            className="w-16 h-16 mx-auto rounded-full mb-4"
-          />
-          <h3 className="text-lg font-semibold">{user.login}</h3>
-          <p className="text-gray-500">Rating: {user.rating}</p>
-        </div>
-      ))}
+      {filteredUsers.map((user) => {
+        const normalizedRating = user.rating
+          ? Math.min(user.rating / 20, 5)
+          : 0;
+
+        return (
+          <div
+            key={user.id}
+            onClick={() => handleUserClick(user.login)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleUserClick(user.login);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            className="p-6 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg shadow-md text-center transition-all duration-300 cursor-pointer"
+          >
+            <img
+              src={user.profile_picture || '/images/avatars/default-avatar.png'}
+              alt={`${user.login} avatar`}
+              className="w-16 h-16 mx-auto rounded-full mb-4"
+            />
+            <h3 className="text-lg font-semibold">{user.login}</h3>
+            <Box sx={{ '& > legend': { mt: 2 } }}>
+              <Rating
+                name={`rating-${user.id}`}
+                value={normalizedRating}
+                precision={0.1}
+                readOnly
+              />
+            </Box>
+          </div>
+        );
+      })}
     </div>
   );
 };
