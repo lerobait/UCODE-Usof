@@ -175,8 +175,16 @@ const PostItem: React.FC<PostItemProps> = ({
         </p>
 
         {imageUrl && (
-          <div className="mt-4">
-            <img src={imageUrl} alt={title} className="max-w-full rounded-lg" />
+          <div className="mt-4 relative w-full h-[500px] overflow-hidden rounded-lg">
+            <div
+              className="absolute inset-0 w-full h-full bg-cover bg-center filter blur-xl scale-150"
+              style={{ backgroundImage: `url(${imageUrl})` }}
+            ></div>
+            <img
+              src={imageUrl}
+              alt={title}
+              className="relative z-10 w-full h-full object-contain"
+            />
           </div>
         )}
       </div>
