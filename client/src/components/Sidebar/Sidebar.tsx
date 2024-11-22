@@ -58,35 +58,35 @@ const Sidebar: React.FC = () => {
       <aside className="sticky top-16 h-[940px] bg-white shadow-lg flex flex-col p-4 w-64">
         <div className="flex-grow overflow-y-auto space-y-4">
           <Button
-            className={`w-full text-left font-semibold py-2 px-4 rounded flex items-center space-x-2 ${isActive('/posts') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
+            className={`w-full text-left font-semibold py-2 px-4 rounded flex items-center space-x-2 ${isActive('/posts') ? 'bg-blue-100 text-gray-900' : 'text-gray-700 hover:bg-blue-100'}`}
             onClick={handleTrendsClick}
           >
             <IoIosTrendingUp className="text-lg" />
             <span>Trends</span>
           </Button>
           <Button
-            className={`w-full text-left font-semibold flex items-center space-x-2 text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${isActive('/categories') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
+            className={`w-full text-left font-semibold flex items-center space-x-2 text-gray-700 hover:bg-blue-100 py-2 px-4 rounded ${isActive('/categories') ? 'bg-blue-100 text-gray-900' : 'text-gray-700 hover:bg-blue-100'}`}
             onClick={handleCategoriesClick}
           >
             <BiCategory className="text-lg" />
             <span>Categories</span>
           </Button>
           <Button
-            className={`w-full text-left font-semibold flex items-center space-x-2 py-2 px-4 rounded ${isActive('/posts/my') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
+            className={`w-full text-left font-semibold flex items-center space-x-2 py-2 px-4 rounded ${isActive('/posts/my') ? 'bg-blue-100 text-gray-900' : 'text-gray-700 hover:bg-blue-100'}`}
             onClick={handleMyPostsClick}
           >
             <BsFileEarmarkPost className="text-lg" />
             <span>My Posts</span>
           </Button>
           <Button
-            className={`w-full text-left font-semibold flex items-center space-x-2 py-2 px-4 rounded ${isActive('/posts/favorite') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
+            className={`w-full text-left font-semibold flex items-center space-x-2 py-2 px-4 rounded ${isActive('/posts/favorite') ? 'bg-blue-100 text-gray-900' : 'text-gray-700 hover:bg-blue-100'}`}
             onClick={handleFavoriteClick}
           >
             <GoStar className="text-lg" />
             <span>Favorites</span>
           </Button>
           <Button
-            className={`w-full text-left font-semibold flex items-center space-x-2 text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${isActive('/users') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
+            className={`w-full text-left font-semibold flex items-center space-x-2 text-gray-700 hover:bg-blue-100 py-2 px-4 rounded ${isActive('/users') ? 'bg-blue-100 text-gray-900' : 'text-gray-700 hover:bg-blue-100'}`}
             onClick={handleUsersClick}
           >
             <PiUsersThree className="text-lg" />
@@ -97,7 +97,7 @@ const Sidebar: React.FC = () => {
         {user && (
           <div className="pt-4">
             <Button
-              className={`w-full text-left font-semibold flex items-center space-x-2  text-gray-700 hover:bg-gray-200 py-2 px-4 rounded ${isActive('/users/me') ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200'}`}
+              className={`w-full text-left font-semibold flex items-center space-x-2  text-gray-700 hover:bg-blue-100 py-2 px-4 rounded ${isActive('/users/me') ? 'bg-blue-100 text-gray-900' : 'text-gray-700 hover:bg-blue-100'}`}
               onClick={handleSettingsClick}
             >
               <IoSettingsOutline className="text-lg" />
