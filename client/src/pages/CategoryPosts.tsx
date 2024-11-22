@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Header from '../components/Posts/Header';
+import Header from '../components/Header/Header';
 import Sidebar from '../components/Sidebar/Sidebar';
 import CategoryItem from '../components/Categories/CategoryItem';
 import CategoryPostsList from '../components/Categories/CategoryPostList';

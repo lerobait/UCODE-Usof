@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Posts/Header';
+import Header from '../components/Header/Header';
 import useAuthStore from '../hooks/useAuthStore';
 import PostList from '../components/Posts/PostList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';

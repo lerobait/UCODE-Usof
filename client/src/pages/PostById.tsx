@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PostService from '../API/PostService';
 import PostItem from '../components/Posts/PostItem';
-import Header from '../components/Posts/Header';
+import Header from '../components/Header/Header';
 import Sidebar from '../components/Sidebar/Sidebar';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import CommentList from '../components/Comments/CommentList';

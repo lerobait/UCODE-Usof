@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import UserService from '.././API/UserService';
-import Header from '../components/Posts/Header';
+import Header from '../components/Header/Header';
 import Sidebar from '../components/Sidebar/Sidebar';
 import UserAvatarChange from '../components/User/UserAvatarChange';
 import UserInfoChange from '../components/User/UserInfoChange';

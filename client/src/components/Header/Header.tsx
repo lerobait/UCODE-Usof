@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Common/Button';
 import useAuthStore from '../../hooks/useAuthStore';
+import { MdLogin, MdLogout } from 'react-icons/md';
 
 const Header: React.FC<{ onSearch: (searchText: string) => void }> = ({
   onSearch,
@@ -50,17 +51,17 @@ const Header: React.FC<{ onSearch: (searchText: string) => void }> = ({
 
         {user ? (
           <Button
-            className="text-blue-600 font-semibold hover:underline"
+            className="text-blue-600 hover:text-blue-800 transition"
             onClick={handleLogout}
           >
-            Logout
+            <MdLogout size={24} />
           </Button>
         ) : (
           <Button
-            className="text-blue-600 font-semibold hover:underline"
+            className="text-blue-600 hover:text-blue-800 transition"
             onClick={() => navigate('/login')}
           >
-            Login
+            <MdLogin size={24} />
           </Button>
         )}
       </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Posts/Header';
+import Header from '../components/Header/Header';
 import CategoriesList from '../components/Categories/CategoryList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import Sidebar from '../components/Sidebar/Sidebar';

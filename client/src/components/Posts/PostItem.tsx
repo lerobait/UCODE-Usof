@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { IoMdMore } from 'react-icons/io';
 import PostDelete from './PostDelete';
 import PostEdit from './PostEdit';
+import { LiaCommentSolid } from 'react-icons/lia';
 
 dayjs.extend(relativeTime);
 
@@ -175,13 +176,14 @@ const PostItem: React.FC<PostItemProps> = ({
             />
           </div>
           <Button
-            className="text-gray-500 hover:text-gray-700"
+            className="flex items-center text-gray-500 hover:text-gray-700"
             onClick={(e) => {
               e.stopPropagation();
               navigate(`/posts/${id}`);
             }}
           >
-            💬 {commentCount}
+            <LiaCommentSolid className="text-2xl" />
+            <span className="mx-2">{commentCount}</span>
           </Button>
         </div>
       </div>
