@@ -4,7 +4,6 @@ import PostMyList from '../components/Posts/PostMyList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import Sidebar from '../components/Sidebar/Sidebar';
 import UserCurrentItem from '../components/User/UserCurrentItem';
-import PostCreate from '../components/Posts/PostCreate';
 
 const MyPosts: React.FC = () => {
   const [searchText, setSearchText] = useState('');
@@ -30,7 +29,6 @@ const MyPosts: React.FC = () => {
         <div className="flex-grow flex flex-col pl-8 pr-4">
           <div className="w-full mx-auto pl-20 pr-80">
             <UserCurrentItem />
-            <PostCreate />
             <PostMyList searchText={searchText} />
           </div>
           <ScrollToTop />

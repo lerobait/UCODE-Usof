@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import UserService from '../../API/UserService';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
+import PostCreate from '../Posts/PostCreate';
 
 interface User {
   profile_picture: string | null;
@@ -63,6 +64,9 @@ const UserCurrentItem: React.FC = () => {
           </div>
         </>
       )}
+      <div className="ml-auto">
+        <PostCreate />
+      </div>
     </div>
   );
 };

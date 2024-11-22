@@ -7,6 +7,7 @@ import TextArea from '../Common/TextArea';
 import InputFileUpload from '../Common/InputFileUpload';
 import ImagePreview from '../Common/ImagePreview';
 import CategorySelector from '../Common/CategorySelector';
+import { IoMdAdd } from 'react-icons/io';
 
 const PostCreate: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,10 +83,11 @@ const PostCreate: React.FC = () => {
   return (
     <div className="mb-4">
       <Button
-        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="w-full px-4 py-2 bg-transparent text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600 flex items-center justify-center space-x-2"
         onClick={handleOpenModal}
       >
-        Create a post
+        <IoMdAdd />
+        <span>Create Post</span>
       </Button>
 
       <Modal
