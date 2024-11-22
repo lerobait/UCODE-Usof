@@ -33,7 +33,7 @@ const Header: React.FC<{ onSearch: (searchText: string) => void }> = ({
           type="text"
           value={searchText}
           onChange={handleSearchChange}
-          placeholder="Search"
+          placeholder="Search..."
           className="border border-gray-300 rounded-lg py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full max-w-xs"
         />
       </div>

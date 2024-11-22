@@ -26,10 +26,13 @@ const Categories: React.FC = () => {
         <div className="sticky top-16 w-64">
           <Sidebar />
         </div>
-        <div className="flex-grow flex flex-col pl-8 pr-4">
-          <div className="w-full mx-auto pl-20 pr-80">
+        <div className="flex-grow flex flex-col pl-20 pr-20">
+          <div className="flex-grow w-full mx-auto pl-10 pr-10  rounded-lg flex flex-col">
+            <h1 className="text-4xl font-bold text-blue-500 mt-8">
+              Categories
+            </h1>
             <CategoryCreate />
-            <CategoriesList />
+            <CategoriesList searchText={searchText} />
           </div>
           <ScrollToTop />
         </div>

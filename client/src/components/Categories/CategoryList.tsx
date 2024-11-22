@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CategoryService from '../../API/CategoryService';
+import { RiPushpinFill } from 'react-icons/ri';
+
+interface CategoriesListProps {
+  searchText: string;
+}
 
 interface Category {
   id: number;
   title: string;
 }
 
-const CategoriesList: React.FC = () => {
+const CategoriesList: React.FC<CategoriesListProps> = ({ searchText }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -19,7 +24,7 @@ const CategoriesList: React.FC = () => {
         const data = await CategoryService.getCategories();
         setCategories(data);
       } catch {
-        setError('Не удалось загрузить категории');
+        setError('Failed to load categories');
       } finally {
         setLoading(false);
       }
@@ -30,6 +35,10 @@ const CategoriesList: React.FC = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
+
+  const filteredCategories = categories.filter((category) =>
+    category.title.toLowerCase().includes(searchText.toLowerCase()),
+  );
 
   const handleCategoryClick = (categoryId: number) => {
     navigate(`/category-posts/${categoryId}`);
@@ -42,17 +51,18 @@ const CategoriesList: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-6 mt-6 px-4">
-      {categories.map((category) => (
+    <div className="flex flex-wrap gap-4 mt-6">
+      {filteredCategories.map((category) => (
         <div
           key={category.id}
           onClick={() => handleCategoryClick(category.id)}
           onKeyDown={(event) => handleKeyDown(event, category.id)}
           role="button"
           tabIndex={0}
-          className="p-6 bg-blue-100 hover:bg-blue-200 border border-blue-300 rounded-lg shadow-md text-center text-blue-600 font-semibold text-lg transition-all duration-300 cursor-pointer"
+          className="flex items-center space-x-2 bg-white p-4 rounded-lg shadow-lg hover:bg-blue-100 cursor-pointer"
         >
-          <h3>{category.title}</h3>
+          <RiPushpinFill className="text-blue-500 text-lg" />
+          <span className="text-gray-800 font-medium">{category.title}</span>
         </div>
       ))}
     </div>
