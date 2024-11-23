@@ -60,11 +60,11 @@ const UserAvatarChange: React.FC<UserAvatarChangeProps> = ({
       <img
         src={previewUrl || currentAvatar}
         alt="Avatar"
-        className="w-24 h-24 rounded-full object-cover mb-4"
+        className="w-40 h-40 rounded-full object-cover mb-4"
       />
       <Button
         onClick={() => setIsModalOpen(true)}
-        className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2 shadow-lg"
+        className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-3 shadow-lg"
       >
         <MdAddAPhoto className="w-5 h-5" />
       </Button>
@@ -91,13 +91,13 @@ const UserAvatarChange: React.FC<UserAvatarChangeProps> = ({
           <div className="mt-8 w-full flex justify-end">
             <Button
               onClick={handleCancel}
-              className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+              className="px-4 py-2 mr-2 font-bold text-gray-500 border border-gray-500 rounded-full hover:border-2 hover:border-gray-600"
             >
               Cancel
             </Button>
             <Button
               onClick={handleAvatarSubmit}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="px-4 py-2 font-bold text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
             >
               Save
             </Button>

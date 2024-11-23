@@ -70,7 +70,10 @@ const UserInfoChange: React.FC<UserInfoChangeProps> = ({
   return (
     <>
       <Button onClick={handleOpenModal} className="flex items-center">
-        <FaEdit className="mr-2" /> Change Info
+        <FaEdit className="mr-2" />
+        <span className="underline hover:text-blue-600 cursor-pointer">
+          Change Info
+        </span>
       </Button>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
@@ -122,13 +125,13 @@ const UserInfoChange: React.FC<UserInfoChangeProps> = ({
           <div className="mt-8 w-full flex justify-end">
             <Button
               onClick={handleCloseModal}
-              className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+              className="px-4 py-2 mr-2 font-bold text-gray-500 border border-gray-500 rounded-full hover:border-2 hover:border-gray-600"
             >
               Cancel
             </Button>
             <Button
               onClick={handleSave}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="px-4 py-2 font-bold text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
             >
               Save
             </Button>

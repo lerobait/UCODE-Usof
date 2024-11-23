@@ -3,6 +3,7 @@ import useAuthStore from '../../hooks/useAuthStore';
 import Modal from '../Modal/Modal';
 import UserService from '../../API/UserService';
 import Button from '../Common/Button';
+import { TiDeleteOutline } from 'react-icons/ti';
 
 const UserDeleteMe: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -29,9 +30,10 @@ const UserDeleteMe: React.FC = () => {
     <div>
       <Button
         onClick={handleOpenModal}
-        className="bg-red-500 text-white px-4 py-2 rounded"
+        className="px-4 py-2 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600 flex items-center justify-center space-x-2"
       >
-        Delete Account
+        <TiDeleteOutline />
+        <span>Delete Account</span>
       </Button>
 
       {isModalOpen && (
@@ -44,17 +46,17 @@ const UserDeleteMe: React.FC = () => {
             </p>
             <div className="mt-4 flex justify-center space-x-4">
               <Button
+                onClick={handleCloseModal}
+                className="px-4 py-2 mr-2 font-bold text-gray-500 border border-gray-500 rounded-full hover:border-2 hover:border-gray-600"
+              >
+                Cancel
+              </Button>
+              <Button
                 onClick={handleDeleteAccount}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                className="px-4 py-2 m-0 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600"
                 disabled={isDeleting}
               >
                 {isDeleting ? 'Deleting...' : 'Delete'}
-              </Button>
-              <Button
-                onClick={handleCloseModal}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-              >
-                Cancel
               </Button>
             </div>
           </div>

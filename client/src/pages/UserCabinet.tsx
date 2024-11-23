@@ -6,6 +6,7 @@ import UserAvatarChange from '../components/User/UserAvatarChange';
 import UserInfoChange from '../components/User/UserInfoChange';
 import UserPasswordChange from '../components/User/UserPasswordChange';
 import UserDeleteMe from '../components/User/UserDeleteMe';
+import { SiTicktick } from 'react-icons/si';
 
 interface User {
   profile_picture: string;
@@ -56,41 +57,88 @@ const UserCabinet: React.FC = () => {
           <Sidebar />
         </div>
         <div className="flex-grow flex flex-col pl-12 pr-12 mb-8">
-          <div className="bg-white shadow-lg rounded-lg p-6 mb-8 w-full h-full">
-            <h2 className="text-2xl font-semibold mb-4">User Cabinet</h2>
+          <div className="bg-white shadow-lg rounded-lg p-6 mb-8 w-full h-full flex">
+            <div className="flex-1 pr-8 border-r border-blue-200 flex flex-col justify-between">
+              <div>
+                <h1 className="text-4xl font-bold text-blue-500 mt-2 mb-2">
+                  Profile Picture
+                </h1>
+                <div className="mb-6 p-3 bg-blue-100 shadow-lg rounded-lg">
+                  <UserAvatarChange
+                    currentAvatar={
+                      user.profile_picture ||
+                      '/images/avatars/default-avatar.png'
+                    }
+                    onAvatarUpdated={handleAvatarUpdated}
+                  />
+                </div>
+                <h1 className="text-4xl font-bold text-blue-500 mt-2 mb-2">
+                  User Info
+                </h1>
+                <div className="mb-6 p-3 bg-blue-100 shadow-lg rounded-lg">
+                  <h1 className="text-3xl font-bold text-gray-600 mb-3">
+                    Login:{' '}
+                    <span className="text-blue-500 font-semibold">
+                      {user.login}
+                    </span>
+                  </h1>
+                  <p className="text-2xl font-bold text-gray-600 mb-3">
+                    Full Name:{' '}
+                    <span className="text-blue-500 font-semibold">
+                      {user.full_name}
+                    </span>
+                  </p>
 
-            <div className="mb-6">
-              <UserAvatarChange
-                currentAvatar={
-                  user.profile_picture || '/images/avatars/default-avatar.png'
-                }
-                onAvatarUpdated={handleAvatarUpdated}
-              />
+                  <UserInfoChange
+                    currentUser={user}
+                    onSave={handleUserInfoUpdate}
+                  />
+                </div>
+                <h1 className="text-4xl font-bold text-blue-500 mt-2 mb-2">
+                  Account Verification
+                </h1>
+                <div className="mb-6 p-3 bg-blue-100 shadow-lg rounded-lg">
+                  <h1 className="text-2x1 font-bold text-gray-600 mb-3">
+                    Email:{' '}
+                    <span className="text-blue-500 font-semibold">
+                      {user.email}
+                    </span>
+                  </h1>
+                  <p className="text-sm text-gray-600 flex items-center">
+                    {user.email_verified ? (
+                      <span className="text-green-600 font-bold flex items-center">
+                        Email Verified
+                        <SiTicktick className="ml-2" />
+                      </span>
+                    ) : (
+                      'Email Not Verified'
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <UserDeleteMe />
+              </div>
             </div>
 
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold">Login: {user.login}</h3>
-              <p className="text-gray-600">Full Name: {user.full_name}</p>
-
-              <UserInfoChange
-                currentUser={user}
-                onSave={handleUserInfoUpdate}
-              />
-            </div>
-
-            <div className="mb-6">
-              <h4 className="text-lg font-semibold">Email: {user.email}</h4>
-              <p className="text-sm text-gray-600">
-                {user.email_verified ? 'Email Verified' : 'Email Not Verified'}
-              </p>
-            </div>
-
-            <div className="mb-6">
-              <UserPasswordChange />
-            </div>
-
-            <div className="mb-6">
-              <UserDeleteMe />
+            <div className="flex-1 pl-8 flex flex-col justify-between">
+              <div>
+                <h1 className="text-4xl font-bold text-blue-500 mt-2 mb-2">
+                  Password Change
+                </h1>
+                <UserPasswordChange />
+                <div className="mt-8 flex flex-col items-center justify-center">
+                  <img
+                    src="/images/icons/logo.svg"
+                    alt="CodeUnity Logo"
+                    className="w-36 h-36"
+                  />
+                  <h2 className="text-6xl font-bold text-blue-600 mt-4">
+                    CodeUnity
+                  </h2>
+                </div>
+              </div>
             </div>
           </div>
         </div>

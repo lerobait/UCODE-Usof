@@ -64,8 +64,7 @@ const UserPasswordChange: React.FC<UserPasswordChangeProps> = ({
   };
 
   return (
-    <div>
-      <h4 className="text-lg font-semibold mb-2">Change Password</h4>
+    <div className="p-3 bg-blue-100 shadow-lg rounded-lg">
       <div className="mb-4">
         <label htmlFor="currentPassword" className="block font-semibold mb-1">
           Current Password
@@ -112,7 +111,7 @@ const UserPasswordChange: React.FC<UserPasswordChangeProps> = ({
 
       <Button
         onClick={handleChangePassword}
-        className={`bg-blue-500 text-white px-4 py-2 rounded ${
+        className={`px-4 py-2 font-bold text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600 ${
           loading ? 'opacity-50 cursor-not-allowed' : ''
         }`}
         disabled={loading}
