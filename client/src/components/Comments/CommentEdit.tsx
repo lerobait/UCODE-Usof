@@ -61,7 +61,7 @@ const CommentEdit: React.FC<CommentEditProps> = ({
   return (
     <div>
       <Button
-        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-100"
         onClick={handleOpenModal}
       >
         Edit

@@ -74,6 +74,10 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
     fetchComments();
   }, [page, filter]);
 
+  useEffect(() => {
+    fetchComments();
+  }, [postId]);
+
   const handleFilterChange = (newFilter: {
     sortBy: 'likes' | 'date' | undefined;
     order: 'ASC' | 'DESC' | undefined;
