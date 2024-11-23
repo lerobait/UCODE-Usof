@@ -30,7 +30,7 @@ const PostById: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [commentsKey, setCommentsKey] = useState(0); // Состояние для обновления списка комментариев
+  const [commentsKey, setCommentsKey] = useState(0);
 
   const handleSearch = (searchText: string) => {
     setSearchText(searchText);
@@ -38,7 +38,6 @@ const PostById: React.FC = () => {
 
   const handleCommentCreated = () => {
     setOpenSnackbar(true);
-    // Изменение состояния ключа, чтобы принудительно обновить комментарии
     setCommentsKey((prevKey) => prevKey + 1);
   };
 

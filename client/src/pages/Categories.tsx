@@ -4,10 +4,15 @@ import CategoriesList from '../components/Categories/CategoryList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import Sidebar from '../components/Sidebar/Sidebar';
 import CategoryCreate from '../components/Categories/CategoryCreate';
+import Snackbar from '@mui/joy/Snackbar';
+import { SiTicktick } from 'react-icons/si';
 
 const Categories: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [key, setKey] = useState(0);
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -22,6 +27,12 @@ const Categories: React.FC = () => {
 
   const handleCategoryCreated = () => {
     setKey((prevKey) => prevKey + 1);
+    setSnackbarMessage('Category created successfully!');
+    setOpenSnackbar(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -42,6 +53,18 @@ const Categories: React.FC = () => {
           <ScrollToTop />
         </div>
       </div>
+
+      <Snackbar
+        variant="solid"
+        color="success"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openSnackbar}
+        onClose={handleSnackbarClose}
+        startDecorator={<SiTicktick />}
+        autoHideDuration={3000}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </div>
   );
 };
