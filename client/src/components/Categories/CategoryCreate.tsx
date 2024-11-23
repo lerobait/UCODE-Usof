@@ -5,8 +5,15 @@ import Input from '../Common/Input';
 import Button from '../Common/Button';
 import useAuthStore from '../../hooks/useAuthStore';
 import CategoryService from '../../API/CategoryService';
+import { IoMdAdd } from 'react-icons/io';
 
-const CategoryCreate: React.FC = () => {
+interface CategoryCreateProps {
+  onCategoryCreated: () => void;
+}
+
+const CategoryCreate: React.FC<CategoryCreateProps> = ({
+  onCategoryCreated,
+}) => {
   const { user } = useAuthStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -24,21 +31,29 @@ const CategoryCreate: React.FC = () => {
       setDescription('');
       setError(null);
       setIsModalOpen(false);
+
+      onCategoryCreated();
     } catch {
       setError('Category with this title already exists');
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setError(null);
   };
 
   return (
     <>
       <Button
         onClick={() => setIsModalOpen(true)}
-        className="w-full mt-10 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="px-4 py-2 text-blue-500 border border-blue-500 hover:border-2 hover:border-blue-600 rounded-full flex items-center justify-center space-x-2"
       >
-        Create Category
+        <IoMdAdd />
+        <span>Create Category</span>
       </Button>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className="p-6">
           <h2 className="text-lg font-bold mb-4">Create a New Category</h2>
 
@@ -71,14 +86,14 @@ const CategoryCreate: React.FC = () => {
 
           <div className="flex justify-end">
             <Button
-              onClick={() => setIsModalOpen(false)}
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
+              onClick={handleCloseModal}
+              className="px-4 py-2 mr-2 font-bold text-gray-500 border border-gray-500 rounded-full hover:border-2 hover:border-gray-600"
             >
               Cancel
             </Button>
             <Button
               onClick={handleCreateCategory}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="px-4 py-2 font-bold text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
             >
               Create Category
             </Button>

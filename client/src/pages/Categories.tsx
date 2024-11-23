@@ -7,6 +7,7 @@ import CategoryCreate from '../components/Categories/CategoryCreate';
 
 const Categories: React.FC = () => {
   const [searchText, setSearchText] = useState('');
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -19,6 +20,10 @@ const Categories: React.FC = () => {
     setSearchText(searchText);
   };
 
+  const handleCategoryCreated = () => {
+    setKey((prevKey) => prevKey + 1);
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Header onSearch={handleSearch} />
@@ -27,12 +32,12 @@ const Categories: React.FC = () => {
           <Sidebar />
         </div>
         <div className="flex-grow flex flex-col pl-20 pr-20">
-          <div className="flex-grow w-full mx-auto pl-10 pr-10  rounded-lg flex flex-col">
-            <h1 className="text-4xl font-bold text-blue-500 mt-8">
-              Categories
-            </h1>
-            <CategoryCreate />
-            <CategoriesList searchText={searchText} />
+          <div className="flex-grow w-full mx-auto pl-10 pr-10 rounded-lg flex flex-col">
+            <div className="flex items-center justify-between mt-8">
+              <h1 className="text-4xl font-bold text-blue-500">Categories</h1>
+              <CategoryCreate onCategoryCreated={handleCategoryCreated} />
+            </div>
+            <CategoriesList key={key} searchText={searchText} />
           </div>
           <ScrollToTop />
         </div>
