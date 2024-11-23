@@ -23,7 +23,7 @@ export interface PostComment {
   content: string;
   author_id: number;
   publish_date: string;
-  status: string;
+  status: 'active' | 'inactive';
   likes_count: number;
 }
 

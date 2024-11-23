@@ -84,8 +84,12 @@ const PostById: React.FC = () => {
               }}
             />
             <div className="flex justify-between items-center mt-8">
-              <h2 className="text-xl font-semibold">Comments</h2>
-              <CommentCreate postId={post.id} onCommentCreated={() => {}} />
+              <h1 className="text-3xl font-bold text-blue-500">Comments</h1>
+              <CommentCreate
+                postId={post.id}
+                postStatus={post.status}
+                onCommentCreated={() => {}}
+              />
             </div>
             <CommentList postId={post.id} searchText={searchText} />
           </div>

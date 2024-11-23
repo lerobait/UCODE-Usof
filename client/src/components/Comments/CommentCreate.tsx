@@ -3,14 +3,17 @@ import Button from '../Common/Button';
 import TextArea from '../Common/TextArea';
 import Modal from '../Modal/Modal';
 import CommentService from '../../API/PostService';
+import { IoMdAdd } from 'react-icons/io';
 
 interface CommentCreateProps {
   postId: number;
+  postStatus: string;
   onCommentCreated: () => void;
 }
 
 const CommentCreate: React.FC<CommentCreateProps> = ({
   postId,
+  postStatus,
   onCommentCreated,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,15 +49,16 @@ const CommentCreate: React.FC<CommentCreateProps> = ({
     <div className="mb-4">
       <Button
         onClick={handleOpenModal}
-        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        disabled={postStatus === 'inactive'}
+        className={`w-full px-4 py-2 ${postStatus === 'inactive' ? 'cursor-not-allowed' : 'hover:border-2 hover:border-blue-600'} text-blue-500 border border-blue-500 rounded-full flex items-center justify-center space-x-2`}
       >
-        Create Comment
+        <IoMdAdd />
+        <span>Create Comment</span>
       </Button>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} width="1000px">
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <h2 className="text-lg font-bold">Create Comment</h2>
-          {error && <div className="text-red-500">{error}</div>}
           <TextArea
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -62,9 +66,10 @@ const CommentCreate: React.FC<CommentCreateProps> = ({
             placeholder="Write your comment here..."
             required
           />
+          {error && <div className="text-red-500">{error}</div>}
           <Button
             type="submit"
-            className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+            className="w-full bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600"
           >
             Create Comment
           </Button>

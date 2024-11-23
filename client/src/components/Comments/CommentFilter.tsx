@@ -1,4 +1,3 @@
-// CommentFilter.tsx
 import React, { useState } from 'react';
 import Button from '../Common/Button';
 import { GoSortAsc, GoSortDesc } from 'react-icons/go';
@@ -46,12 +45,14 @@ const CommentFilter: React.FC<CommentFilterProps> = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="fixed right-2 top-[calc(5vh+40px)] bg-white shadow-lg p-6 rounded-lg space-y-6 w-48 border border-gray-200 mr-12">
-      <h2 className="text-xl font-semibold text-gray-800">Comment Filters</h2>
+    <div className="fixed right-2 top-[calc(5vh+40px)] bg-white shadow-lg p-6 rounded-lg space-y-6 w-48 border mr-12">
+      <h1 className="text-lg font-semibold text-gray-800 text-center">
+        Filters
+      </h1>
 
       <Button
         onClick={handleLikesSort}
-        className="flex items-center justify-between w-full bg-blue-500 text-white py-2 px-4 rounded-md border border-blue-700 hover:bg-blue-600 transition-colors"
+        className="text-md flex items-center justify-between w-full py-2 px-4 text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
       >
         By Likes
         {sortByLikesOrder === 'DESC' ? <GoSortDesc /> : <GoSortAsc />}
@@ -59,7 +60,7 @@ const CommentFilter: React.FC<CommentFilterProps> = ({ onFilterChange }) => {
 
       <Button
         onClick={handleDateSort}
-        className="flex items-center justify-between w-full bg-green-500 text-white py-2 px-4 rounded-md border border-green-700 hover:bg-green-600 transition-colors"
+        className="text-md flex items-center justify-between w-full py-2 px-4 text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
       >
         By Date
         {sortByDateOrder === 'DESC' ? <GoSortDesc /> : <GoSortAsc />}
@@ -67,7 +68,7 @@ const CommentFilter: React.FC<CommentFilterProps> = ({ onFilterChange }) => {
 
       <Button
         onClick={handleStatusToggle}
-        className="w-full bg-gray-500 text-white py-2 px-4 rounded-md border border-gray-700 hover:bg-gray-600 transition-colors"
+        className="text-md flex items-center justify-between w-full py-2 px-4 text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
       >
         Status:{' '}
         {status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All'}

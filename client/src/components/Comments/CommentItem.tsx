@@ -85,39 +85,49 @@ const CommentItem: React.FC<CommentItemProps> = ({
     setLikeStatus(newStatus);
   };
 
+  const statusClass =
+    status === 'active'
+      ? 'text-green-500 border border-green-500 rounded-full px-1 py-0.5 text-sm'
+      : status === 'inactive'
+        ? 'text-red-500 border border-red-500 rounded-full px-1 py-0.5 text-sm'
+        : 'text-gray-500 text-sm';
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 relative">
-      <div className="flex items-center justify-between">
+    <div className="bg-white shadow-md rounded-lg p-6 relative">
+      <div className="flex items-center text-gray-500 text-sm">
         <CommentAuthor authorId={authorId} />
-        {user && user.id === authorId && (
-          <div className="absolute top-4 right-4">
-            <Button
-              onClick={toggleActions}
-              className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
-            >
-              <IoMdMore size={24} />
-            </Button>
-            {isActionsVisible && (
-              <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md w-32">
-                <CommentEdit
-                  commentId={id}
-                  initialContent={content}
-                  initialStatus={status}
-                />
-                <CommentDelete
-                  commentId={id}
-                  onCommentDeleted={() => onCommentDeleted?.(id)}
-                />
-              </div>
-            )}
-          </div>
-        )}
+        <span className="mx-2">•</span>
+        <span>{dayjs(publishDate).fromNow()}</span>
       </div>
+
+      {user && user.id === authorId && (
+        <div className="absolute top-4 right-4">
+          <Button
+            onClick={toggleActions}
+            className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
+          >
+            <IoMdMore size={24} />
+          </Button>
+          {isActionsVisible && (
+            <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md w-32">
+              <CommentEdit
+                commentId={id}
+                initialContent={content}
+                initialStatus={status}
+              />
+              <CommentDelete
+                commentId={id}
+                onCommentDeleted={() => onCommentDeleted?.(id)}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
       <p className="text-gray-600 mt-2">{content}</p>
-      <span className="ml-2 text-xs text-gray-400">{status}</span>
 
       <div className="absolute bottom-4 right-4 text-sm text-gray-500">
-        {dayjs(publishDate).fromNow()}
+        <span className={statusClass}>{status}</span>
       </div>
 
       <CommentLike

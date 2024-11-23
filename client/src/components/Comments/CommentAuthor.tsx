@@ -46,7 +46,7 @@ const CommentAuthor: React.FC<CommentAuthorProps> = ({ authorId }) => {
     <div className="flex items-center space-x-4">
       <div
         role="button"
-        className="w-8 h-8 rounded-full cursor-pointer"
+        className="w-10 h-10 rounded-full cursor-pointer"
         onClick={handleAuthorClick}
         tabIndex={0}
         onKeyDown={handleKeyPress}
@@ -54,7 +54,7 @@ const CommentAuthor: React.FC<CommentAuthorProps> = ({ authorId }) => {
         <img
           src={user.profile_picture || '/images/avatars/default-avatar.png'}
           alt="User avatar"
-          className="w-8 h-8 rounded-full"
+          className="w-10 h-10 rounded-full"
         />
       </div>
       <div
