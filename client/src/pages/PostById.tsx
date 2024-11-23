@@ -7,6 +7,8 @@ import Sidebar from '../components/Sidebar/Sidebar';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import CommentList from '../components/Comments/CommentList';
 import CommentCreate from '../components/Comments/CommentCreate';
+import Snackbar from '@mui/joy/Snackbar';
+import { SiTicktick } from 'react-icons/si';
 
 interface Post {
   id: number;
@@ -27,17 +29,19 @@ const PostById: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleSearch = (searchText: string) => {
     setSearchText(searchText);
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      console.log('User is not authenticated');
-    }
-  }, []);
+  const handleCommentCreated = () => {
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -88,7 +92,7 @@ const PostById: React.FC = () => {
               <CommentCreate
                 postId={post.id}
                 postStatus={post.status}
-                onCommentCreated={() => {}}
+                onCommentCreated={handleCommentCreated}
               />
             </div>
             <CommentList postId={post.id} searchText={searchText} />
@@ -96,6 +100,18 @@ const PostById: React.FC = () => {
           <ScrollToTop />
         </div>
       </div>
+
+      <Snackbar
+        variant="solid"
+        color="success"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openSnackbar}
+        onClose={handleCloseSnackbar}
+        startDecorator={<SiTicktick />}
+        autoHideDuration={3000}
+      >
+        Comment created successfully!
+      </Snackbar>
     </div>
   ) : (
     <div>Post not found</div>
