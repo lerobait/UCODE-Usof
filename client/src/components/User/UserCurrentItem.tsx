@@ -3,6 +3,8 @@ import UserService from '../../API/UserService';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import PostCreate from '../Posts/PostCreate';
+import { SiTicktick } from 'react-icons/si';
+import Snackbar from '@mui/joy/Snackbar';
 
 interface UserCurrentItemProps {
   setUpdateKey: React.Dispatch<React.SetStateAction<number>>;
@@ -19,6 +21,8 @@ const UserCurrentItem: React.FC<UserCurrentItemProps> = ({ setUpdateKey }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -34,6 +38,14 @@ const UserCurrentItem: React.FC<UserCurrentItemProps> = ({ setUpdateKey }) => {
 
     fetchUser();
   }, []);
+
+  const handlePostCreated = () => {
+    setUpdateKey((prevKey) => prevKey + 1);
+    setSnackbarMessage('Post created successfully!');
+    setSnackbarOpen(true);
+  };
+
+  const handleCloseSnackbar = () => setSnackbarOpen(false);
 
   if (loading)
     return <div className="text-center text-gray-500">Loading...</div>;
@@ -69,10 +81,21 @@ const UserCurrentItem: React.FC<UserCurrentItemProps> = ({ setUpdateKey }) => {
         </>
       )}
       <div className="ml-auto">
-        <PostCreate
-          onPostCreated={() => setUpdateKey((prevKey) => prevKey + 1)}
-        />
+        <PostCreate onPostCreated={handlePostCreated} />
       </div>
+
+      <Snackbar
+        variant="solid"
+        color="success"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={snackbarOpen}
+        onClose={handleCloseSnackbar}
+        startDecorator={<SiTicktick />}
+        autoHideDuration={3000}
+        key="post-snackbar"
+      >
+        {snackbarMessage}
+      </Snackbar>
     </div>
   );
 };
