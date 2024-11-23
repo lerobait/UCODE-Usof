@@ -5,6 +5,11 @@ import { useFetching } from '../../hooks/useFetching';
 import PostService from '../../API/PostService';
 import { useObserver } from '../../hooks/useObserver';
 
+interface PostMyListProps {
+  searchText: string;
+  updateKey: number;
+}
+
 interface Post {
   id: number;
   title: string;
@@ -18,7 +23,7 @@ interface Post {
   image_url?: string | null;
 }
 
-const PostMyList: React.FC<{ searchText: string }> = ({ searchText }) => {
+const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(3);
@@ -63,8 +68,11 @@ const PostMyList: React.FC<{ searchText: string }> = ({ searchText }) => {
   });
 
   useEffect(() => {
+    setPage(1);
+    setPosts([]);
+    setHasMore(true);
     fetchMyPosts();
-  }, [page, filter]);
+  }, [page, filter, updateKey]);
 
   const handleFilterChange = (newFilter: {
     sortBy: 'likes' | 'date' | undefined;

@@ -7,6 +7,7 @@ import UserCurrentItem from '../components/User/UserCurrentItem';
 
 const MyPosts: React.FC = () => {
   const [searchText, setSearchText] = useState('');
+  const [updateKey, setUpdateKey] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -28,8 +29,8 @@ const MyPosts: React.FC = () => {
         </div>
         <div className="flex-grow flex flex-col pl-8 pr-4">
           <div className="w-full mx-auto pl-20 pr-80">
-            <UserCurrentItem />
-            <PostMyList searchText={searchText} />
+            <UserCurrentItem setUpdateKey={setUpdateKey} />
+            <PostMyList searchText={searchText} updateKey={updateKey} />
           </div>
           <ScrollToTop />
         </div>

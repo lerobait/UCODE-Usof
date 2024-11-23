@@ -4,6 +4,10 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import PostCreate from '../Posts/PostCreate';
 
+interface UserCurrentItemProps {
+  setUpdateKey: React.Dispatch<React.SetStateAction<number>>;
+}
+
 interface User {
   profile_picture: string | null;
   login: string;
@@ -11,7 +15,7 @@ interface User {
   rating: number;
 }
 
-const UserCurrentItem: React.FC = () => {
+const UserCurrentItem: React.FC<UserCurrentItemProps> = ({ setUpdateKey }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,10 +53,10 @@ const UserCurrentItem: React.FC = () => {
             className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
           />
           <div className="ml-6">
-            <h2 className="text-2xl font-semibold text-gray-800">
+            <h2 className="text-2xl pl-1 font-semibold text-gray-800">
               {user.login}
             </h2>
-            <p className="text-lg text-gray-600">{user.full_name}</p>
+            <p className="text-lg pl-1 text-gray-600">{user.full_name}</p>
             <Box className="mt-2" sx={{ '& > legend': { mt: 2 } }}>
               <Rating
                 name="user-rating"
@@ -65,7 +69,9 @@ const UserCurrentItem: React.FC = () => {
         </>
       )}
       <div className="ml-auto">
-        <PostCreate />
+        <PostCreate
+          onPostCreated={() => setUpdateKey((prevKey) => prevKey + 1)}
+        />
       </div>
     </div>
   );

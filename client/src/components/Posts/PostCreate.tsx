@@ -9,7 +9,11 @@ import ImagePreview from '../Common/ImagePreview';
 import CategorySelector from '../Common/CategorySelector';
 import { IoMdAdd } from 'react-icons/io';
 
-const PostCreate: React.FC = () => {
+interface PostCreateProps {
+  onPostCreated: () => void;
+}
+
+const PostCreate: React.FC<PostCreateProps> = ({ onPostCreated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -49,6 +53,7 @@ const PostCreate: React.FC = () => {
 
       await PostService.createPost(formData);
       handleCloseModal();
+      onPostCreated();
     } catch {
       setError('Failed to create post. Try again.');
     }
@@ -147,9 +152,9 @@ const PostCreate: React.FC = () => {
 
           <Button
             type="submit"
-            className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+            className="w-full bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600"
           >
-            Create
+            Post
           </Button>
         </form>
       </Modal>
