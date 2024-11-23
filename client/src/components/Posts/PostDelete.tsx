@@ -37,7 +37,7 @@ const PostDelete: React.FC<PostDeleteProps> = ({ postId, onPostDeleted }) => {
     <>
       <Button
         onClick={handleOpenModal}
-        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-100"
       >
         Delete
       </Button>
@@ -51,17 +51,17 @@ const PostDelete: React.FC<PostDeleteProps> = ({ postId, onPostDeleted }) => {
           </p>
           <div className="mt-4 flex justify-center space-x-4">
             <Button
+              onClick={handleCloseModal}
+              className="px-4 py-2 mr-2 font-bold text-gray-500 border border-gray-500 rounded-full hover:border-2 hover:border-gray-600"
+            >
+              Cancel
+            </Button>
+            <Button
               onClick={handleDeletePost}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              className="px-4 py-2 m-0 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600"
               disabled={isDeleting}
             >
               {isDeleting ? 'Deleting...' : 'Delete'}
-            </Button>
-            <Button
-              onClick={handleCloseModal}
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-            >
-              Cancel
             </Button>
           </div>
         </div>

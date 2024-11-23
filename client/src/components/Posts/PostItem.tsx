@@ -139,7 +139,7 @@ const PostItem: React.FC<PostItemProps> = ({
             <IoMdMore size={24} />
           </Button>
           {isActionsVisible && (
-            <div className="absolute right-0 mt-2 bg-white shadow-md rounded-md w-32">
+            <div className="absolute right-3 top-3 mt-2 bg-white shadow-md rounded-md w-32">
               <PostEdit
                 postId={id}
                 onPostUpdated={() => {

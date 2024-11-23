@@ -122,7 +122,7 @@ const PostEdit: React.FC<PostEditProps> = ({ postId, onPostUpdated }) => {
   return (
     <div>
       <Button
-        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-100"
         onClick={handleOpenModal}
       >
         Edit Post
@@ -219,7 +219,7 @@ const PostEdit: React.FC<PostEditProps> = ({ postId, onPostUpdated }) => {
 
           <Button
             type="submit"
-            className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+            className="w-full bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600"
             disabled={isUpdating || isLoading}
           >
             {isUpdating ? 'Updating...' : 'Update Post'}
