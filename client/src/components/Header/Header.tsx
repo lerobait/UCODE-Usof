@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../Common/Button';
 import useAuthStore from '../../hooks/useAuthStore';
 import { MdLogin, MdLogout } from 'react-icons/md';
+import logo from '../../../public/images/icons/logo.svg';
 
 const Header: React.FC<{ onSearch: (searchText: string) => void }> = ({
   onSearch,
@@ -26,7 +27,20 @@ const Header: React.FC<{ onSearch: (searchText: string) => void }> = ({
 
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
-      <h1 className="text-2xl font-bold text-blue-600">CodeUnity</h1>
+      <div
+        className="flex items-center cursor-pointer"
+        role="button"
+        tabIndex={0}
+        onClick={() => navigate('/posts')}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            navigate('/posts');
+          }
+        }}
+      >
+        <img src={logo} alt="CodeUnity Logo" className="w-8 h-8 mr-2" />
+        <h1 className="text-2xl font-bold text-blue-600">CodeUnity</h1>
+      </div>
 
       <div className="flex-1 flex justify-center">
         <input
