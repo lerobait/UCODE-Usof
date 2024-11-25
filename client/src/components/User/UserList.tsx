@@ -62,7 +62,21 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100 text-center">
+        <div>
+          <img
+            src="/images/icons/error.svg"
+            alt="Error Icon"
+            className="w-60 h-60 mx-auto mb-4"
+          />
+
+          <h1 className="text-4xl text-blue-600 font-bold">
+            Something Went Wrong. Please Try Again Later!
+          </h1>
+        </div>
+      </div>
+    );
   }
 
   const handleUserClick = (login: string) => {
