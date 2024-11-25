@@ -9,6 +9,8 @@ import { AxiosError } from 'axios';
 import AppInfo from '../components/Auth/AppInfo';
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../components/Auth/PasswordInput';
+import logo from '../../public/images/icons/logo.svg';
+import CircularProgress from '@mui/joy/CircularProgress';
 
 const Login: React.FC = () => {
   const [login, setLogin] = useState('');
@@ -93,8 +95,23 @@ const Login: React.FC = () => {
   return (
     <div className="flex min-h-screen">
       <AppInfo />
-      <div className="w-1/2 flex flex-col items-center justify-center p-8 bg-white">
-        <h1 className="text-3xl font-bold mb-6">Login to CodeUnity</h1>
+      <div className="w-1/2 flex flex-col items-center justify-center p-8 bg-blue-100">
+        <div
+          className="flex items-center cursor-pointer mb-6"
+          role="button"
+          tabIndex={0}
+          onClick={() => navigate('/posts')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              navigate('/posts');
+            }
+          }}
+        >
+          <h1 className="text-3xl font-bold mr-2">
+            Login to <span className="text-blue-600">CodeUnity</span>
+          </h1>
+          <img src={logo} alt="CodeUnity Logo" className="w-8 h-8" />
+        </div>
         <form
           className="bg-white shadow-md rounded-lg p-8 w-full max-w-md"
           onSubmit={handleLogin}
@@ -109,7 +126,7 @@ const Login: React.FC = () => {
               placeholder="Enter login"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-gray-600"
             />
             {loginError && <p className="text-red-500">{loginError}</p>}
           </div>
@@ -123,7 +140,7 @@ const Login: React.FC = () => {
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-gray-600"
             />
             {emailError && <p className="text-red-500">{emailError}</p>}
           </div>
@@ -154,7 +171,7 @@ const Login: React.FC = () => {
           </div>
 
           {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
-          {isLoading && <p className="text-blue-500 mb-4">Loading...</p>}
+          {isLoading && <CircularProgress size="sm" />}
 
           <Button
             className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200"
