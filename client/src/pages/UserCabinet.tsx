@@ -7,6 +7,7 @@ import UserInfoChange from '../components/User/UserInfoChange';
 import UserPasswordChange from '../components/User/UserPasswordChange';
 import UserDeleteMe from '../components/User/UserDeleteMe';
 import { SiTicktick } from 'react-icons/si';
+import Snackbar from '@mui/joy/Snackbar';
 
 interface User {
   profile_picture: string;
@@ -19,6 +20,8 @@ interface User {
 const UserCabinet: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string>('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,12 +40,20 @@ const UserCabinet: React.FC = () => {
     setUser((prevUser) =>
       prevUser ? { ...prevUser, profile_picture: newAvatarUrl } : prevUser,
     );
+    setOpenSnackbar(true);
+    setSnackbarMessage('Avatar updated successfully!');
   };
 
   const handleUserInfoUpdate = (login: string, fullName: string) => {
     setUser((prevUser) =>
       prevUser ? { ...prevUser, login, full_name: fullName } : prevUser,
     );
+    setOpenSnackbar(true);
+    setSnackbarMessage('User Info updated successfully!');
+  };
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
   };
 
   if (!user) {
@@ -143,6 +154,17 @@ const UserCabinet: React.FC = () => {
           </div>
         </div>
       </div>
+      <Snackbar
+        variant="solid"
+        color="success"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openSnackbar}
+        onClose={handleSnackbarClose}
+        startDecorator={<SiTicktick />}
+        autoHideDuration={3000}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </div>
   );
 };
