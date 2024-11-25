@@ -203,6 +203,7 @@ const PostItem: React.FC<PostItemProps> = ({
               onLikeStatusChange={handleLikeUpdate}
               currentLikeCount={currentLikeCount}
               postStatus={status}
+              authorId={authorId}
             />
           </div>
           <Button

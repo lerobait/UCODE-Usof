@@ -12,6 +12,7 @@ interface PostLikeProps {
   onLikeStatusChange: (newStatus: 'like' | 'dislike' | null) => void;
   currentLikeCount: number;
   postStatus: string;
+  authorId: number;
 }
 
 const PostLike: React.FC<PostLikeProps> = ({
@@ -20,6 +21,7 @@ const PostLike: React.FC<PostLikeProps> = ({
   onLikeStatusChange,
   currentLikeCount,
   postStatus,
+  authorId,
 }) => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
@@ -90,12 +92,14 @@ const PostLike: React.FC<PostLikeProps> = ({
   const buttonClass =
     postStatus === 'inactive' ? 'cursor-not-allowed' : 'hover:text-blue-300';
 
+  const isAuthor = user?.id === authorId;
+
   return (
     <div className="flex items-center">
       <Button
         onClick={handleLikeClick}
         className={`focus:outline-none ${postStatus === 'inactive' ? 'text-gray-400' : 'text-2xl'} ${buttonClass}`}
-        disabled={postStatus === 'inactive'}
+        disabled={postStatus === 'inactive' || isAuthor}
       >
         <AiOutlineLike
           className={`text-2xl ${likeStatus === 'like' ? 'text-blue-500' : 'text-gray-500'} ${buttonClass}`}
@@ -105,7 +109,7 @@ const PostLike: React.FC<PostLikeProps> = ({
       <Button
         onClick={handleDislikeClick}
         className={`focus:outline-none ${postStatus === 'inactive' ? 'text-gray-400' : 'text-2xl'} ${buttonClass}`}
-        disabled={postStatus === 'inactive'}
+        disabled={postStatus === 'inactive' || isAuthor}
       >
         <AiOutlineDislike
           className={`text-2xl ${likeStatus === 'dislike' ? 'text-red-500' : 'text-gray-500'} ${buttonClass}`}
