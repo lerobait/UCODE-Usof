@@ -5,7 +5,6 @@ import Rating from '@mui/material/Rating';
 import PostCreate from '../Posts/PostCreate';
 import { SiTicktick } from 'react-icons/si';
 import Snackbar from '@mui/joy/Snackbar';
-import CircularProgress from '@mui/joy/CircularProgress';
 
 interface UserCurrentItemProps {
   setUpdateKey: React.Dispatch<React.SetStateAction<number>>;
@@ -47,21 +46,6 @@ const UserCurrentItem: React.FC<UserCurrentItemProps> = ({ setUpdateKey }) => {
   };
 
   const handleCloseSnackbar = () => setSnackbarOpen(false);
-
-  if (loading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '80vh',
-        }}
-      >
-        <CircularProgress size="lg" />
-      </div>
-    );
-  }
 
   if (error) {
     return (

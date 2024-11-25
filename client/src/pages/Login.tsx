@@ -28,7 +28,11 @@ const Login: React.FC = () => {
   const [fetchLogin, isLoading, error] = useFetching(async () => {
     try {
       const response = await AuthService.login({ login, email, password });
-      setUser({ ...response.data.user, token: response.data.token });
+      setUser({
+        ...response.data.user,
+        token: response.data.token,
+        role: response.data.user.role,
+      });
       setErrorMessage('');
       navigate('/posts');
     } catch (err) {
