@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../../hooks/useAuthStore';
 import Modal from '../Modal/Modal';
 import CategoryService from '../../API/CategoryService';
+import Button from '../Common/Button';
+import { TiDeleteOutline } from 'react-icons/ti';
 
 interface CategoryDeleteProps {
   categoryId: number;
@@ -36,12 +38,13 @@ const CategoryDelete: React.FC<CategoryDeleteProps> = ({ categoryId }) => {
 
   return (
     <>
-      <button
+      <Button
         onClick={handleOpenModal}
-        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        className="px-4 py-2 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600 flex items-center justify-center space-x-2"
       >
-        Delete Category
-      </button>
+        <TiDeleteOutline />
+        <span>Delete Category</span>
+      </Button>
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <div className="text-center">
@@ -54,19 +57,19 @@ const CategoryDelete: React.FC<CategoryDeleteProps> = ({ categoryId }) => {
               be undone.
             </p>
             <div className="mt-4 flex justify-center space-x-4">
-              <button
+              <Button
+                onClick={handleCloseModal}
+                className="px-4 py-2 mr-2 font-bold text-gray-500 border border-gray-500 rounded-full hover:border-2 hover:border-gray-600"
+              >
+                Cancel
+              </Button>
+              <Button
                 onClick={handleDeleteCategory}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                className="px-4 py-2 m-0 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600"
                 disabled={isDeleting}
               >
                 {isDeleting ? 'Deleting...' : 'Delete'}
-              </button>
-              <button
-                onClick={handleCloseModal}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-              >
-                Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </Modal>

@@ -25,7 +25,7 @@ const CategoryPosts: React.FC = () => {
         </div>
         <div className="flex-grow flex flex-col pl-8 pr-4">
           <div className="w-full mx-auto pl-20 pr-80">
-            <CategoryItem categoryId={categoryId} />
+            <CategoryItem categoryId={categoryId.toString()} />
             <CategoryPostsList
               categoryId={categoryId}
               searchText={searchText}

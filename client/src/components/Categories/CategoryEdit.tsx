@@ -5,6 +5,7 @@ import TextArea from '../Common/TextArea';
 import Button from '../Common/Button';
 import useAuthStore from '../../hooks/useAuthStore';
 import CategoryService from '../../API/CategoryService';
+import { FaEdit } from 'react-icons/fa';
 
 interface CategoryEditProps {
   category: { id: number; title: string; description: string };
@@ -43,9 +44,10 @@ const CategoryEdit: React.FC<CategoryEditProps> = ({
     <>
       <Button
         onClick={() => setIsModalOpen(true)}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="px-4 py-2 mb-3 text-blue-500 border border-blue-500 hover:border-2 hover:border-blue-600 rounded-full flex items-center justify-center space-x-2"
       >
-        Edit Category
+        <FaEdit className="mr-2" />
+        <span>Edit Category</span>
       </Button>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -82,13 +84,13 @@ const CategoryEdit: React.FC<CategoryEditProps> = ({
           <div className="flex justify-end">
             <Button
               onClick={() => setIsModalOpen(false)}
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
+              className="px-4 py-2 mr-2 font-bold text-gray-500 border border-gray-500 rounded-full hover:border-2 hover:border-gray-600"
             >
               Cancel
             </Button>
             <Button
               onClick={handleUpdateCategory}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="px-4 py-2 font-bold text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
             >
               Edit Category
             </Button>
