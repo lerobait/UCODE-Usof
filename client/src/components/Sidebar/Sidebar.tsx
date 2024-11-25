@@ -110,12 +110,10 @@ const Sidebar: React.FC = () => {
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="text-center">
           <h2 className="text-lg font-bold mb-4">Authentication Required</h2>
-          <p className="mb-4">
-            You need to be logged in to access your favorites.
-          </p>
+          <p className="mb-4">You need to be logged in to access this page.</p>
           <Button
             onClick={() => navigate('/login')}
-            className="bg-blue-500 text-white mb-2 w-full"
+            className="w-full bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600"
           >
             Login
           </Button>

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header/Header';
-import useAuthStore from '../hooks/useAuthStore';
 import PostList from '../components/Posts/PostList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import Sidebar from '../components/Sidebar/Sidebar';
 
 const Posts: React.FC = () => {
-  const { user } = useAuthStore();
   const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
@@ -30,12 +28,6 @@ const Posts: React.FC = () => {
         <div className="flex-grow flex flex-col pl-8 pr-4">
           <div className="w-full mx-auto pl-20 pr-80">
             <PostList searchText={searchText} />
-            {!user && (
-              <div className="text-center text-gray-500 mt-6">
-                Вы можете просматривать посты, но для взаимодействия вам нужно
-                войти в систему.
-              </div>
-            )}
           </div>
           <ScrollToTop />
         </div>
