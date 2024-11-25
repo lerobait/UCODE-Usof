@@ -20,6 +20,14 @@ interface CommentItemProps {
   status: 'active' | 'inactive';
   likeCount: number;
   onCommentDeleted?: (commentId: number) => void;
+  onCommentUpdated?: (updatedComment: {
+    id: number;
+    content: string;
+    author_id: number;
+    publish_date: string;
+    status: 'active' | 'inactive';
+    likes_count: number;
+  }) => void;
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({
@@ -30,6 +38,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   status,
   likeCount,
   onCommentDeleted,
+  onCommentUpdated,
 }) => {
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
@@ -40,6 +49,18 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const toggleActions = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsActionsVisible((prev) => !prev);
+  };
+
+  const handleCommentUpdated = (updatedContent: string) => {
+    const updatedComment = {
+      id,
+      content: updatedContent,
+      author_id: authorId,
+      publish_date: publishDate,
+      status,
+      likes_count: currentLikeCount,
+    };
+    onCommentUpdated?.(updatedComment);
   };
 
   useEffect(() => {
@@ -114,6 +135,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 commentId={id}
                 initialContent={content}
                 initialStatus={status}
+                onCommentUpdated={handleCommentUpdated}
               />
               <CommentDelete
                 commentId={id}

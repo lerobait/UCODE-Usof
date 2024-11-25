@@ -28,7 +28,6 @@ export const updateComment = async (
 ) => {
   const comment = await Comment.findOne({
     where: { id: commentId },
-    include: [{ model: User, attributes: ['id'] }],
   });
 
   if (!comment) {

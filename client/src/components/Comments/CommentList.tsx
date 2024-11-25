@@ -93,6 +93,14 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
     comments.content.toLowerCase().includes(searchText.toLowerCase()),
   );
 
+  const handleCommentUpdated = (updatedComment: PostComment) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === updatedComment.id ? updatedComment : comment,
+      ),
+    );
+  };
+
   const handleCommentDeleted = (commentId: number) => {
     setComments((prevComments) =>
       prevComments.filter((comment) => comment.id !== commentId),
@@ -116,6 +124,7 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
           status={comment.status}
           likeCount={comment.likes_count}
           onCommentDeleted={handleCommentDeleted}
+          onCommentUpdated={handleCommentUpdated}
         />
       ))}
       <div ref={lastElement} style={{ height: 20 }} />

@@ -9,12 +9,14 @@ interface CommentEditProps {
   commentId: number;
   initialContent: string;
   initialStatus: 'active' | 'inactive';
+  onCommentUpdated: (updatedContent: string) => void;
 }
 
 const CommentEdit: React.FC<CommentEditProps> = ({
   commentId,
   initialContent,
   initialStatus,
+  onCommentUpdated,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [content, setContent] = useState<string>(initialContent);
@@ -46,6 +48,7 @@ const CommentEdit: React.FC<CommentEditProps> = ({
         content,
         status,
       });
+      onCommentUpdated(content);
       handleCloseModal();
     } catch {
       setError('Failed to update comment. Please try again.');
