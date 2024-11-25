@@ -4,6 +4,7 @@ import Modal from '../Modal/Modal';
 import UserService from '../../API/UserService';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../../hooks/useAuthStore';
+import { TiDeleteOutline } from 'react-icons/ti';
 
 interface UserDeleteProps {
   userId: number;
@@ -35,12 +36,13 @@ const UserDelete: React.FC<UserDeleteProps> = ({ userId }) => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   return (
-    <div>
+    <div className="flex items-center">
       <Button
         onClick={handleOpenModal}
-        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+        className="px-4 py-2 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600 flex items-center justify-center space-x-2"
       >
-        Delete User
+        <TiDeleteOutline />
+        <span>Delete User</span>
       </Button>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
@@ -50,19 +52,19 @@ const UserDelete: React.FC<UserDeleteProps> = ({ userId }) => {
             Are you sure you want to delete this user? This action cannot be
             undone.
           </p>
-          <div className="mt-4 flex justify-center space-x-4">
+          <div className="mt-4 flex justify-center gap-4">
+            <Button
+              onClick={handleCloseModal}
+              className="px-4 py-2 mr-2 font-bold text-gray-500 border border-gray-500 rounded-full hover:border-2 hover:border-gray-600"
+            >
+              Cancel
+            </Button>
             <Button
               onClick={handleDeleteUser}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              className="px-4 py-2 m-0 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600"
               disabled={isDeleting}
             >
               {isDeleting ? 'Deleting...' : 'Delete'}
-            </Button>
-            <Button
-              onClick={handleCloseModal}
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-            >
-              Cancel
             </Button>
           </div>
         </div>

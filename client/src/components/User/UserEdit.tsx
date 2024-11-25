@@ -60,11 +60,11 @@ const UserEdit: React.FC<UserEditProps> = ({
   if (!user || user.role !== 'admin' || user.id === userId) return null;
 
   return (
-    <div>
+    <div className="flex items-center">
       <FormControl
         orientation="horizontal"
         sx={{
-          width: 300,
+          width: 'auto',
           justifyContent: 'flex-start',
           alignItems: 'center',
         }}
@@ -79,12 +79,13 @@ const UserEdit: React.FC<UserEditProps> = ({
           sx={{
             marginLeft: '8px',
             color: role === 'admin' ? 'green' : 'red',
+            fontWeight: 'bold',
           }}
         >
           {role === 'admin' ? 'Admin' : 'User'}
         </FormHelperText>
       </FormControl>
-      {error && <p className="text-red-500 text-sm">{error}</p>}{' '}
+      {error && <p className="text-red-500 text-sm ml-2">{error}</p>}
     </div>
   );
 };

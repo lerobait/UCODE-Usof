@@ -53,28 +53,32 @@ const UserItem: React.FC = () => {
   const normalizedRating = user?.rating ? Math.min(user.rating / 20, 5) : 0;
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mb-8 flex items-center">
+    <div className="bg-white shadow-lg rounded-lg p-6 mb-8 flex items-center justify-between">
       {user && (
         <>
-          <img
-            src={profilePicture}
-            alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
-          />
-          <div className="ml-6">
-            <h2 className="text-2xl font-semibold text-gray-800">
-              {user.login}
-            </h2>
-            <p className="text-lg text-gray-600">{user.full_name}</p>
-            <Box className="mt-2" sx={{ '& > legend': { mt: 2 } }}>
-              <Rating
-                name="user-rating"
-                value={normalizedRating}
-                precision={0.1}
-                readOnly
-              />
-            </Box>
+          <div className="flex items-center">
+            <img
+              src={profilePicture}
+              alt="Profile"
+              className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
+            />
+            <div className="ml-6">
+              <h2 className="text-2xl pl-1 font-semibold text-gray-800">
+                {user.login}
+              </h2>
+              <p className="text-lg pl-1 text-gray-600">{user.full_name}</p>
+              <Box className="mt-2" sx={{ '& > legend': { mt: 2 } }}>
+                <Rating
+                  name="user-rating"
+                  value={normalizedRating}
+                  precision={0.1}
+                  readOnly
+                />
+              </Box>
+            </div>
+          </div>
 
+          <div className="flex items-center gap-4">
             <UserEdit
               userId={user.id}
               currentRole={user.role}
