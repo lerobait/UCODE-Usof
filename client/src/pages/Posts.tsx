@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header/Header';
 import PostList from '../components/Posts/PostList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
@@ -6,13 +6,6 @@ import Sidebar from '../components/Sidebar/Sidebar';
 
 const Posts: React.FC = () => {
   const [searchText, setSearchText] = useState('');
-
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      console.log('User is not authenticated');
-    }
-  }, []);
 
   const handleSearch = (searchText: string) => {
     setSearchText(searchText);

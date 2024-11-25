@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CategoryService from '../../API/CategoryService';
 import { RiPushpinFill } from 'react-icons/ri';
+import CircularProgress from '@mui/joy/CircularProgress';
 
 interface CategoriesListProps {
   searchText: string;
@@ -33,7 +34,21 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ searchText }) => {
     fetchCategories();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '80vh',
+        }}
+      >
+        <CircularProgress size="lg" />
+      </div>
+    );
+  }
+
   if (error) return <div>{error}</div>;
 
   const filteredCategories = categories.filter((category) =>

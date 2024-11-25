@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import UserService from '../../API/UserService';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
+import CircularProgress from '@mui/joy/CircularProgress';
 
 interface User {
   id: number;
@@ -45,8 +46,24 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
     setFilteredUsers(filtered);
   }, [searchText, users]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '80vh',
+        }}
+      >
+        <CircularProgress size="lg" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   const handleUserClick = (login: string) => {
     navigate(`/posts/user/${login}`);

@@ -6,6 +6,7 @@ import PostService from '../../API/PostService';
 import { useObserver } from '../../hooks/useObserver';
 import Snackbar from '@mui/joy/Snackbar';
 import { SiTicktick } from 'react-icons/si';
+import CircularProgress from '@mui/joy/CircularProgress';
 
 interface PostMyListProps {
   searchText: string;
@@ -114,6 +115,21 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
     setOpenSnackbar(false);
   };
 
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '80vh',
+        }}
+      >
+        <CircularProgress size="lg" />
+      </div>
+    );
+  }
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -138,8 +154,6 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
           onPostUpdated={handlePostUpdated}
         />
       ))}
-      <div ref={lastElement} style={{ height: 20 }} />
-      {isLoading && <div>Loading more posts...</div>}
 
       <Snackbar
         variant="solid"

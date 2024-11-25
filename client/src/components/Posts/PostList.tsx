@@ -4,6 +4,7 @@ import PostFilter from './PostFilter';
 import { useFetching } from '../../hooks/useFetching';
 import PostService from '../../API/PostService';
 import { useObserver } from '../../hooks/useObserver';
+import CircularProgress from '@mui/joy/CircularProgress';
 
 interface Post {
   id: number;
@@ -85,6 +86,21 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
       post.content.toLowerCase().includes(searchText.toLowerCase()),
   );
 
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '80vh',
+        }}
+      >
+        <CircularProgress size="lg" />
+      </div>
+    );
+  }
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -112,7 +128,6 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
         />
       ))}
       <div ref={lastElement} style={{ height: 20 }} />
-      {isLoading && <div>Loading more posts...</div>}
     </div>
   );
 };
