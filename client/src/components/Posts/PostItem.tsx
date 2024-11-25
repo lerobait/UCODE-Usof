@@ -28,6 +28,7 @@ interface PostItemProps {
   imageUrl?: string | null;
   showActions?: boolean;
   onPostDeleted: (deletedPostId: number) => void;
+  onPostUpdated: () => void;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -42,6 +43,7 @@ const PostItem: React.FC<PostItemProps> = ({
   imageUrl,
   showActions = false,
   onPostDeleted,
+  onPostUpdated,
 }) => {
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
@@ -143,7 +145,8 @@ const PostItem: React.FC<PostItemProps> = ({
               <PostEdit
                 postId={id}
                 onPostUpdated={() => {
-                  console.log('Post updated successfully!');
+                  setIsActionsVisible(false);
+                  onPostUpdated();
                 }}
               />
               <PostDelete

@@ -28,6 +28,7 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
   const [page, setPage] = useState(1);
   const [limit] = useState(3);
   const [hasMore, setHasMore] = useState(true);
+  const [updateKeyLocal, setUpdateKeyLocal] = useState(0);
   const [filter, setFilter] = useState<{
     sortBy: 'likes' | 'date' | undefined;
     order: 'ASC' | 'DESC' | undefined;
@@ -72,7 +73,7 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
     setPosts([]);
     setHasMore(true);
     fetchMyPosts();
-  }, [page, filter, updateKey]);
+  }, [page, filter, updateKey, updateKeyLocal]);
 
   const handleFilterChange = (newFilter: {
     sortBy: 'likes' | 'date' | undefined;
@@ -97,6 +98,10 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
     );
   };
 
+  const handlePostUpdated = () => {
+    setUpdateKeyLocal((prev) => prev + 1);
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -118,6 +123,7 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
           imageUrl={post.image_url}
           showActions={true}
           onPostDeleted={handlePostDeleted}
+          onPostUpdated={handlePostUpdated}
         />
       ))}
       <div ref={lastElement} style={{ height: 20 }} />
