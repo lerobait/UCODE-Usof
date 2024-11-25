@@ -4,6 +4,8 @@ import PostFilter from './PostFilter';
 import { useFetching } from '../../hooks/useFetching';
 import PostService from '../../API/PostService';
 import { useObserver } from '../../hooks/useObserver';
+import Snackbar from '@mui/joy/Snackbar';
+import { SiTicktick } from 'react-icons/si';
 
 interface PostMyListProps {
   searchText: string;
@@ -38,6 +40,8 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
     order: 'DESC',
     status: undefined,
   });
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const lastElement = useRef<HTMLDivElement>(null);
 
   const [fetchMyPosts, isLoading, error] = useFetching(async () => {
@@ -96,10 +100,18 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
     setPosts((prevPosts) =>
       prevPosts.filter((post) => post.id !== deletedPostId),
     );
+    setSnackbarMessage('Post Deleted successfully!');
+    setOpenSnackbar(true);
   };
 
   const handlePostUpdated = () => {
     setUpdateKeyLocal((prev) => prev + 1);
+    setSnackbarMessage('Post updated successfully!');
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   if (error) {
@@ -128,6 +140,18 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
       ))}
       <div ref={lastElement} style={{ height: 20 }} />
       {isLoading && <div>Loading more posts...</div>}
+
+      <Snackbar
+        variant="solid"
+        color="success"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openSnackbar}
+        onClose={handleCloseSnackbar}
+        startDecorator={<SiTicktick />}
+        autoHideDuration={3000}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </div>
   );
 };

@@ -28,7 +28,7 @@ interface PostItemProps {
   imageUrl?: string | null;
   showActions?: boolean;
   onPostDeleted: (deletedPostId: number) => void;
-  onPostUpdated: () => void;
+  onPostUpdated?: () => void;
 }
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -146,7 +146,7 @@ const PostItem: React.FC<PostItemProps> = ({
                 postId={id}
                 onPostUpdated={() => {
                   setIsActionsVisible(false);
-                  onPostUpdated();
+                  onPostUpdated?.();
                 }}
               />
               <PostDelete
