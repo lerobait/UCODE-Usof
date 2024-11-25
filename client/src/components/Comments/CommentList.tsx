@@ -4,6 +4,8 @@ import CommentFilter from './CommentFilter';
 import { useFetching } from '../../hooks/useFetching';
 import PostService from '../../API/PostService';
 import { useObserver } from '../../hooks/useObserver';
+import Snackbar from '@mui/joy/Snackbar';
+import { SiTicktick } from 'react-icons/si';
 
 interface PostComment {
   id: number;
@@ -31,7 +33,8 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
     order: 'DESC',
     status: undefined,
   });
-
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const lastElement = useRef<HTMLDivElement>(null);
 
   const [fetchComments, isLoading, error] = useFetching(async () => {
@@ -99,12 +102,20 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
         comment.id === updatedComment.id ? updatedComment : comment,
       ),
     );
+    setSnackbarMessage('Comment updated successfully!');
+    setOpenSnackbar(true);
   };
 
   const handleCommentDeleted = (commentId: number) => {
     setComments((prevComments) =>
       prevComments.filter((comment) => comment.id !== commentId),
     );
+    setSnackbarMessage('Comment Deleted successfully!');
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   if (error) {
@@ -129,6 +140,18 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
       ))}
       <div ref={lastElement} style={{ height: 20 }} />
       {isLoading && <div>Loading more comments...</div>}
+
+      <Snackbar
+        variant="solid"
+        color="success"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openSnackbar}
+        onClose={handleCloseSnackbar}
+        startDecorator={<SiTicktick />}
+        autoHideDuration={3000}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </div>
   );
 };
