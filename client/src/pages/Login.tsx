@@ -97,11 +97,11 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen overflow-y-auto">
       <AppInfo />
-      <div className="w-1/2 flex flex-col items-center justify-center p-8 bg-blue-100">
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center min-h-screen bg-blue-100 p-4">
         <div
-          className="flex items-center cursor-pointer mb-6"
+          className="flex items-center cursor-pointer mb-6 text-center"
           role="button"
           tabIndex={0}
           onClick={() => navigate('/posts')}
@@ -111,13 +111,13 @@ const Login: React.FC = () => {
             }
           }}
         >
-          <h1 className="text-3xl font-bold mr-2">
+          <h1 className="text-2xl md:text-3xl font-bold mr-2 truncate">
             Login to <span className="text-blue-600">CodeUnity</span>
           </h1>
-          <img src={logo} alt="CodeUnity Logo" className="w-8 h-8" />
+          <img src={logo} alt="CodeUnity Logo" className="w-6 h-6 md:w-8 md:h-8" />
         </div>
         <form
-          className="bg-white shadow-md rounded-lg p-8 w-full max-w-md"
+          className="bg-white shadow-md rounded-lg p-6 md:p-8 w-full max-w-xs sm:max-w-sm md:max-w-md"
           onSubmit={handleLogin}
         >
           <div className="mb-4">
@@ -148,14 +148,14 @@ const Login: React.FC = () => {
             />
             {emailError && <p className="text-red-500">{emailError}</p>}
           </div>
-
+  
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="password" className="block text-gray-700">
                 Password <span className="text-red-500">*</span>
               </label>
               <Button
-                className="text-blue-500 cursor-pointer"
+                className="text-blue-500 cursor-pointer text-sm"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -173,10 +173,10 @@ const Login: React.FC = () => {
               error={passwordError}
             />
           </div>
-
+  
           {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
           {isLoading && <CircularProgress size="sm" />}
-
+  
           <Button
             className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200"
             type="submit"
@@ -184,7 +184,7 @@ const Login: React.FC = () => {
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </Button>
-
+  
           <div className="mt-4 text-center">
             <span className="text-gray-700">Don&apos;t have an account? </span>
             <Button
@@ -201,7 +201,7 @@ const Login: React.FC = () => {
         />
       </div>
     </div>
-  );
+  ); 
 };
 
 export default Login;

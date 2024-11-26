@@ -102,11 +102,11 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen overflow-y-auto">
       <AppInfo />
-      <div className="w-1/2 flex flex-col items-center justify-center p-8 bg-blue-100">
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center min-h-screen bg-blue-100 p-4">
         <div
-          className="flex items-center cursor-pointer mb-6"
+          className="flex items-center cursor-pointer mb-6 text-center"
           role="button"
           tabIndex={0}
           onClick={() => navigate('/posts')}
@@ -116,13 +116,13 @@ const Register: React.FC = () => {
             }
           }}
         >
-          <h1 className="text-3xl font-bold mr-2">
-            Login to <span className="text-blue-600">CodeUnity</span>
+          <h1 className="text-2xl md:text-3xl font-bold mr-2 truncate">
+            Sign In to <span className="text-blue-600">CodeUnity</span>
           </h1>
-          <img src={logo} alt="CodeUnity Logo" className="w-8 h-8" />
+          <img src={logo} alt="CodeUnity Logo" className="w-6 h-6 md:w-8 md:h-8" />
         </div>
         <form
-          className="bg-white shadow-md rounded-lg p-8 w-full max-w-md"
+          className="bg-white shadow-md rounded-lg p-6 md:p-8 w-full max-w-xs sm:max-w-sm md:max-w-md"
           onSubmit={handleRegister}
         >
           <div className="mb-4">
