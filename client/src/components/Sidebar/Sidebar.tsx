@@ -55,7 +55,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-      <aside className="sticky top-16 h-[1368px] bg-white shadow-lg flex flex-col p-4 w-64">
+      <aside className="sticky top-16 min-h-screen bg-white shadow-lg flex flex-col p-4 w-64">
         <div className="flex-grow space-y-5">
           <Button
             className={`w-full text-left font-semibold py-2 px-4 rounded flex items-center space-x-2 ${isActive('/posts') ? 'bg-blue-100 text-gray-900' : 'text-gray-700 hover:bg-blue-100'}`}
