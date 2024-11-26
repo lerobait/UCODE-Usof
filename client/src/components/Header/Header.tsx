@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Common/Button';
 import useAuthStore from '../../hooks/useAuthStore';
-import { MdLogin, MdLogout } from 'react-icons/md';
+import { MdLogin, MdLogout, MdMenu } from 'react-icons/md';
 import logo from '../../../public/images/icons/logo.svg';
 
-const Header: React.FC<{ onSearch: (searchText: string) => void }> = ({
+const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: () => void }> = ({
   onSearch,
+  toggleSidebar
 }) => {
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
@@ -27,6 +28,12 @@ const Header: React.FC<{ onSearch: (searchText: string) => void }> = ({
 
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+      <button
+          className="md:hidden text-blue-600"
+          onClick={toggleSidebar}
+        >
+          <MdMenu size={30} />
+        </button>
       <div
         className="flex items-center cursor-pointer"
         role="button"

@@ -6,19 +6,35 @@ import Sidebar from '../components/Sidebar/Sidebar';
 
 const Posts: React.FC = () => {
   const [searchText, setSearchText] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSearch = (searchText: string) => {
     setSearchText(searchText);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Header onSearch={handleSearch} />
+    <div className="relative flex min-h-screen bg-gray-100">
+      <Header onSearch={handleSearch} toggleSidebar={toggleSidebar} />
       <div className="flex flex-grow pt-16">
-        <div className="sticky top-16 w-64">
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
+            onClick={toggleSidebar}
+          ></div>
+        )}
+        <div
+          className={`fixed left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ${
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:relative md:translate-x-0`}
+        >
           <Sidebar />
         </div>
-        <div className="flex-grow flex flex-col pl-8 pr-4">
+
+        <div className="flex-grow flex flex-col">
           <div className="w-full mx-auto pl-20 pr-80">
             <PostList searchText={searchText} />
           </div>
@@ -30,3 +46,4 @@ const Posts: React.FC = () => {
 };
 
 export default Posts;
+
