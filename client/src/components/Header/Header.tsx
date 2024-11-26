@@ -28,12 +28,9 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
 
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
-      <button
-          className="md:hidden text-blue-600"
-          onClick={toggleSidebar}
-        >
-          <MdMenu size={30} />
-        </button>
+      <button className="md:hidden text-blue-600" onClick={toggleSidebar}>
+        <MdMenu size={30} />
+      </button>
       <div
         className="flex items-center cursor-pointer"
         role="button"
@@ -46,9 +43,9 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
         }}
       >
         <img src={logo} alt="CodeUnity Logo" className="w-8 h-8 mr-2" />
-        <h1 className="text-2xl font-bold text-blue-600">CodeUnity</h1>
+        <h1 className="text-2xl font-bold text-blue-600 hidden md:block">CodeUnity</h1>
       </div>
-
+  
       <div className="flex-1 flex justify-center">
         <input
           type="text"
@@ -58,7 +55,7 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
           className="border border-gray-300 rounded-lg py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full max-w-xs"
         />
       </div>
-
+  
       <div className="flex items-center space-x-4">
         {user && (
           <div className="flex items-center space-x-2">
@@ -69,25 +66,19 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
             />
           </div>
         )}
-
+  
         {user ? (
-          <Button
-            className="text-blue-600 hover:text-blue-800 transition"
-            onClick={handleLogout}
-          >
+          <Button className="text-blue-600 hover:text-blue-800 transition" onClick={handleLogout}>
             <MdLogout size={24} />
           </Button>
         ) : (
-          <Button
-            className="text-blue-600 hover:text-blue-800 transition"
-            onClick={() => navigate('/login')}
-          >
+          <Button className="text-blue-600 hover:text-blue-800 transition" onClick={() => navigate('/login')}>
             <MdLogin size={24} />
           </Button>
         )}
       </div>
     </header>
-  );
+  );  
 };
 
 export default Header;

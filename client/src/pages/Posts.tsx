@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header/Header';
 import PostList from '../components/Posts/PostList';
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
@@ -16,6 +16,18 @@ const Posts: React.FC = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isSidebarOpen]);
+
   return (
     <div className="relative flex min-h-screen bg-gray-100">
       <Header onSearch={handleSearch} toggleSidebar={toggleSidebar} />
@@ -27,7 +39,7 @@ const Posts: React.FC = () => {
           ></div>
         )}
         <div
-          className={`fixed left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ${
+          className={`fixed left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 md:top-0 ${
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
           } md:relative md:translate-x-0`}
         >

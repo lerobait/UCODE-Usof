@@ -21,7 +21,7 @@ interface Post {
 const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
-  const [limit] = useState(3);
+  const [limit] = useState(10);
   const [hasMore, setHasMore] = useState(true);
   const [filter, setFilter] = useState<{
     sortBy: 'likes' | 'date' | undefined;
