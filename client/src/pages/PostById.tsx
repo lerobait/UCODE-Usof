@@ -31,6 +31,7 @@ const PostById: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [commentsKey, setCommentsKey] = useState(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSearch = (searchText: string) => {
     setSearchText(searchText);
@@ -44,6 +45,22 @@ const PostById: React.FC = () => {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isSidebarOpen]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -68,13 +85,23 @@ const PostById: React.FC = () => {
 
   return post !== null ? (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-400">
-      <Header onSearch={handleSearch} />
+      <Header onSearch={handleSearch} toggleSidebar={toggleSidebar}/>
       <div className="flex flex-grow pt-16">
-        <div className="sticky top-16 w-64">
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
+            onClick={toggleSidebar}
+          ></div>
+        )}
+        <div
+          className={`fixed left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 md:top-0 ${
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:relative md:translate-x-0`}
+        >
           <Sidebar />
         </div>
-        <div className="flex-grow flex flex-col pl-8 pr-4">
-          <div className="w-full mx-auto pl-20 pr-80">
+        <div className="flex-grow flex flex-col">
+          <div className="w-full mx-auto md:pl-10 md:pr-10">
             <PostItem
               id={post.id}
               title={post.title}

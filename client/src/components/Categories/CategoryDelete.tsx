@@ -40,7 +40,7 @@ const CategoryDelete: React.FC<CategoryDeleteProps> = ({ categoryId }) => {
     <>
       <Button
         onClick={handleOpenModal}
-        className="px-4 py-2 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600 flex items-center justify-center space-x-2"
+        className="px-4 py-2 font-bold text-red-500 border border-red-500 rounded-full hover:border-2 hover:border-red-600 flex items-center justify-center space-x-2 flex-shrink-0 max-w-full"
       >
         <TiDeleteOutline />
         <span>Delete Category</span>

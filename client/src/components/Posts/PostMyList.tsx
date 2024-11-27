@@ -133,38 +133,43 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
   }
 
   return (
-    <div className="space-y-6">
-      <PostFilter onFilterChange={handleFilterChange} />
-      {filteredPosts.map((post) => (
-        <PostItem
-          key={post.id}
-          id={post.id}
-          title={post.title}
-          content={post.content}
-          authorId={post.author_id}
-          date={post.publish_date}
-          status={post.status}
-          likeCount={post.likes_count}
-          commentCount={post.comments_count}
-          imageUrl={post.image_url}
-          showActions={true}
-          onPostDeleted={handlePostDeleted}
-          onPostUpdated={handlePostUpdated}
-        />
-      ))}
-      <div ref={lastElement} style={{ height: 20 }} />
+    <div className="flex flex-col lg:flex-row-reverse lg:space-x-reverse lg:space-x-6 space-y-6 lg:space-y-0">
+      <div className="w-full lg:w-1/4">
+        <PostFilter onFilterChange={handleFilterChange} />
+      </div>
 
-      <Snackbar
-        variant="solid"
-        color="success"
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        open={openSnackbar}
-        onClose={handleCloseSnackbar}
-        startDecorator={<SiTicktick />}
-        autoHideDuration={3000}
-      >
-        {snackbarMessage}
-      </Snackbar>
+      <div className="w-full lg:w-3/4 space-y-6">
+        {filteredPosts.map((post) => (
+          <PostItem
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            content={post.content}
+            authorId={post.author_id}
+            date={post.publish_date}
+            status={post.status}
+            likeCount={post.likes_count}
+            commentCount={post.comments_count}
+            imageUrl={post.image_url}
+            showActions={true}
+            onPostDeleted={handlePostDeleted}
+            onPostUpdated={handlePostUpdated}
+          />
+        ))}
+        <div ref={lastElement} style={{ height: 20 }} />
+
+        <Snackbar
+          variant="solid"
+          color="success"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={openSnackbar}
+          onClose={handleCloseSnackbar}
+          startDecorator={<SiTicktick />}
+          autoHideDuration={3000}
+        >
+          {snackbarMessage}
+        </Snackbar>
+      </div>
     </div>
   );
 };

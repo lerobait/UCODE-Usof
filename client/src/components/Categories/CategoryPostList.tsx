@@ -97,24 +97,34 @@ const CategoryPostsList: React.FC<CategoryPostsListProps> = ({
   }
 
   return (
-    <div className="space-y-6">
-      <PostFilter onFilterChange={handleFilterChange} />
-      {filteredPosts.map((post) => (
-        <PostItem
-          key={post.id}
-          id={post.id}
-          title={post.title}
-          content={post.content}
-          authorId={post.author_id}
-          date={new Date(post.publish_date).toLocaleDateString()}
-          status={post.status}
-          likeCount={post.likes_count}
-          commentCount={post.comments_count}
-          imageUrl={post.image_url}
-        />
-      ))}
-      <div ref={lastElement} style={{ height: 20 }} />
-      {isLoading && <div>Loading more posts...</div>}
+    <div className="flex flex-col lg:flex-row-reverse lg:space-x-reverse lg:space-x-6 space-y-6 lg:space-y-0">
+      <div className="w-full lg:w-1/4">
+        <PostFilter onFilterChange={handleFilterChange} />
+      </div>
+      
+      <div className="w-full lg:w-3/4 space-y-6">
+        {filteredPosts.map((post) => (
+          <PostItem
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            content={post.content}
+            authorId={post.author_id}
+            date={new Date(post.publish_date).toLocaleDateString()}
+            status={post.status}
+            likeCount={post.likes_count}
+            commentCount={post.comments_count}
+            imageUrl={post.image_url}
+            onPostDeleted={(deletedPostId) => {
+              setPosts((prevPosts) =>
+                prevPosts.filter((p) => p.id !== deletedPostId),
+              );
+            }}
+          />
+        ))}
+        <div ref={lastElement} style={{ height: 20 }} />
+        {isLoading && <div>Loading more posts...</div>}
+      </div>
     </div>
   );
 };

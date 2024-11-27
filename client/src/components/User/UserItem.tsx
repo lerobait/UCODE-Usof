@@ -53,7 +53,7 @@ const UserItem: React.FC = () => {
   const normalizedRating = user?.rating ? Math.min(user.rating / 20, 5) : 0;
 
   return (
-    <div className="bg-white dark:bg-gray-600 shadow-lg rounded-lg p-6 mb-8 flex items-center justify-between">
+    <div className="bg-white dark:bg-gray-600 shadow-lg rounded-lg p-6 mb-8 flex flex-wrap items-center justify-between">
       {user && (
         <>
           <div className="flex items-center">
@@ -66,7 +66,9 @@ const UserItem: React.FC = () => {
               <h2 className="text-2xl pl-1 font-semibold text-gray-800 dark:text-white">
                 {user.login}
               </h2>
-              <p className="text-lg pl-1 text-gray-600 dark:text-white">{user.full_name}</p>
+              <p className="text-lg pl-1 text-gray-600 dark:text-white">
+                {user.full_name}
+              </p>
               <Box className="mt-2" sx={{ '& > legend': { mt: 2 } }}>
                 <Rating
                   name="user-rating"
@@ -77,8 +79,8 @@ const UserItem: React.FC = () => {
               </Box>
             </div>
           </div>
-
-          <div className="flex items-center gap-4">
+  
+          <div className="flex flex-wrap items-center gap-4 mt-4 sm:mt-0">
             <UserEdit
               userId={user.id}
               currentRole={user.role}

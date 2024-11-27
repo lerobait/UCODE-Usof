@@ -47,7 +47,7 @@ const Posts: React.FC = () => {
         </div>
 
         <div className="flex-grow flex flex-col">
-          <div className="w-full mx-auto pl-10 pr-10">
+          <div className="w-full mx-auto md:pl-10 md:pr-10">
             <PostList searchText={searchText} />
           </div>
           <ScrollToTop />

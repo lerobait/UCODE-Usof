@@ -69,7 +69,7 @@ const Categories: React.FC = () => {
         >
           <Sidebar />
         </div>
-        <div className="flex-grow flex flex-col pl-10 pr-10">
+        <div className="flex-grow flex flex-col md:pl-10 md:pr-10">
           <div className="flex flex-wrap items-center justify-between mt-8">
             <h1 className="text-4xl font-bold text-blue-600 dark:text-white">Categories</h1>
             <div className="mt-4 md:mt-0">

@@ -70,15 +70,17 @@ const UserCurrentItem: React.FC<UserCurrentItemProps> = ({ setUpdateKey }) => {
   const normalizedRating = user?.rating ? Math.min(user.rating / 20, 5) : 0;
 
   return (
-    <div className="bg-white dark:bg-gray-600 shadow-lg rounded-lg p-6 mb-8 flex items-center">
+    <div className="bg-white dark:bg-gray-600 shadow-lg rounded-lg p-6 mb-8 flex flex-wrap items-center">
       {user && (
         <>
-          <img
-            src={profilePicture}
-            alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
-          />
-          <div className="ml-6">
+          <div className="flex-shrink-0">
+            <img
+              src={profilePicture}
+              alt="Profile"
+              className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
+            />
+          </div>
+          <div className="ml-3 flex-1">
             <h2 className="text-2xl pl-1 font-semibold text-gray-800 dark:text-white">
               {user.login}
             </h2>
@@ -94,7 +96,7 @@ const UserCurrentItem: React.FC<UserCurrentItemProps> = ({ setUpdateKey }) => {
           </div>
         </>
       )}
-      <div className="ml-auto">
+      <div className="w-full mt-4 md:ml-auto md:mt-0 md:w-auto">
         <PostCreate onPostCreated={handlePostCreated} />
       </div>
 

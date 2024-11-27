@@ -68,7 +68,7 @@ const CommentCreate: React.FC<CommentCreateProps> = ({
   };
 
   return (
-    <div className="mb-4">
+    <div className="md:mb-4">
       <Button
         onClick={handleOpenModal}
         disabled={postStatus === 'inactive'}

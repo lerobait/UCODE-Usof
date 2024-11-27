@@ -31,7 +31,7 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
-      <button className="md:hidden text-blue-600" onClick={toggleSidebar}>
+      <button className="lg:hidden text-blue-600" onClick={toggleSidebar}>
         <MdMenu size={30} />
       </button>
       <div
@@ -55,7 +55,7 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
           value={searchText}
           onChange={handleSearchChange}
           placeholder="Search..."
-          className="border border-gray-300 rounded-lg py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full max-w-xs"
+          className="border mr-2 border-gray-300 rounded-lg py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full max-w-xs"
         />
       </div>
   

@@ -69,7 +69,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
             <p className="text-gray-600 dark:text-white mt-4">{category.description}</p>
           </div>
 
-          <div className="flex flex-col items-end">
+          <div className="flex flex-wrap justify-end items-center gap-4 mt-4">
             <CategoryEdit
               category={category}
               onCategoryUpdated={handleCategoryUpdated}
