@@ -32,6 +32,12 @@ const TextArea: React.FC<TextAreaProps> = ({
     }
   };
 
+  const handleEmojiClick = (emoji: string) => {
+    onChange({
+      target: { value: value + emoji },
+    } as React.ChangeEvent<HTMLTextAreaElement>);
+  };
+
   return (
     <div>
       <label htmlFor="content" className="block text-sm font-medium mb-1">
@@ -102,6 +108,18 @@ const TextArea: React.FC<TextAreaProps> = ({
             onClick={() => setItalic((prev) => !prev)}
           >
             <FormatItalic />
+          </IconButton>
+
+          <IconButton onClick={() => handleEmojiClick('😍')} color="neutral">
+            <span>😍</span>
+          </IconButton>
+
+          <IconButton onClick={() => handleEmojiClick('😂')} color="neutral">
+            <span>😂</span>
+          </IconButton>
+
+          <IconButton onClick={() => handleEmojiClick('👀')} color="neutral">
+            <span>👀</span>
           </IconButton>
 
           <div
