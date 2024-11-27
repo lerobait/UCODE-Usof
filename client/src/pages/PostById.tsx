@@ -67,7 +67,7 @@ const PostById: React.FC = () => {
   if (error) return <div>{error}</div>;
 
   return post !== null ? (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-400">
       <Header onSearch={handleSearch} />
       <div className="flex flex-grow pt-16">
         <div className="sticky top-16 w-64">
@@ -90,7 +90,7 @@ const PostById: React.FC = () => {
               }}
             />
             <div className="flex justify-between items-center mt-8">
-              <h1 className="text-3xl font-bold text-blue-500">Comments</h1>
+              <h1 className="text-3xl font-bold text-blue-500 dark:text-white">Comments</h1>
               <CommentCreate
                 postId={post.id}
                 postStatus={post.status}

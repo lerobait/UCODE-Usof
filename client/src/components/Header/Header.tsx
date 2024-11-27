@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../Common/Button';
 import useAuthStore from '../../hooks/useAuthStore';
 import { MdLogin, MdLogout, MdMenu } from 'react-icons/md';
+import Switch from '@mui/joy/Switch';
+import DarkMode from '@mui/icons-material/DarkMode';
+import LightMode from '@mui/icons-material/LightMode';
 import logo from '../../../public/images/icons/logo.svg';
 
 const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: () => void }> = ({
@@ -11,7 +14,7 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
 }) => {
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
-  const { user, clearUser } = useAuthStore();
+  const { user, clearUser, theme, toggleTheme } = useAuthStore();
 
   const handleLogout = () => {
     clearUser();
@@ -27,7 +30,7 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
   };
 
   return (
-    <header className="bg-white shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <header className="bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
       <button className="md:hidden text-blue-600" onClick={toggleSidebar}>
         <MdMenu size={30} />
       </button>
@@ -57,6 +60,18 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
       </div>
   
       <div className="flex items-center space-x-4">
+        <Switch
+          size="lg"
+          checked={theme === 'dark'}
+          onChange={toggleTheme}
+          slotProps={{
+            input: { 'aria-label': 'Toggle theme' },
+            thumb: {
+              children: theme === 'dark' ? <DarkMode /> : <LightMode />,
+            },
+          }}
+          sx={{ '--Switch-thumbSize': '24px' }}
+        />
         {user && (
           <div className="flex items-center space-x-2">
             <img
@@ -78,7 +93,7 @@ const Header: React.FC<{ onSearch: (searchText: string) => void, toggleSidebar: 
         )}
       </div>
     </header>
-  );  
+  );
 };
 
 export default Header;

@@ -29,7 +29,7 @@ const Posts: React.FC = () => {
   }, [isSidebarOpen]);
 
   return (
-    <div className="relative flex min-h-screen bg-gray-100">
+    <div className="relative flex min-h-screen bg-gray-100 dark:bg-gray-400">
       <Header onSearch={handleSearch} toggleSidebar={toggleSidebar} />
       <div className="flex flex-grow pt-16">
         {isSidebarOpen && (

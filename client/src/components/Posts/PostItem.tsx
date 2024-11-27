@@ -125,8 +125,8 @@ const PostItem: React.FC<PostItemProps> = ({
   const shouldTruncate = !/\/posts\/\d+$/.test(location.pathname);
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 relative">
-      <div className="flex items-center text-gray-500 text-sm">
+    <div className="bg-white dark:bg-gray-600 shadow-md rounded-lg p-6 relative">
+      <div className="flex items-center text-gray-500 dark:text-white text-sm">
         <PostAuthor authorId={authorId} />
         <span className="mx-2">•</span>
         <span>{dayjs(date).fromNow()}</span>
@@ -136,7 +136,7 @@ const PostItem: React.FC<PostItemProps> = ({
         <div className="absolute top-4 right-4">
           <Button
             onClick={toggleActions}
-            className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
+            className="text-gray-500 dark:text-white hover:text-gray-700 flex items-center justify-center"
           >
             <IoMdMore size={24} />
           </Button>
@@ -172,8 +172,8 @@ const PostItem: React.FC<PostItemProps> = ({
         role="button"
         tabIndex={0}
       >
-        <h2 className="text-2xl font-semibold text-gray-800 mt-4">{title}</h2>
-        <p className="text-gray-600 mt-2">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mt-4">{title}</h2>
+        <p className="text-gray-600 dark:text-white mt-2">
           {shouldTruncate ? truncateContent(content, maxLength) : content}
         </p>
 
@@ -207,7 +207,7 @@ const PostItem: React.FC<PostItemProps> = ({
             />
           </div>
           <Button
-            className="flex items-center text-gray-500 hover:text-gray-700"
+            className="flex items-center text-gray-500 dark:text-white dark:hover:text-gray-100 hover:text-gray-700"
             onClick={(e) => {
               e.stopPropagation();
               navigate(`/posts/${id}`);

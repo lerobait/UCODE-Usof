@@ -44,7 +44,7 @@ const CategoryEdit: React.FC<CategoryEditProps> = ({
     <>
       <Button
         onClick={() => setIsModalOpen(true)}
-        className="px-4 py-2 mb-3 text-blue-500 border border-blue-500 hover:border-2 hover:border-blue-600 rounded-full flex items-center justify-center space-x-2"
+        className="px-4 py-2 mb-3 text-blue-500 dark:text-white border dark:border-white dark:hover:border-2 dark:hover:border-white border-blue-500 hover:border-2 hover:border-blue-600 rounded-full flex items-center justify-center space-x-2"
       >
         <FaEdit className="mr-2" />
         <span>Edit Category</span>

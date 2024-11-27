@@ -51,7 +51,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ searchText }) => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-100 text-center">
+      <div className="flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-400 text-center">
         <div>
           <img
             src="images/icons/error.svg"
@@ -90,10 +90,10 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ searchText }) => {
           onKeyDown={(event) => handleKeyDown(event, category.id)}
           role="button"
           tabIndex={0}
-          className="flex items-center space-x-2 bg-white p-4 rounded-lg shadow-lg hover:bg-blue-100 cursor-pointer"
+          className="flex items-center space-x-2 bg-white dark:bg-gray-600 p-4 rounded-lg shadow-lg hover:bg-blue-100 dark:hover:bg-gray-800 cursor-pointer"
         >
           <RiPushpinFill className="text-blue-500 text-lg" />
-          <span className="text-gray-800 font-medium">{category.title}</span>
+          <span className="text-gray-800 dark:text-white font-medium">{category.title}</span>
         </div>
       ))}
     </div>

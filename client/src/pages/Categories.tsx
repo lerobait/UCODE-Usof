@@ -53,7 +53,7 @@ const Categories: React.FC = () => {
   };
 
   return (
-    <div className="relative flex min-h-screen bg-gray-100">
+    <div className="relative flex min-h-screen bg-gray-100 dark:bg-gray-400">
       <Header onSearch={handleSearch} toggleSidebar={toggleSidebar} />
       <div className="flex flex-grow pt-16">
         {isSidebarOpen && (
@@ -71,7 +71,7 @@ const Categories: React.FC = () => {
         </div>
         <div className="flex-grow flex flex-col pl-10 pr-10">
           <div className="flex flex-wrap items-center justify-between mt-8">
-            <h1 className="text-4xl font-bold text-blue-500">Categories</h1>
+            <h1 className="text-4xl font-bold text-blue-600 dark:text-white">Categories</h1>
             <div className="mt-4 md:mt-0">
               <CategoryCreate onCategoryCreated={handleCategoryCreated} />
             </div>

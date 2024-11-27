@@ -45,28 +45,28 @@ const PostFilter: React.FC<PostFilterProps> = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="bg-white shadow-lg p-6 rounded-lg border">
-      <h1 className="text-lg font-semibold text-gray-800 mb-4">
+    <div className="bg-white dark:bg-gray-600 shadow-lg p-6 rounded-lg">
+      <h1 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
         Filters
       </h1>
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap md:flex-row md:flex-wrap lg:flex-col lg:gap-2">
         <Button
           onClick={handleLikesSort}
-          className="w-full sm:w-auto text-md flex items-center justify-between py-2 px-4 text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
+          className="w-full sm:w-auto text-md flex items-center justify-between py-2 px-4 dark:text-white dark:border-white dark:hover:border-2 dark:hover:border-white text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
         >
           By Likes
           {sortByLikesOrder === 'DESC' ? <GoSortDesc /> : <GoSortAsc />}
         </Button>
         <Button
           onClick={handleDateSort}
-          className="w-full sm:w-auto text-md flex items-center justify-between py-2 px-4 text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
+          className="w-full sm:w-auto text-md flex items-center justify-between py-2 px-4 dark:text-white dark:border-white dark:hover:border-2 dark:hover:border-white text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
         >
           By Date
           {sortByDateOrder === 'DESC' ? <GoSortDesc /> : <GoSortAsc />}
         </Button>
         <Button
           onClick={handleStatusToggle}
-          className="w-full sm:w-auto text-md flex items-center justify-between py-2 px-4 text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
+          className="w-full sm:w-auto text-md flex items-center justify-between py-2 px-4 dark:text-white dark:border-white dark:hover:border-2 dark:hover:border-white text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
         >
           Status: {status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All'}
         </Button>

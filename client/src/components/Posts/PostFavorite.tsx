@@ -83,7 +83,7 @@ const PostFavorite: React.FC<PostFavoriteProps> = ({ postId }) => {
         {isFavorite ? (
           <GoStarFill className="text-yellow-500 hover:text-yellow-600 text-2xl" />
         ) : (
-          <GoStar className="text-gray-500 hover:text-yellow-500 text-2xl" />
+          <GoStar className="text-gray-500 dark:text-white hover:text-yellow-500 dark:hover:text-yellow-500 text-2xl" />
         )}
       </Button>
 

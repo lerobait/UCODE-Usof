@@ -88,7 +88,7 @@ const PostCreate: React.FC<PostCreateProps> = ({ onPostCreated }) => {
   return (
     <div className="mb-4">
       <Button
-        className="w-full px-4 py-2 bg-transparent text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600 flex items-center justify-center space-x-2"
+        className="w-full px-4 py-2 bg-transparent text-blue-500 dark:text-white border border-blue-500 dark:border-white rounded-full hover:border-2 dark:hover:border-2 hover:border-blue-600 dark:hover:border-white flex items-center justify-center space-x-2"
         onClick={handleOpenModal}
       >
         <IoMdAdd />

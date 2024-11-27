@@ -94,7 +94,7 @@ const CommentLike: React.FC<CommentLikeProps> = ({
   const closeModal = () => setModalOpen(false);
 
   const buttonClass =
-    commentStatus === 'inactive' ? 'cursor-not-allowed' : 'hover:text-blue-300';
+    commentStatus === 'inactive' ? 'cursor-not-allowed' : 'hover:text-blue-300 dark:hover:text-blue-300';
 
   return (
     <div className="flex items-center mt-4">
@@ -104,17 +104,17 @@ const CommentLike: React.FC<CommentLikeProps> = ({
         disabled={commentStatus === 'inactive'}
       >
         <AiOutlineLike
-          className={`text-2xl ${likeStatus === 'like' ? 'text-blue-500' : 'text-gray-500'} ${buttonClass}`}
+          className={`text-2xl ${likeStatus === 'like' ? 'text-blue-500' : 'text-gray-500 dark:text-white'} ${buttonClass}`}
         />
       </Button>
-      <span className="mx-2 text-gray-500">{currentLikeCount}</span>
+      <span className="mx-2 text-gray-500 dark:text-white">{currentLikeCount}</span>
       <Button
         onClick={handleDislikeClick}
-        className={`focus:outline-none ${commentStatus === 'inactive' ? 'text-gray-400' : 'text-2xl'} ${buttonClass}`}
+        className={`focus:outline-none ${commentStatus === 'inactive' ? 'text-gray-400 dark:text-white' : 'text-2xl'} ${buttonClass}`}
         disabled={commentStatus === 'inactive'}
       >
         <AiOutlineDislike
-          className={`text-2xl ${likeStatus === 'dislike' ? 'text-red-500' : 'text-gray-500'} ${buttonClass}`}
+          className={`text-2xl ${likeStatus === 'dislike' ? 'text-red-500' : 'text-gray-500 dark:text-white'} ${buttonClass}`}
         />
       </Button>
 

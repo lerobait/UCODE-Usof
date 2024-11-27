@@ -19,7 +19,7 @@ const Users: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-400">
       <Header onSearch={handleSearch} />
       <div className="flex flex-grow pt-16">
         <div className="sticky top-16 w-64">
@@ -27,7 +27,7 @@ const Users: React.FC = () => {
         </div>
         <div className="flex-grow flex flex-col pl-8 pr-4">
           <div className="w-full mx-auto pl-20 pr-20">
-            <h1 className="text-4xl font-bold text-blue-500 mt-8">Users</h1>
+            <h1 className="text-4xl font-bold text-blue-500 dark:text-white mt-8">Users</h1>
             <UserList searchText={searchText} />
           </div>
           <ScrollToTop />

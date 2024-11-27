@@ -87,7 +87,7 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-100 text-center">
+      <div className="flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-400 text-center">
         <div>
           <img
             src="/images/icons/error.svg"

@@ -59,7 +59,7 @@ const CommentAuthor: React.FC<CommentAuthorProps> = ({ authorId }) => {
       </div>
       <div
         role="button"
-        className="text-sm text-gray-500"
+        className="text-sm text-gray-500 dark:text-white"
         onClick={handleAuthorClick}
         onKeyDown={handleKeyPress}
         tabIndex={0}

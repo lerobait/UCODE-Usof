@@ -59,14 +59,14 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mb-8 flex justify-between items-start">
+    <div className="bg-white dark:bg-gray-600 shadow-lg rounded-lg p-6 mb-8 flex justify-between items-start">
       {category && (
         <>
           <div className="flex-1">
-            <h2 className="text-3xl font-semibold text-gray-800">
+            <h2 className="text-3xl font-semibold text-gray-800 dark:text-white">
               {category.title}
             </h2>
-            <p className="text-gray-600 mt-4">{category.description}</p>
+            <p className="text-gray-600 dark:text-white mt-4">{category.description}</p>
           </div>
 
           <div className="flex flex-col items-end">

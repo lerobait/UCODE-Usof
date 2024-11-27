@@ -91,9 +91,9 @@ const UserPasswordChange: React.FC<UserPasswordChangeProps> = ({
   };
 
   return (
-    <div className="p-3 bg-blue-100 shadow-lg rounded-lg">
+    <div className="p-3 bg-blue-100 dark:bg-gray-400 shadow-lg rounded-lg">
       <div className="mb-4">
-        <label htmlFor="currentPassword" className="block font-semibold mb-1">
+        <label htmlFor="currentPassword" className="block bg-text-500 dark:bg-text-800 font-semibold mb-1">
           Current Password
         </label>
         <PasswordInput
@@ -105,7 +105,7 @@ const UserPasswordChange: React.FC<UserPasswordChangeProps> = ({
       </div>
 
       <div className="mb-4">
-        <label htmlFor="newPassword" className="block font-semibold mb-1">
+        <label htmlFor="newPassword" className="block bg-text-500 dark:bg-text-800 font-semibold mb-1">
           New Password
         </label>
         <PasswordInput
@@ -119,7 +119,7 @@ const UserPasswordChange: React.FC<UserPasswordChangeProps> = ({
       <div className="mb-4">
         <label
           htmlFor="passwordConfirmation"
-          className="block font-semibold mb-1"
+          className="block font-semibold mb-1 bg-text-500 dark:bg-text-800"
         >
           Password Confirm
         </label>
@@ -133,7 +133,7 @@ const UserPasswordChange: React.FC<UserPasswordChangeProps> = ({
 
       <Button
         onClick={handleChangePassword}
-        className={`px-4 py-2 font-bold text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`px-4 py-2 font-bold text-blue-500 dark:text-white border dark:border-white border-blue-500 rounded-full hover:border-2 dark:hover:border-2 hover:border-blue-600 dark:hover:border-white ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
         disabled={loading}
       >
         {loading ? 'Processing...' : 'Change Password'}

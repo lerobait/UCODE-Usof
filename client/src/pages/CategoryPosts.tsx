@@ -17,7 +17,7 @@ const CategoryPosts: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-400">
       <Header onSearch={handleSearch} />
       <div className="flex flex-grow pt-16">
         <div className="sticky top-16 w-64">

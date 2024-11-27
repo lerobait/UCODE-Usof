@@ -61,20 +61,20 @@ const UserCabinet: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-400">
       <Header onSearch={(searchText: string) => console.log(searchText)} />
       <div className="flex flex-grow pt-16">
         <div className="sticky top-16 w-64">
           <Sidebar />
         </div>
         <div className="flex-grow flex flex-col pl-12 pr-12 mb-8">
-          <div className="bg-white shadow-lg rounded-lg p-6 mb-8 w-full h-full flex">
+          <div className="bg-white dark:bg-gray-600 shadow-lg rounded-lg p-6 mb-8 w-full h-full flex">
             <div className="flex-1 pr-8 border-r border-blue-200 flex flex-col justify-between">
               <div>
-                <h1 className="text-4xl font-bold text-blue-500 mt-2 mb-2">
+                <h1 className="text-4xl font-bold text-blue-500 dark:text-white mt-2 mb-2">
                   Profile Picture
                 </h1>
-                <div className="mb-6 p-3 bg-blue-100 shadow-lg rounded-lg">
+                <div className="mb-6 p-3 bg-blue-100 dark:bg-gray-400 shadow-lg rounded-lg">
                   <UserAvatarChange
                     currentAvatar={
                       user.profile_picture ||
@@ -83,19 +83,19 @@ const UserCabinet: React.FC = () => {
                     onAvatarUpdated={handleAvatarUpdated}
                   />
                 </div>
-                <h1 className="text-4xl font-bold text-blue-500 mt-2 mb-2">
+                <h1 className="text-4xl font-bold text-blue-500 dark:text-white mt-2 mb-2">
                   User Info
                 </h1>
-                <div className="mb-6 p-3 bg-blue-100 shadow-lg rounded-lg">
-                  <h1 className="text-3xl font-bold text-gray-600 mb-3">
+                <div className="mb-6 p-3 bg-blue-100 dark:bg-gray-400 shadow-lg rounded-lg">
+                  <h1 className="text-3xl font-bold text-gray-600 dark:text-gray-800 mb-3">
                     Login:{' '}
-                    <span className="text-blue-500 font-semibold">
+                    <span className="text-blue-600 font-semibold">
                       {user.login}
                     </span>
                   </h1>
-                  <p className="text-2xl font-bold text-gray-600 mb-3">
+                  <p className="text-2xl font-bold text-gray-600 dark:text-gray-800 mb-3">
                     Full Name:{' '}
-                    <span className="text-blue-500 font-semibold">
+                    <span className="text-blue-600 font-semibold">
                       {user.full_name}
                     </span>
                   </p>
@@ -105,13 +105,13 @@ const UserCabinet: React.FC = () => {
                     onSave={handleUserInfoUpdate}
                   />
                 </div>
-                <h1 className="text-4xl font-bold text-blue-500 mt-2 mb-2">
+                <h1 className="text-4xl font-bold text-blue-500 dark:text-white mt-2 mb-2">
                   Account Verification
                 </h1>
-                <div className="mb-6 p-3 bg-blue-100 shadow-lg rounded-lg">
-                  <h1 className="text-2x1 font-bold text-gray-600 mb-3">
+                <div className="mb-6 p-3 bg-blue-100 dark:bg-gray-400 shadow-lg rounded-lg">
+                  <h1 className="text-2x1 font-bold text-gray-600 dark:text-gray-800 mb-3">
                     Email:{' '}
-                    <span className="text-blue-500 font-semibold">
+                    <span className="text-blue-600 font-semibold">
                       {user.email}
                     </span>
                   </h1>
@@ -135,7 +135,7 @@ const UserCabinet: React.FC = () => {
 
             <div className="flex-1 pl-8 flex flex-col justify-between">
               <div>
-                <h1 className="text-4xl font-bold text-blue-500 mt-2 mb-2">
+                <h1 className="text-4xl font-bold text-blue-500 dark:text-white mt-2 mb-2">
                   Password Change
                 </h1>
                 <UserPasswordChange />

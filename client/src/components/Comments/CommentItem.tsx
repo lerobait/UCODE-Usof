@@ -114,8 +114,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
         : 'text-gray-500 text-sm';
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 relative">
-      <div className="flex items-center text-gray-500 text-sm">
+    <div className="bg-white dark:bg-gray-600 shadow-md rounded-lg p-6 relative">
+      <div className="flex items-center text-gray-500 dark:text-white text-sm">
         <CommentAuthor authorId={authorId} />
         <span className="mx-2">•</span>
         <span>{dayjs(publishDate).fromNow()}</span>
@@ -125,7 +125,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <div className="absolute top-4 right-4">
           <Button
             onClick={toggleActions}
-            className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
+            className="text-gray-50 dark:text-white hover:text-gray-700 flex items-center justify-center"
           >
             <IoMdMore size={24} />
           </Button>
@@ -146,7 +146,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         </div>
       )}
 
-      <p className="text-gray-600 mt-2">{content}</p>
+      <p className="text-gray-600 dark:text-white mt-2">{content}</p>
 
       <div className="absolute bottom-4 right-4 text-sm text-gray-500">
         <span className={statusClass}>{status}</span>

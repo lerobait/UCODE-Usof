@@ -63,7 +63,7 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-100 text-center">
+      <div className="flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-400 text-center">
         <div>
           <img
             src="/images/icons/error.svg"
@@ -101,14 +101,14 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
             }}
             role="button"
             tabIndex={0}
-            className="p-6 bg-white hover:bg-blue-100 rounded-lg shadow-md text-center transition-all duration-300 cursor-pointer"
+            className="p-6 bg-white dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-gray-800 rounded-lg shadow-md text-center transition-all duration-300 cursor-pointer"
           >
             <img
               src={user.profile_picture || '/images/avatars/default-avatar.png'}
               alt={`${user.login} avatar`}
               className="w-16 h-16 mx-auto rounded-full mb-4"
             />
-            <h3 className="text-lg font-semibold">{user.login}</h3>
+            <h3 className="text-lg text-gray-500 dark:text-white font-semibold">{user.login}</h3>
             <Box sx={{ '& > legend': { mt: 2 } }}>
               <Rating
                 name={`rating-${user.id}`}

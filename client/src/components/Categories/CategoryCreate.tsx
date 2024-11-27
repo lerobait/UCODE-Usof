@@ -47,7 +47,7 @@ const CategoryCreate: React.FC<CategoryCreateProps> = ({
     <>
       <Button
         onClick={() => setIsModalOpen(true)}
-        className="px-4 py-2 text-blue-500 border border-blue-500 hover:border-2 hover:border-blue-600 rounded-full flex items-center justify-center space-x-2"
+        className="px-4 py-2 dark:text-white text-blue-500 border border-blue-500 dark:border-white hover:border-2 dark:hover:border-2 hover:border-blue-600 dark:hover:border-white rounded-full flex items-center justify-center space-x-2"
       >
         <IoMdAdd />
         <span>Create Category</span>
