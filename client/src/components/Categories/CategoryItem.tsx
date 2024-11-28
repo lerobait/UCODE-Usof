@@ -66,7 +66,9 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ categoryId }) => {
             <h2 className="text-3xl font-semibold text-gray-800 dark:text-white">
               {category.title}
             </h2>
-            <p className="text-gray-600 dark:text-white mt-4">{category.description}</p>
+            <p className="text-gray-600 dark:text-white mt-4">
+              {category.description}
+            </p>
           </div>
 
           <div className="flex flex-wrap justify-end items-center gap-4 mt-4">

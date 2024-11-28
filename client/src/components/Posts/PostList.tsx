@@ -108,7 +108,7 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
       <div className="w-full lg:w-1/4">
         <PostFilter onFilterChange={handleFilterChange} />
       </div>
-  
+
       <div className="w-full lg:w-3/4 space-y-6">
         {filteredPosts.map((post) => (
           <PostItem
@@ -132,7 +132,7 @@ const PostList: React.FC<{ searchText: string }> = ({ searchText }) => {
         <div ref={lastElement} style={{ height: 20 }} />
       </div>
     </div>
-  );  
+  );
 };
 
 export default PostList;

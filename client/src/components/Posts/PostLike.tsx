@@ -90,7 +90,9 @@ const PostLike: React.FC<PostLikeProps> = ({
   const closeModal = () => setModalOpen(false);
 
   const buttonClass =
-    postStatus === 'inactive' ? 'cursor-not-allowed' : 'hover:text-blue-300 dark:hover:text-blue-300';
+    postStatus === 'inactive'
+      ? 'cursor-not-allowed'
+      : 'hover:text-blue-300 dark:hover:text-blue-300';
 
   const isAuthor = user?.id === authorId;
 
@@ -105,7 +107,9 @@ const PostLike: React.FC<PostLikeProps> = ({
           className={`text-2xl ${likeStatus === 'like' ? 'text-blue-500' : 'text-gray-500 dark:text-white'} ${buttonClass}`}
         />
       </Button>
-      <span className="mx-2 text-gray-500 dark:text-white">{currentLikeCount}</span>
+      <span className="mx-2 text-gray-500 dark:text-white">
+        {currentLikeCount}
+      </span>
       <Button
         onClick={handleDislikeClick}
         className={`focus:outline-none ${postStatus === 'inactive' ? 'text-gray-400 dark:text-white' : 'text-2xl'} ${buttonClass}`}

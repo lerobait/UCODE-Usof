@@ -41,6 +41,13 @@ const CategoryPosts: React.FC = () => {
           <div
             className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
             onClick={toggleSidebar}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                toggleSidebar();
+              }
+            }}
           ></div>
         )}
         <div

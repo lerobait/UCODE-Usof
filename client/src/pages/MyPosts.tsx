@@ -43,8 +43,15 @@ const MyPosts: React.FC = () => {
       <div className="flex flex-grow pt-16">
         {isSidebarOpen && (
           <div
+            role="button"
+            tabIndex={0}
             className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
             onClick={toggleSidebar}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                toggleSidebar();
+              }
+            }}
           ></div>
         )}
         <div

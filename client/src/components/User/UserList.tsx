@@ -89,7 +89,7 @@ const UserList: React.FC<UserListProps> = ({ searchText }) => {
         const normalizedRating = user.rating
           ? Math.min(user.rating / 20, 5)
           : 0;
-  
+
         return (
           <div
             key={user.id}

@@ -114,7 +114,11 @@ const Login: React.FC = () => {
           <h1 className="text-2xl md:text-3xl font-bold mr-2 truncate">
             Login to <span className="text-blue-600">CodeUnity</span>
           </h1>
-          <img src={logo} alt="CodeUnity Logo" className="w-6 h-6 md:w-8 md:h-8" />
+          <img
+            src={logo}
+            alt="CodeUnity Logo"
+            className="w-6 h-6 md:w-8 md:h-8"
+          />
         </div>
         <form
           className="bg-white shadow-md rounded-lg p-6 md:p-8 w-full max-w-xs sm:max-w-sm md:max-w-md"
@@ -148,7 +152,7 @@ const Login: React.FC = () => {
             />
             {emailError && <p className="text-red-500">{emailError}</p>}
           </div>
-  
+
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="password" className="block text-gray-700">
@@ -173,10 +177,10 @@ const Login: React.FC = () => {
               error={passwordError}
             />
           </div>
-  
+
           {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
           {isLoading && <CircularProgress size="sm" />}
-  
+
           <Button
             className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200"
             type="submit"
@@ -184,7 +188,7 @@ const Login: React.FC = () => {
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </Button>
-  
+
           <div className="mt-4 text-center">
             <span className="text-gray-700">Don&apos;t have an account? </span>
             <Button
@@ -201,7 +205,7 @@ const Login: React.FC = () => {
         />
       </div>
     </div>
-  ); 
+  );
 };
 
 export default Login;

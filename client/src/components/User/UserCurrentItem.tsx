@@ -84,7 +84,9 @@ const UserCurrentItem: React.FC<UserCurrentItemProps> = ({ setUpdateKey }) => {
             <h2 className="text-2xl pl-1 font-semibold text-gray-800 dark:text-white">
               {user.login}
             </h2>
-            <p className="text-lg pl-1 text-gray-600 dark:text-white">{user.full_name}</p>
+            <p className="text-lg pl-1 text-gray-600 dark:text-white">
+              {user.full_name}
+            </p>
             <Box className="mt-2" sx={{ '& > legend': { mt: 2 } }}>
               <Rating
                 name="user-rating"

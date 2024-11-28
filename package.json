@@ -3,22 +3,18 @@
   "version": "1.0.0",
   "description": "Campus-UCODE-Usof-2024",
   "private": true,
-  "workspaces": [
-    "server",
-    "client"
-  ],
   "scripts": {
     "lint:server": "eslint 'server/**/*.ts'",
     "lint:client": "eslint 'client/**/*.tsx'",
     "lint": "npm run lint:server && npm run lint:client",
     "format": "prettier --write 'client/**/*.{ts,tsx}' 'server/**/*.{ts,tsx}'",
-    "server:build": "npm run --workspace=server build",
-    "server:start": "npm run --workspace=server start",
-    "server:migrate": "npm run --workspace=server migrate",
-    "server:migrate:undo": "npm run --workspace=server migrate:undo",
-    "server:seed": "npm run --workspace=server seed",
-    "client:start": "npm run --workspace=client start",
-    "client:build": "npm run --workspace=client build"
+    "server:build": "cd server && npm run build",
+    "server:start": "cd server && npm run start",
+    "server:migrate": "cd server && npm run migrate",
+    "server:migrate:undo": "cd server && npm run migrate:undo",
+    "server:seed": "cd server && npm run seed",
+    "client:start": "cd client && npm run start",
+    "client:build": "cd client && npm run build"
   },
   "author": "Artem Nikulin",
   "license": "ISC",

@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { Box, IconButton, Menu, MenuItem, ListItemDecorator } from '@mui/joy';
-import FormatBold from '@mui/icons-material/FormatBold';
-import FormatItalic from '@mui/icons-material/FormatItalic';
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import Check from '@mui/icons-material/Check';
-
+import { FaBold, FaItalic, FaArrowDown, FaCheck } from 'react-icons/fa';
 interface TextAreaProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -73,8 +69,8 @@ const TextArea: React.FC<TextAreaProps> = ({
             color="neutral"
             onClick={(event) => setAnchorEl(event.currentTarget)}
           >
-            <FormatBold />
-            <KeyboardArrowDown fontSize="medium" />
+            <FaBold />
+            <FaArrowDown fontSize="medium" />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -94,7 +90,7 @@ const TextArea: React.FC<TextAreaProps> = ({
                 sx={{ fontWeight: weight }}
               >
                 <ListItemDecorator>
-                  {fontWeight === weight && <Check fontSize="small" />}
+                  {fontWeight === weight && <FaCheck fontSize="small" />}
                 </ListItemDecorator>
                 {weight === '200' ? 'lighter' : weight}
               </MenuItem>
@@ -107,7 +103,7 @@ const TextArea: React.FC<TextAreaProps> = ({
             aria-pressed={italic}
             onClick={() => setItalic((prev) => !prev)}
           >
-            <FormatItalic />
+            <FaItalic />
           </IconButton>
 
           <IconButton onClick={() => handleEmojiClick('😍')} color="neutral">

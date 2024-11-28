@@ -79,24 +79,31 @@ const UserCabinet: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-400">
-    <Header
-      onSearch={(searchText: string) => console.log(searchText)}
-      toggleSidebar={toggleSidebar}
-    />
-    <div className="flex flex-grow pt-16">
-      {isSidebarOpen && (
+      <Header
+        onSearch={(searchText: string) => console.log(searchText)}
+        toggleSidebar={toggleSidebar}
+      />
+      <div className="flex flex-grow pt-16">
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
+            onClick={toggleSidebar}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                toggleSidebar();
+              }
+            }}
+          ></div>
+        )}
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
-          onClick={toggleSidebar}
-        ></div>
-      )}
-      <div
-        className={`fixed left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:relative lg:translate-x-0`}
-      >
-        <Sidebar />
-      </div>
+          className={`fixed left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ${
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } lg:relative lg:translate-x-0`}
+        >
+          <Sidebar />
+        </div>
         <div className="flex-grow flex flex-col lg:pl-10 lg:pr-10 lg:mb-8">
           <div className="bg-white dark:bg-gray-600 shadow-lg rounded-lg p-6 lg:mb-8 w-full h-full flex flex-col md:flex-row">
             <div className="flex-1 md:pr-8 border-b md:border-r md:border-b-0 border-blue-200 pb-6 md:pb-0 flex flex-col justify-between">
@@ -129,7 +136,7 @@ const UserCabinet: React.FC = () => {
                       {user.full_name}
                     </span>
                   </p>
-  
+
                   <UserInfoChange
                     currentUser={user}
                     onSave={handleUserInfoUpdate}
@@ -157,12 +164,12 @@ const UserCabinet: React.FC = () => {
                   </p>
                 </div>
               </div>
-  
+
               <div className="mt-6">
                 <UserDeleteMe />
               </div>
             </div>
-  
+
             <div className="flex-1 md:pl-8 flex flex-col justify-between mt-6 md:mt-0">
               <div>
                 <h1 className="text-4xl font-bold text-blue-500 dark:text-white mt-2 mb-2">

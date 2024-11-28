@@ -93,7 +93,10 @@ const UserPasswordChange: React.FC<UserPasswordChangeProps> = ({
   return (
     <div className="p-3 bg-blue-100 dark:bg-gray-400 shadow-lg rounded-lg">
       <div className="mb-4">
-        <label htmlFor="currentPassword" className="block bg-text-500 dark:bg-text-800 font-semibold mb-1">
+        <label
+          htmlFor="currentPassword"
+          className="block bg-text-500 dark:bg-text-800 font-semibold mb-1"
+        >
           Current Password
         </label>
         <PasswordInput
@@ -105,7 +108,10 @@ const UserPasswordChange: React.FC<UserPasswordChangeProps> = ({
       </div>
 
       <div className="mb-4">
-        <label htmlFor="newPassword" className="block bg-text-500 dark:bg-text-800 font-semibold mb-1">
+        <label
+          htmlFor="newPassword"
+          className="block bg-text-500 dark:bg-text-800 font-semibold mb-1"
+        >
           New Password
         </label>
         <PasswordInput

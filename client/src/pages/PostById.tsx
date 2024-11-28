@@ -85,12 +85,19 @@ const PostById: React.FC = () => {
 
   return post !== null ? (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-400">
-      <Header onSearch={handleSearch} toggleSidebar={toggleSidebar}/>
+      <Header onSearch={handleSearch} toggleSidebar={toggleSidebar} />
       <div className="flex flex-grow pt-16">
         {isSidebarOpen && (
           <div
             className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
+            role="button"
+            tabIndex={0}
             onClick={toggleSidebar}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                toggleSidebar();
+              }
+            }}
           ></div>
         )}
         <div
@@ -117,7 +124,9 @@ const PostById: React.FC = () => {
               }}
             />
             <div className="flex justify-between items-center mt-8">
-              <h1 className="text-3xl font-bold text-blue-500 dark:text-white">Comments</h1>
+              <h1 className="text-3xl font-bold text-blue-500 dark:text-white">
+                Comments
+              </h1>
               <CommentCreate
                 postId={post.id}
                 postStatus={post.status}

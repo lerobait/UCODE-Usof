@@ -41,8 +41,15 @@ const Users: React.FC = () => {
       <div className="flex flex-grow pt-16">
         {isSidebarOpen && (
           <div
+            role="button"
+            tabIndex={0}
             className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
             onClick={toggleSidebar}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                toggleSidebar();
+              }
+            }}
           ></div>
         )}
         <div
@@ -54,7 +61,9 @@ const Users: React.FC = () => {
         </div>
         <div className="flex-grow flex flex-col">
           <div className="w-full mx-auto md:pl-10 md:pr-10">
-            <h1 className="text-4xl font-bold text-blue-500 dark:text-white mt-8">Users</h1>
+            <h1 className="text-4xl font-bold text-blue-500 dark:text-white mt-8">
+              Users
+            </h1>
             <UserList searchText={searchText} />
           </div>
           <ScrollToTop />

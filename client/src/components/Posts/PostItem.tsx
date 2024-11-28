@@ -172,7 +172,9 @@ const PostItem: React.FC<PostItemProps> = ({
         role="button"
         tabIndex={0}
       >
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mt-4">{title}</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mt-4">
+          {title}
+        </h2>
         <p className="text-gray-600 dark:text-white mt-2">
           {shouldTruncate ? truncateContent(content, maxLength) : content}
         </p>

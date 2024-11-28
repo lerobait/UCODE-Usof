@@ -79,7 +79,7 @@ const UserItem: React.FC = () => {
               </Box>
             </div>
           </div>
-  
+
           <div className="flex flex-wrap items-center gap-4 mt-4 sm:mt-0">
             <UserEdit
               userId={user.id}

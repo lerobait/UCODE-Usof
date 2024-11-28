@@ -119,7 +119,11 @@ const Register: React.FC = () => {
           <h1 className="text-2xl md:text-3xl font-bold mr-2 truncate">
             Sign In to <span className="text-blue-600">CodeUnity</span>
           </h1>
-          <img src={logo} alt="CodeUnity Logo" className="w-6 h-6 md:w-8 md:h-8" />
+          <img
+            src={logo}
+            alt="CodeUnity Logo"
+            className="w-6 h-6 md:w-8 md:h-8"
+          />
         </div>
         <form
           className="bg-white shadow-md rounded-lg p-6 md:p-8 w-full max-w-xs sm:max-w-sm md:max-w-md"

@@ -74,5 +74,4 @@ if (storedTheme) {
   useAuthStore.getState().setTheme('light');
 }
 
-
 export default useAuthStore;

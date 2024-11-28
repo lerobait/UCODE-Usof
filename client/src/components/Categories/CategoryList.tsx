@@ -93,7 +93,9 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ searchText }) => {
           className="flex items-center space-x-2 bg-white dark:bg-gray-600 p-4 rounded-lg shadow-lg hover:bg-blue-100 dark:hover:bg-gray-800 cursor-pointer"
         >
           <RiPushpinFill className="text-blue-500 text-lg" />
-          <span className="text-gray-800 dark:text-white font-medium">{category.title}</span>
+          <span className="text-gray-800 dark:text-white font-medium">
+            {category.title}
+          </span>
         </div>
       ))}
     </div>

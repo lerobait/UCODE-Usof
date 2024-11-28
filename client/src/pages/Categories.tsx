@@ -58,8 +58,15 @@ const Categories: React.FC = () => {
       <div className="flex flex-grow pt-16">
         {isSidebarOpen && (
           <div
+            role="button"
+            tabIndex={0}
             className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
             onClick={toggleSidebar}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                toggleSidebar();
+              }
+            }}
           ></div>
         )}
         <div
@@ -71,7 +78,9 @@ const Categories: React.FC = () => {
         </div>
         <div className="flex-grow flex flex-col md:pl-10 md:pr-10">
           <div className="flex flex-wrap items-center justify-between mt-8">
-            <h1 className="text-4xl font-bold text-blue-600 dark:text-white">Categories</h1>
+            <h1 className="text-4xl font-bold text-blue-600 dark:text-white">
+              Categories
+            </h1>
             <div className="mt-4 md:mt-0">
               <CategoryCreate onCategoryCreated={handleCategoryCreated} />
             </div>
@@ -80,7 +89,7 @@ const Categories: React.FC = () => {
         </div>
         <ScrollToTop />
       </div>
-  
+
       <Snackbar
         variant="solid"
         color="success"

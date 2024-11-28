@@ -72,7 +72,7 @@ const CommentFilter: React.FC<CommentFilterProps> = ({ onFilterChange }) => {
           className="w-full sm:w-auto text-md flex items-center justify-between py-2 px-4 dark:text-white dark:border-white dark:hover:border-2 dark:hover:border-white text-blue-500 border border-blue-500 rounded-full hover:border-2 hover:border-blue-600"
         >
           Status:{' '}
-          {status ? status.charAt(0). toUpperCase() + status.slice(1) : 'All'}
+          {status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All'}
         </Button>
       </div>
     </div>
