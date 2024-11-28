@@ -23,6 +23,7 @@ export const up = async (queryInterface: QueryInterface): Promise<void> => {
         content: commentTexts[i],
         publish_date: new Date(),
         status: 'active',
+        parent_id: null,
       };
       comments.push(comment);
     }

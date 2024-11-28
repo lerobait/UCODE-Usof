@@ -252,6 +252,14 @@ export const getCommentsForPostService = async (
         [
           sequelize.literal(
             `(SELECT COUNT(*)
+              FROM comments AS c
+              WHERE c.parent_id = Comment.id)`,
+          ),
+          'replies_count',
+        ],
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*)
               FROM likes AS l
               WHERE l.comment_id = Comment.id AND l.type = 'like')`,
           ),
@@ -273,6 +281,7 @@ export const getCommentsForPostService = async (
       status: comment.status,
       author_id: comment.author?.id,
       likes_count: comment.getDataValue('likes_count'),
+      replies_count: comment.getDataValue('replies_count'),
     })),
     totalItems: allCommentIds.length,
   };

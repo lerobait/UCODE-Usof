@@ -22,6 +22,16 @@ export default {
           model: 'posts',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+      },
+      parent_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'comments',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
       },
       content: {
         type: DataTypes.TEXT,

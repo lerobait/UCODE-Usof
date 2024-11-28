@@ -1,7 +1,8 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as CommentService from '../services/comment.service';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
+import { getStringQueryParam } from '../utils/filters';
 
 interface CustomRequest extends Request {
   user?: {
@@ -20,6 +21,59 @@ export const getCommentById = catchAsync(
       data: {
         comment,
         likeCount,
+      },
+    });
+  },
+);
+
+export const getAllReplies = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { parent_id } = req.params;
+    const status = getStringQueryParam(req.query.status);
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const order = getStringQueryParam(req.query.order) || 'DESC';
+
+    const { replies } = await CommentService.getAllRepliesService(
+      parseInt(parent_id, 10),
+      status as 'active' | 'inactive',
+      sortBy as 'likes' | 'date',
+      order as 'ASC' | 'DESC',
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        replies,
+      },
+    });
+  },
+);
+
+export const createReply = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { parent_id, post_id } = req.params;
+    const { content } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return next(new AppError('User not authenticated', 401));
+    }
+
+    if (!content) {
+      return next(new AppError('Content is required', 400));
+    }
+
+    const reply = await CommentService.createReplyService(
+      parseInt(parent_id, 10),
+      parseInt(post_id, 10),
+      content,
+      userId,
+    );
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        reply,
       },
     });
   },

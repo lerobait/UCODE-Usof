@@ -22,7 +22,7 @@ import { Like } from './Like';
 @Table({ tableName: 'comments', timestamps: false })
 export class Comment extends Model<
   InferAttributes<Comment>,
-  InferCreationAttributes<Comment, { omit: 'author' | 'post' }>
+  InferCreationAttributes<Comment, { omit: 'author' | 'post' | 'replies' }>
 > {
   @PrimaryKey
   @AutoIncrement
@@ -36,6 +36,10 @@ export class Comment extends Model<
   @ForeignKey(() => Post)
   @Column(DataType.INTEGER)
   post_id!: number;
+
+  @ForeignKey(() => Comment)
+  @Column(DataType.INTEGER)
+  parent_id!: number | null;
 
   @Column(DataType.TEXT)
   content!: string;
@@ -57,8 +61,17 @@ export class Comment extends Model<
   @BelongsTo(() => Post)
   post?: Post;
 
+  @BelongsTo(() => Comment, { foreignKey: 'parent_id' })
+  parent?: Comment;
+
+  @HasMany(() => Comment, { foreignKey: 'parent_id' })
+  replies?: Comment[];
+
   @HasMany(() => Like)
   likes?: Like[];
 
   likes_count?: number;
+
+  @Column(DataType.VIRTUAL)
+  replies_count?: number;
 }

@@ -2,6 +2,7 @@ import { Comment } from '../../database/models/Comment';
 import { User } from '../../database/models/User';
 import { Like } from '../../database/models/Like';
 import { updateUserRating } from '../utils/rating';
+import sequelize from '../../database/db';
 import AppError from '../utils/appError';
 
 export const findCommentById = async (commentId: number) => {
@@ -18,6 +19,111 @@ export const countLikes = async (commentId: number) => {
   return await Like.count({
     where: { comment_id: commentId, type: 'like' },
   });
+};
+
+export const getAllRepliesService = async (
+  parentId: number,
+  status?: 'active' | 'inactive',
+  sortBy: 'likes' | 'date' = 'likes',
+  order: 'ASC' | 'DESC' = 'DESC',
+) => {
+  const parentComment = await Comment.findByPk(parentId);
+
+  if (!parentComment) {
+    throw new AppError('Parent comment not found', 404);
+  }
+
+  if (parentComment.status === 'inactive') {
+    throw new AppError('Cannot get replies for an inactive comment', 403);
+  }
+
+  const whereClause: { [key: string]: string | number | undefined } = {
+    parent_id: parentId,
+  };
+
+  if (status) {
+    whereClause.status = status;
+  }
+
+  const replies = await Comment.findAll({
+    where: whereClause,
+    include: [
+      {
+        model: User,
+        attributes: ['id'],
+        as: 'author',
+      },
+    ],
+    attributes: {
+      include: [
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*)
+              FROM likes AS l
+              WHERE l.comment_id = Comment.id AND l.type = 'like')`,
+          ),
+          'likes_count',
+        ],
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*)
+              FROM comments AS c
+              WHERE c.parent_id = Comment.id)`,
+          ),
+          'replies_count',
+        ],
+      ],
+    },
+    order:
+      sortBy === 'likes'
+        ? [[sequelize.literal('likes_count'), order]]
+        : [['publish_date', order]],
+  });
+
+  return {
+    replies: replies.map((reply) => ({
+      id: reply.id,
+      content: reply.content,
+      publish_date: reply.publish_date,
+      status: reply.status,
+      author_id: reply.author?.id,
+      likes_count: reply.getDataValue('likes_count'),
+      replies_count: reply.getDataValue('replies_count'),
+    })),
+  };
+};
+
+export const createReplyService = async (
+  parentId: number,
+  postId: number,
+  content: string,
+  userId: number,
+) => {
+  const parentComment = await Comment.findByPk(parentId);
+  if (!parentComment) {
+    throw new AppError('Parent comment not found', 404);
+  }
+
+  if (parentComment.status === 'inactive') {
+    throw new AppError('Cannot reply to an inactive comment', 403);
+  }
+
+  const reply = await Comment.create({
+    post_id: postId,
+    parent_id: parentId,
+    content,
+    author_id: userId,
+    status: 'active',
+  });
+
+  return {
+    id: reply.id,
+    content: reply.content,
+    post_id: reply.post_id,
+    parent_id: reply.parent_id,
+    author_id: reply.author_id,
+    status: reply.status,
+  };
 };
 
 export const updateComment = async (
