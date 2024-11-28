@@ -119,7 +119,7 @@ export default class PostService {
       status?: 'active' | 'inactive';
     } = { page, limit };
 
-    if (sortBy && sortBy !== 'likes') params.sortBy = sortBy;
+    if (sortBy && sortBy !== 'date') params.sortBy = sortBy;
     if (order && order !== 'DESC') params.order = order;
     if (status) params.status = status;
 
@@ -172,8 +172,8 @@ export default class PostService {
       status?: 'active' | 'inactive';
     } = { page, limit };
 
-    if (sortBy) params.sortBy = sortBy;
-    if (order) params.order = order;
+    if (sortBy && sortBy !== 'date') params.sortBy = sortBy;
+    if (order && order !== 'DESC') params.order = order;
     if (status) params.status = status;
 
     const response: AxiosResponse<{ data: { posts: Post[] } }> =
@@ -206,8 +206,8 @@ export default class PostService {
       limit,
     };
 
-    if (sortBy) params.sortBy = sortBy;
-    if (order) params.order = order;
+    if (sortBy && sortBy !== 'date') params.sortBy = sortBy;
+    if (order && order !== 'DESC') params.order = order;
     if (status) params.status = status;
 
     const response: AxiosResponse<{ data: { posts: Post[] } }> =

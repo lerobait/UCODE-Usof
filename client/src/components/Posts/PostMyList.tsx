@@ -36,7 +36,7 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
     order: 'ASC' | 'DESC' | undefined;
     status?: 'active' | 'inactive' | undefined;
   }>({
-    sortBy: 'likes',
+    sortBy: 'date',
     order: 'DESC',
     status: undefined,
   });

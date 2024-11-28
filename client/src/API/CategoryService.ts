@@ -52,8 +52,8 @@ export default class CategoryService {
       limit,
     };
 
-    if (sortBy) params.sortBy = sortBy;
-    if (order) params.order = order;
+    if (sortBy && sortBy !== 'date') params.sortBy = sortBy;
+    if (order && order !== 'DESC') params.order = order;
     if (status) params.status = status;
 
     try {

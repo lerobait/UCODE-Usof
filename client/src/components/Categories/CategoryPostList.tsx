@@ -36,7 +36,7 @@ const CategoryPostsList: React.FC<CategoryPostsListProps> = ({
     order: 'ASC' | 'DESC' | undefined;
     status?: 'active' | 'inactive' | undefined;
   }>({
-    sortBy: 'likes',
+    sortBy: 'date',
     order: 'DESC',
     status: undefined,
   });

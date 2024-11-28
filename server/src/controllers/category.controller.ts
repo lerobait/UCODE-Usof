@@ -39,7 +39,7 @@ export const getPostsByCategoryId = catchAsync(
     const id = parseInt(category_id);
 
     const status = getStringQueryParam(req.query.status);
-    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'date';
     const order = getStringQueryParam(req.query.order) || 'DESC';
 
     const posts = await CategoryService.getPostsByCategoryId(

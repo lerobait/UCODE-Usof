@@ -94,7 +94,7 @@ export const getUserPosts = catchAsync(
     const userId = user.id;
 
     const status = getStringQueryParam(req.query.status);
-    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'date';
     const order = getStringQueryParam(req.query.order) || 'DESC';
 
     const posts = await getMyPostsService(
@@ -122,7 +122,7 @@ export const getMyPosts = catchAsync(
     }
 
     const status = getStringQueryParam(req.query.status);
-    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'date';
     const order = getStringQueryParam(req.query.order) || 'DESC';
 
     const posts = await getMyPostsService(
@@ -280,7 +280,7 @@ export const getMyFavoritePosts = catchAsync(
     }
 
     const status = getStringQueryParam(req.query.status);
-    const sortBy = getStringQueryParam(req.query.sortBy) || 'likes';
+    const sortBy = getStringQueryParam(req.query.sortBy) || 'date';
     const order = getStringQueryParam(req.query.order) || 'DESC';
 
     const favoritePosts = await getMyFavoritePostsService(

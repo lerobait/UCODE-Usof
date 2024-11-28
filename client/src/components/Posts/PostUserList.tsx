@@ -31,7 +31,7 @@ const PostUserList: React.FC<{ searchText: string; username: string }> = ({
     order: 'ASC' | 'DESC' | undefined;
     status?: 'active' | 'inactive' | undefined;
   }>({
-    sortBy: 'likes',
+    sortBy: 'date',
     order: 'DESC',
     status: undefined,
   });
