@@ -33,10 +33,6 @@ export const getAllRepliesService = async (
     throw new AppError('Parent comment not found', 404);
   }
 
-  if (parentComment.status === 'inactive') {
-    throw new AppError('Cannot get replies for an inactive comment', 403);
-  }
-
   const whereClause: { [key: string]: string | number | undefined } = {
     parent_id: parentId,
   };

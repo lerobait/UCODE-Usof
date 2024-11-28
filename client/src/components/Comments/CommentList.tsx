@@ -136,6 +136,7 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
             id={comment.id}
             content={comment.content}
             authorId={comment.author_id}
+            postId={postId}
             publishDate={comment.publish_date}
             status={comment.status}
             likeCount={comment.likes_count}

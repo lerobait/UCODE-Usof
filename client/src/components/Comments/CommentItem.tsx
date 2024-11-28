@@ -9,7 +9,8 @@ import { IoMdMore } from 'react-icons/io';
 import Button from '../Common/Button';
 import CommentDelete from './CommentDelete';
 import CommentEdit from './CommentEdit';
-import { TbMessageReply } from 'react-icons/tb';
+import RepliesButton from './CommentReply';
+import RepliesList from './CommentReplyList';
 
 dayjs.extend(relativeTime);
 
@@ -17,10 +18,12 @@ interface CommentItemProps {
   id: number;
   content: string;
   authorId: number;
+  postId: number;
   publishDate: string;
   status: 'active' | 'inactive';
   likeCount: number;
   repliesCount: number;
+  isReply?: boolean;
   onCommentDeleted?: (commentId: number) => void;
   onCommentUpdated?: (updatedComment: {
     id: number;
@@ -38,17 +41,23 @@ const CommentItem: React.FC<CommentItemProps> = ({
   content,
   authorId,
   publishDate,
+  postId,
   status,
   likeCount,
   repliesCount,
   onCommentDeleted,
   onCommentUpdated,
+  isReply = false,
 }) => {
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
 
   const { user } = useAuthStore();
   const [isActionsVisible, setIsActionsVisible] = useState(false);
+  const [isRepliesVisible, setIsRepliesVisible] = useState(false);
+  const containerClass = isReply
+    ? 'bg-gray-100 dark:bg-gray-700 border-l-4 border-blue-300'
+    : 'bg-white dark:bg-gray-600';
 
   const toggleActions = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -111,6 +120,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
     setLikeStatus(newStatus);
   };
 
+  const handleRepliesToggle = (isVisible: boolean) => {
+    setIsRepliesVisible(isVisible);
+  };
+
   const statusClass =
     status === 'active'
       ? 'text-green-500 border border-green-500 rounded-full px-1 py-0.5 text-sm'
@@ -119,7 +132,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         : 'text-gray-500 text-sm';
 
   return (
-    <div className="bg-white dark:bg-gray-600 shadow-md rounded-lg p-6 relative">
+    <div className={`${containerClass} shadow-md rounded-lg p-6 relative`}>
       <div className="flex items-center text-gray-500 dark:text-white text-sm">
         <CommentAuthor authorId={authorId} />
         <span className="mx-2">•</span>
@@ -166,13 +179,18 @@ const CommentItem: React.FC<CommentItemProps> = ({
               commentStatus={status}
             />
           </div>
-          <Button className="flex items-center mt-4 text-gray-500 dark:text-white dark:hover:text-gray-100 hover:text-gray-700">
-            <TbMessageReply className="text-2xl" />
-            <span className="mx-2">{repliesCount}</span>
-          </Button>
+          <RepliesButton
+            commentId={id}
+            repliesCount={repliesCount}
+            onRepliesToggle={handleRepliesToggle}
+            isRepliesVisible={isRepliesVisible}
+          />
         </div>
         <span className={statusClass}>{status}</span>
       </div>
+      {isRepliesVisible && (
+        <RepliesList commentId={id} postId={postId} status={status} />
+      )}
     </div>
   );
 };

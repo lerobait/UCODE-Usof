@@ -99,7 +99,7 @@ const CommentLike: React.FC<CommentLikeProps> = ({
       : 'hover:text-blue-300 dark:hover:text-blue-300';
 
   return (
-    <div className="flex items-center mt-4">
+    <div className="flex items-center">
       <Button
         onClick={handleLikeClick}
         className={`focus:outline-none ${commentStatus === 'inactive' ? 'text-gray-400' : 'text-2xl'} ${buttonClass}`}
