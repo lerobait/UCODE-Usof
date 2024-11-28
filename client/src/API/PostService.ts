@@ -25,6 +25,7 @@ export interface PostComment {
   publish_date: string;
   status: 'active' | 'inactive';
   likes_count: number;
+  replies_count: number;
 }
 
 interface PostResponse {

@@ -9,6 +9,7 @@ import { IoMdMore } from 'react-icons/io';
 import Button from '../Common/Button';
 import CommentDelete from './CommentDelete';
 import CommentEdit from './CommentEdit';
+import { TbMessageReply } from 'react-icons/tb';
 
 dayjs.extend(relativeTime);
 
@@ -19,6 +20,7 @@ interface CommentItemProps {
   publishDate: string;
   status: 'active' | 'inactive';
   likeCount: number;
+  repliesCount: number;
   onCommentDeleted?: (commentId: number) => void;
   onCommentUpdated?: (updatedComment: {
     id: number;
@@ -27,6 +29,7 @@ interface CommentItemProps {
     publish_date: string;
     status: 'active' | 'inactive';
     likes_count: number;
+    replies_count: number;
   }) => void;
 }
 
@@ -37,6 +40,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   publishDate,
   status,
   likeCount,
+  repliesCount,
   onCommentDeleted,
   onCommentUpdated,
 }) => {
@@ -59,6 +63,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
       publish_date: publishDate,
       status,
       likes_count: currentLikeCount,
+      replies_count: repliesCount,
     };
     onCommentUpdated?.(updatedComment);
   };
@@ -125,7 +130,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <div className="absolute top-4 right-4">
           <Button
             onClick={toggleActions}
-            className="text-gray-50 dark:text-white hover:text-gray-700 flex items-center justify-center"
+            className="text-gray-500 dark:text-white hover:text-gray-700 flex items-center justify-center"
           >
             <IoMdMore size={24} />
           </Button>
@@ -146,19 +151,28 @@ const CommentItem: React.FC<CommentItemProps> = ({
         </div>
       )}
 
-      <p className="text-gray-600 dark:text-white mt-2">{content}</p>
-
-      <div className="absolute bottom-4 right-4 text-sm text-gray-500">
-        <span className={statusClass}>{status}</span>
+      <div>
+        <p className="text-gray-600 dark:text-white mt-2">{content}</p>
       </div>
 
-      <CommentLike
-        commentId={id}
-        initialLikeStatus={likeStatus}
-        onLikeStatusChange={handleLikeUpdate}
-        currentLikeCount={currentLikeCount}
-        commentStatus={status}
-      />
+      <div className="flex justify-between items-center mt-4">
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center">
+            <CommentLike
+              commentId={id}
+              initialLikeStatus={likeStatus}
+              onLikeStatusChange={handleLikeUpdate}
+              currentLikeCount={currentLikeCount}
+              commentStatus={status}
+            />
+          </div>
+          <Button className="flex items-center mt-4 text-gray-500 dark:text-white dark:hover:text-gray-100 hover:text-gray-700">
+            <TbMessageReply className="text-2xl" />
+            <span className="mx-2">{repliesCount}</span>
+          </Button>
+        </div>
+        <span className={statusClass}>{status}</span>
+      </div>
     </div>
   );
 };

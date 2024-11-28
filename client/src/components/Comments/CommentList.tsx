@@ -14,6 +14,7 @@ interface PostComment {
   publish_date: string;
   status: 'active' | 'inactive';
   likes_count: number;
+  replies_count: number;
 }
 
 const CommentList: React.FC<{ postId: number; searchText: string }> = ({
@@ -138,6 +139,7 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
             publishDate={comment.publish_date}
             status={comment.status}
             likeCount={comment.likes_count}
+            repliesCount={comment.replies_count}
             onCommentDeleted={handleCommentDeleted}
             onCommentUpdated={handleCommentUpdated}
           />
