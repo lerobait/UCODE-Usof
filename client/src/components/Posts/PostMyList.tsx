@@ -139,23 +139,35 @@ const PostMyList: React.FC<PostMyListProps> = ({ searchText, updateKey }) => {
       </div>
 
       <div className="w-full lg:w-3/4 space-y-6">
-        {filteredPosts.map((post) => (
-          <PostItem
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            content={post.content}
-            authorId={post.author_id}
-            date={post.publish_date}
-            status={post.status}
-            likeCount={post.likes_count}
-            commentCount={post.comments_count}
-            imageUrl={post.image_url}
-            showActions={true}
-            onPostDeleted={handlePostDeleted}
-            onPostUpdated={handlePostUpdated}
-          />
-        ))}
+        {filteredPosts.length === 0 && !isLoading ? (
+          <div className="flex flex-col items-center justify-center h-[80vh] text-center text-gray-500 dark:text-white">
+            <h2 className="text-2xl font-semibold mb-4">
+              You don&apos;t have any posts yet
+            </h2>
+            <p className="text-lg mb-6">
+              Start creating posts, and they will appear here. Let&apos;s add
+              something interesting!
+            </p>
+          </div>
+        ) : (
+          filteredPosts.map((post) => (
+            <PostItem
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              content={post.content}
+              authorId={post.author_id}
+              date={post.publish_date}
+              status={post.status}
+              likeCount={post.likes_count}
+              commentCount={post.comments_count}
+              imageUrl={post.image_url}
+              showActions={true}
+              onPostDeleted={handlePostDeleted}
+              onPostUpdated={handlePostUpdated}
+            />
+          ))
+        )}
         <div ref={lastElement} style={{ height: 20 }} />
 
         <Snackbar
