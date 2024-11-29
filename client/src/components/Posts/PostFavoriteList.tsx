@@ -4,6 +4,8 @@ import PostFilter from './PostFilter';
 import { useFetching } from '../../hooks/useFetching';
 import PostService from '../../API/PostService';
 import { useObserver } from '../../hooks/useObserver';
+import { useNavigate } from 'react-router-dom';
+import Button from '../Common/Button';
 
 interface Post {
   id: number;
@@ -19,6 +21,7 @@ interface Post {
 }
 
 const PostFavoriteList: React.FC<{ searchText: string }> = ({ searchText }) => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(3);
@@ -94,7 +97,6 @@ const PostFavoriteList: React.FC<{ searchText: string }> = ({ searchText }) => {
             alt="Error Icon"
             className="w-60 h-60 mx-auto mb-4"
           />
-
           <h1 className="text-4xl text-blue-600 font-bold">
             Something Went Wrong. Please Try Again Later!
           </h1>
@@ -110,25 +112,42 @@ const PostFavoriteList: React.FC<{ searchText: string }> = ({ searchText }) => {
       </div>
 
       <div className="w-full lg:w-3/4 space-y-6">
-        {filteredPosts.map((post) => (
-          <PostItem
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            content={post.content}
-            authorId={post.author_id}
-            date={post.publish_date}
-            status={post.status}
-            likeCount={post.likes_count}
-            commentCount={post.comments_count}
-            imageUrl={post.image_url}
-            onPostDeleted={(deletedPostId) => {
-              setPosts((prevPosts) =>
-                prevPosts.filter((p) => p.id !== deletedPostId),
-              );
-            }}
-          />
-        ))}
+        {filteredPosts.length === 0 && !isLoading ? (
+          <div className="flex flex-col items-center justify-center h-[80vh] text-center text-gray-500 dark:text-white">
+            <h2 className="text-2xl font-semibold mb-4">
+              No favorite posts yet
+            </h2>
+            <p className="text-lg mb-6">
+              Add some posts to your favorites, and they will appear here!
+            </p>
+            <Button
+              className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+              onClick={() => navigate('/posts')}
+            >
+              Explore Posts
+            </Button>
+          </div>
+        ) : (
+          filteredPosts.map((post) => (
+            <PostItem
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              content={post.content}
+              authorId={post.author_id}
+              date={post.publish_date}
+              status={post.status}
+              likeCount={post.likes_count}
+              commentCount={post.comments_count}
+              imageUrl={post.image_url}
+              onPostDeleted={(deletedPostId) => {
+                setPosts((prevPosts) =>
+                  prevPosts.filter((p) => p.id !== deletedPostId),
+                );
+              }}
+            />
+          ))
+        )}
         <div ref={lastElement} style={{ height: 20 }} />
       </div>
     </div>
