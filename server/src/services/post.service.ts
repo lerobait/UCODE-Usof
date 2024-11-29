@@ -375,8 +375,10 @@ export const updatePostService = async (
   if (title) post.title = title;
   if (content) post.content = content;
 
-  if (imageUrl !== undefined) {
-    post.image_url = imageUrl || undefined;
+  if (imageUrl === null || imageUrl === undefined) {
+    post.image_url = null;
+  } else if (imageUrl) {
+    post.image_url = imageUrl;
   }
 
   if (status === 'active' || status === 'inactive') post.status = status;

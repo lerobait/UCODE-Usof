@@ -41,7 +41,7 @@ export class Post extends Model<
   content!: string;
 
   @Column(DataType.STRING(255))
-  image_url?: string;
+  image_url?: string | null;
 
   @Default(DataType.NOW)
   @Column({
