@@ -35,6 +35,7 @@ export default class PostAuth {
   static async login(
     data: LoginRequest,
   ): Promise<AxiosResponse<LoginResponse>> {
+    // Sends a login request to the backend
     const response = await axios.post<LoginResponse>(
       'http://localhost:3000/api/auth/login',
       data,
@@ -45,6 +46,7 @@ export default class PostAuth {
   static async forgotPassword(
     data: ForgotPasswordRequest,
   ): Promise<AxiosResponse<void>> {
+    // Triggers a password reset email
     const response = await axios.post<void>(
       'http://localhost:3000/api/auth/password-reset',
       data,
@@ -67,6 +69,7 @@ export default class PostAuth {
     confirm_password: string;
     token: string;
   }): Promise<AxiosResponse<void>> {
+    // Resets the user's password using the provided token and new password details
     const response = await axios.post<void>(
       `http://localhost:3000/api/auth/password-reset/${data.token}`,
       {
