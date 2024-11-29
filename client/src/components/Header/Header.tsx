@@ -79,7 +79,17 @@ const Header: React.FC<{
           sx={{ '--Switch-thumbSize': '24px' }}
         />
         {user && (
-          <div className="flex items-center space-x-2">
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate('/users/me')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                navigate('/users/me');
+              }
+            }}
+          >
             <img
               src={user.profile_picture || defaultAvatar}
               alt="User Avatar"
