@@ -93,7 +93,11 @@ const CategoryPostsList: React.FC<CategoryPostsListProps> = ({
   );
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-[80vh] text-center text-gray-500 dark:text-white">
+        <h2 className="text-2xl font-semibold mb-4">No posts yet</h2>
+      </div>
+    );
   }
 
   return (
