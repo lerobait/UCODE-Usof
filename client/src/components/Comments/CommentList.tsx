@@ -120,7 +120,15 @@ const CommentList: React.FC<{ postId: number; searchText: string }> = ({
   };
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-[80vh] text-center text-gray-500 dark:text-white">
+        <h2 className="text-2xl font-semibold mb-4">No comments yet</h2>
+        <p className="text-lg mb-6">
+          Start creating comments, and they will appear here. Let&apos;s add
+          something interesting!
+        </p>
+      </div>
+    );
   }
 
   return (
