@@ -114,7 +114,9 @@ const RepliesList: React.FC<RepliesListProps> = ({
           </div>
         ))
       ) : (
-        <div>No replies available.</div>
+        <div className="text-gray-500 dark:text-white">
+          No replies available.
+        </div>
       )}
       <Snackbar
         variant="solid"

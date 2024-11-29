@@ -75,8 +75,8 @@ const CommentCreate: React.FC<CommentCreateProps> = ({
         className={`w-full px-4 py-2 ${
           postStatus === 'inactive'
             ? 'cursor-not-allowed'
-            : 'hover:border-2 hover:border-blue-600'
-        } text-blue-500 border border-blue-500 dark:text-white dark:border-white dark:hover:border-2 dark:hover:border-white rounded-full flex items-center justify-center space-x-2`}
+            : 'hover:border-2 dark:hover:border-2 hover:border-blue-600 dark:hover:border-white'
+        } text-blue-500 border border-blue-500 dark:text-white dark:border-white rounded-full flex items-center justify-center space-x-2`}
       >
         <IoMdAdd />
         <span>Create Comment</span>
