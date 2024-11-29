@@ -14,15 +14,19 @@ export const up = async (queryInterface: QueryInterface): Promise<void> => {
   ];
 
   const comments = [];
+  const activeComments = ['Yo this post is great!', 'Love this post!'];
 
   for (const post of posts) {
     for (let i = 0; i < commentTexts.length; i++) {
+      const status = activeComments.includes(commentTexts[i])
+        ? 'active'
+        : 'inactive';
       const comment = {
         author_id: users[i % users.length].id,
         post_id: post.id,
         content: commentTexts[i],
         publish_date: new Date(),
-        status: 'active',
+        status: status,
         parent_id: null,
       };
       comments.push(comment);

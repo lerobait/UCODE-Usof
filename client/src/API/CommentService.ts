@@ -32,11 +32,6 @@ export default class CommentService {
     order?: 'ASC' | 'DESC',
     status?: 'active' | 'inactive',
   ): Promise<CommentReply[]> {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      throw new Error('User is not authenticated');
-    }
-
     const params: {
       sortBy?: 'likes' | 'date';
       order?: 'ASC' | 'DESC';
@@ -49,9 +44,6 @@ export default class CommentService {
 
     const response: AxiosResponse<{ data: { replies: CommentReply[] } }> =
       await axios.get(`${this.baseUrl}/${commentId}/replies`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         params,
       });
 
