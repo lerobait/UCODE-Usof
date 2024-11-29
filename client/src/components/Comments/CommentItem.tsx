@@ -64,13 +64,16 @@ const CommentItem: React.FC<CommentItemProps> = ({
     setIsActionsVisible((prev) => !prev);
   };
 
-  const handleCommentUpdated = (updatedContent: string) => {
+  const handleCommentUpdated = (
+    updatedContent: string,
+    updatedStatus: 'active' | 'inactive',
+  ) => {
     const updatedComment = {
       id,
       content: updatedContent,
       author_id: authorId,
       publish_date: publishDate,
-      status,
+      status: updatedStatus,
       likes_count: currentLikeCount,
       replies_count: repliesCount,
     };
@@ -153,7 +156,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 commentId={id}
                 initialContent={content}
                 initialStatus={status}
-                onCommentUpdated={handleCommentUpdated}
+                onCommentUpdated={(updatedContent, updatedStatus) =>
+                  handleCommentUpdated(updatedContent, updatedStatus)
+                }
               />
               <CommentDelete
                 commentId={id}

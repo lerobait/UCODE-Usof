@@ -9,7 +9,10 @@ interface CommentEditProps {
   commentId: number;
   initialContent: string;
   initialStatus: 'active' | 'inactive';
-  onCommentUpdated: (updatedContent: string) => void;
+  onCommentUpdated: (
+    updatedContent: string,
+    updatedStatus: 'active' | 'inactive',
+  ) => void;
 }
 
 const CommentEdit: React.FC<CommentEditProps> = ({
@@ -48,7 +51,7 @@ const CommentEdit: React.FC<CommentEditProps> = ({
         content,
         status,
       });
-      onCommentUpdated(content);
+      onCommentUpdated(content, status);
       handleCloseModal();
     } catch {
       setError('Failed to update comment. Please try again.');
