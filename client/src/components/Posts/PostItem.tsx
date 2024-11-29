@@ -9,10 +9,12 @@ import PostLike from './PostLike';
 import useAuthStore from '../../hooks/useAuthStore';
 import PostFavorite from './PostFavorite';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { IoMdMore } from 'react-icons/io';
+import { IoMdMore, IoMdShareAlt } from 'react-icons/io';
 import PostDelete from './PostDelete';
 import PostEdit from './PostEdit';
 import { LiaCommentSolid } from 'react-icons/lia';
+import Snackbar from '@mui/joy/Snackbar';
+import { SiTicktick } from 'react-icons/si';
 
 dayjs.extend(relativeTime);
 
@@ -48,6 +50,7 @@ const PostItem: React.FC<PostItemProps> = ({
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
   const [likeStatus, setLikeStatus] = useState<'like' | 'dislike' | null>(null);
   const [isActionsVisible, setIsActionsVisible] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const { user } = useAuthStore();
   const navigate = useNavigate();
@@ -103,6 +106,17 @@ const PostItem: React.FC<PostItemProps> = ({
     }
 
     setLikeStatus(newStatus);
+  };
+
+  const handleSharePost = (postId: number, title: string) => {
+    const postUrl = `${window.location.origin}/posts/${postId}`;
+    const message = `Check out this amazing post on CodeUnity: "${title}"\n${postUrl}`;
+
+    navigator.clipboard.writeText(message).then(() => setOpenSnackbar(true));
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   const statusClass =
@@ -218,10 +232,31 @@ const PostItem: React.FC<PostItemProps> = ({
             <LiaCommentSolid className="text-2xl" />
             <span className="mx-2">{commentCount}</span>
           </Button>
+          <Button
+            className="flex items-center text-gray-500 dark:text-white dark:hover:text-gray-100 hover:text-gray-700"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSharePost(id, title);
+            }}
+          >
+            <IoMdShareAlt className="text-2xl" />
+            <span className="ml-1">Share</span>
+          </Button>
           <PostFavorite postId={id} />
         </div>
         <span className={statusClass}>{status}</span>
       </div>
+      <Snackbar
+        variant="solid"
+        color="success"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={openSnackbar}
+        onClose={handleCloseSnackbar}
+        startDecorator={<SiTicktick />}
+        autoHideDuration={3000}
+      >
+        Copied to clipboard!
+      </Snackbar>
     </div>
   );
 };
