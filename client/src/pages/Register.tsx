@@ -81,9 +81,29 @@ const Register: React.FC = () => {
       isValid = false;
     }
 
-    if (!password || password.length < 6) {
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!password || password.length < 8) {
       validationErrors.password =
-        'Password must be at least 6 characters long.';
+        'Password must be at least 8 characters long.';
+      isValid = false;
+    } else if (!hasSpecialChar) {
+      validationErrors.password =
+        'Password must contain at least one special character.';
+      isValid = false;
+    } else if (!hasDigit) {
+      validationErrors.password = 'Password must contain at least one number.';
+      isValid = false;
+    } else if (!hasUpperCase) {
+      validationErrors.password =
+        'Password must contain at least one uppercase letter.';
+      isValid = false;
+    } else if (!hasLowerCase) {
+      validationErrors.password =
+        'Password must contain at least one lowercase letter.';
       isValid = false;
     }
 
@@ -139,7 +159,7 @@ const Register: React.FC = () => {
               placeholder="Enter full name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-gray-600"
+              className="w-full p-2 border border-gray-600 rounded focus:outline-non"
             />
             {errors.fullName && (
               <p className="text-red-500">{errors.fullName}</p>
@@ -156,7 +176,7 @@ const Register: React.FC = () => {
               placeholder="Enter login"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
-              className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-gray-600"
+              className="w-full p-2 border border-gray-600 rounded focus:outline-non"
             />
             {errors.login && <p className="text-red-500">{errors.login}</p>}
           </div>
@@ -171,7 +191,7 @@ const Register: React.FC = () => {
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-gray-600"
+              className="w-full p-2 border border-gray-600 rounded focus:outline-non"
             />
             {errors.email && <p className="text-red-500">{errors.email}</p>}
           </div>

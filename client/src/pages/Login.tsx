@@ -134,7 +134,7 @@ const Login: React.FC = () => {
               placeholder="Enter login"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
-              className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-gray-600"
+              className="w-full p-2 border border-gray-600 rounded focus:outline-none"
             />
             {loginError && <p className="text-red-500">{loginError}</p>}
           </div>
@@ -148,7 +148,7 @@ const Login: React.FC = () => {
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring focus:ring-gray-600"
+              className="w-full p-2 border border-gray-600 rounded focus:outline-none"
             />
             {emailError && <p className="text-red-500">{emailError}</p>}
           </div>
