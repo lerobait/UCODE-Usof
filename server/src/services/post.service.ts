@@ -213,9 +213,11 @@ export const getCommentsForPostService = async (
   limit: number = 10,
   offset: number = 0,
 ) => {
-  const whereClause: { [key: string]: string | number | undefined } = {
+  const whereClause: { [key: string]: string | number | null } = {
     post_id: postId,
+    parent_id: null,
   };
+
   if (status) whereClause.status = status;
 
   const allCommentIds = await Comment.findAll({
