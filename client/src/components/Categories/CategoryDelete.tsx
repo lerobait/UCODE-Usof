@@ -5,6 +5,8 @@ import Modal from '../Modal/Modal';
 import CategoryService from '../../API/CategoryService';
 import Button from '../Common/Button';
 import { TiDeleteOutline } from 'react-icons/ti';
+import { MdOutlineDangerous } from 'react-icons/md';
+import Snackbar from '@mui/joy/Snackbar';
 
 interface CategoryDeleteProps {
   categoryId: number;
@@ -14,6 +16,7 @@ const CategoryDelete: React.FC<CategoryDeleteProps> = ({ categoryId }) => {
   const { user } = useAuthStore();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
 
   const isAdmin = user?.role === 'admin';
@@ -26,12 +29,16 @@ const CategoryDelete: React.FC<CategoryDeleteProps> = ({ categoryId }) => {
     try {
       await CategoryService.deleteCategory(categoryId);
       navigate('/categories');
-    } catch (error) {
-      console.error('Failed to delete category:', error);
+    } catch {
+      setSnackbarOpen(true);
     } finally {
       setDeleting(false);
       setModalOpen(false);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   if (!isAdmin) return null;
@@ -52,8 +59,7 @@ const CategoryDelete: React.FC<CategoryDeleteProps> = ({ categoryId }) => {
               Delete Category?
             </h3>
             <p className="text-gray-600 mt-2">
-              Are you sure you want to delete this category? All posts related
-              to this category will be permanently deleted. This action cannot
+              Are you sure you want to delete this category? This action cannot
               be undone.
             </p>
             <div className="mt-4 flex justify-center space-x-4">
@@ -74,6 +80,17 @@ const CategoryDelete: React.FC<CategoryDeleteProps> = ({ categoryId }) => {
           </div>
         </Modal>
       )}
+      <Snackbar
+        variant="solid"
+        color="danger"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={snackbarOpen}
+        onClose={handleCloseSnackbar}
+        startDecorator={<MdOutlineDangerous />}
+        autoHideDuration={3000}
+      >
+        You can&apos;t delete a category with posts!
+      </Snackbar>
     </>
   );
 };
