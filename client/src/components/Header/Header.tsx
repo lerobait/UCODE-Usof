@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Common/Button';
 import useAuthStore from '../../hooks/useAuthStore';
+import UserService from '../../API/UserService';
 import {
   MdLogin,
   MdLogout,
@@ -12,13 +13,38 @@ import {
 import Switch from '@mui/joy/Switch';
 import logo from '../../../public/images/icons/logo.svg';
 
-const Header: React.FC<{
+interface User {
+  profile_picture: string;
+  login: string;
+  full_name: string;
+  email: string;
+  email_verified: boolean;
+}
+
+interface HeaderProps {
   onSearch: (searchText: string) => void;
   toggleSidebar: () => void;
-}> = ({ onSearch, toggleSidebar }) => {
+}
+
+const Header: React.FC<HeaderProps> = ({ onSearch, toggleSidebar }) => {
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
+  const [userAvatar, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { user, clearUser, theme, toggleTheme } = useAuthStore();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const currentUser = await UserService.getCurrentUser();
+        setUser(currentUser);
+      } catch {
+        setError('Failed to load user data');
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleLogout = () => {
     clearUser();
@@ -91,7 +117,7 @@ const Header: React.FC<{
             }}
           >
             <img
-              src={user.profile_picture || defaultAvatar}
+              src={userAvatar?.profile_picture || defaultAvatar}
               alt="User Avatar"
               className="w-10 h-10 rounded-full"
             />
